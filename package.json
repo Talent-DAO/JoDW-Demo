@@ -1,0 +1,76 @@
+{
+  "name": "@jodw/monorepo",
+  "version": "1.0.0",
+  "keywords": [
+    "ethereum",
+    "react",
+    "uniswap",
+    "workspaces",
+    "yarn"
+  ],
+  "private": true,
+  "scripts": {
+    "react-app:build": "yarn workspace @jodw/react-app build --max-old-space-size=12288",
+    "react-app:eject": "yarn workspace @jodw/react-app eject",
+    "react-app:start": "yarn workspace @jodw/react-app start",
+    "react-app:test": "yarn workspace @jodw/react-app test",
+    "build": "yarn workspace @jodw/react-app build --max-old-space-size=12288",
+    "prettier": "yarn workspace @jodw/react-app prettier",
+    "chain": "yarn workspace @jodw/hardhat chain",
+    "fork": "yarn workspace @jodw/hardhat fork",
+    "node": "yarn workspace @jodw/hardhat chain",
+    "test": "yarn workspace @jodw/hardhat test",
+    "server": "yarn workspace @jodw/backend server",
+    "prestart": "yarn workspace @jodw/react-app prestart",
+    "start": "yarn workspace @jodw/react-app start",
+    "compile": "yarn workspace @jodw/hardhat compile",
+    "deploy": "yarn workspace @jodw/hardhat deploy",
+    "verify": "yarn workspace @jodw/hardhat verify",
+    "watch": "yarn workspace @jodw/hardhat watch",
+    "accounts": "yarn workspace @jodw/hardhat accounts",
+    "balance": "yarn workspace @jodw/hardhat balance",
+    "send": "yarn workspace @jodw/hardhat send",
+    "ipfs": "yarn workspace @jodw/react-app ipfs",
+    "surge": "yarn workspace @jodw/react-app surge",
+    "s3": "yarn workspace @jodw/react-app s3",
+    "ship": "yarn workspace @jodw/react-app ship",
+    "generate": "yarn workspace @jodw/hardhat generate",
+    "account": "yarn workspace @jodw/hardhat account",
+    "mineContractAddress": "cd packages/hardhat && npx hardhat mineContractAddress",
+    "wallet": "cd packages/hardhat && npx hardhat wallet",
+    "fundedwallet": "cd packages/hardhat && npx hardhat fundedwallet",
+    "flatten": "cd packages/hardhat && npx hardhat flatten",
+    "clean": "cd packages/hardhat && npx hardhat clean",
+    "run-graph-node": "yarn workspace @jodw/services run-graph-node",
+    "remove-graph-node": "yarn workspace @jodw/services remove-graph-node",
+    "clean-graph-node": "yarn workspace @jodw/services clean-graph-node",
+    "graph-prepare": "mustache packages/subgraph/config/config.json packages/subgraph/src/subgraph.template.yaml > packages/subgraph/subgraph.yaml",
+    "graph-codegen": "yarn workspace @jodw/subgraph graph codegen",
+    "graph-build": "yarn workspace @jodw/subgraph graph build",
+    "graph-create-local": "yarn workspace @jodw/subgraph graph create --node http://localhost:8020/ jodw/your-contract",
+    "graph-remove-local": "yarn workspace @jodw/subgraph graph remove --node http://localhost:8020/ jodw/your-contract",
+    "graph-deploy-local": "yarn workspace @jodw/subgraph graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 jodw/your-contract",
+    "graph-ship-local": "yarn graph-prepare && yarn graph-codegen && yarn graph-deploy-local",
+    "deploy-and-graph": "yarn deploy && yarn graph-ship-local",
+    "theme": "yarn workspace @jodw/react-app theme",
+    "watch-theme": "yarn workspace @jodw/react-app watch",
+    "postinstall": "husky install"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/@graphprotocol/graph-ts",
+      "**/@graphprotocol/graph-ts/**",
+      "**/hardhat",
+      "**/hardhat/**",
+      "**/hardhat-ts",
+      "**/hardhat-ts/**"
+    ]
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "husky": "^7.0.2"
+  }
+}
