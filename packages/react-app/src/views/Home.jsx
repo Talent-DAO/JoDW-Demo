@@ -82,7 +82,12 @@ function Home({ address }) {
       <div className="mx-auto pt-4 max-w-xl md:max-w-4xl xl:max-w-7xl overflow-hidden">
         <Splash address={address} />
         <div className="mx-4 flex flex-row items-center pt-6">
-          <img src={profileImage} alt="profile" className="pr-2"></img>
+          <div className="pr-2">
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="18" cy="18" r="18" fill="#D8D8D8"/>
+              <path d="M18 21.3271C22.3386 21.3271 26 22.0403 26 24.792C26 27.5446 22.3146 28.2326 18 28.2326C13.6624 28.2326 10 27.5194 10 24.7677C10 22.015 13.6854 21.3271 18 21.3271ZM18 8C20.9391 8 23.294 10.3814 23.294 13.3526C23.294 16.3238 20.9391 18.7062 18 18.7062C15.0619 18.7062 12.706 16.3238 12.706 13.3526C12.706 10.3814 15.0619 8 18 8Z" fill="#B41C2E"/>
+            </svg>
+          </div>
           <div className="text-black font-semibold text-2xl">
             Got Talent? <span className="text-primary">Join Us.</span>
           </div>
