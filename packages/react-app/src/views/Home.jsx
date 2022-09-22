@@ -143,7 +143,7 @@ function Home({ address }) {
                     </div>
                   ))}
                 </div>
-                <div className="pt-4 flex flex-row items-center text-md space-x-4">
+                {/* <div className="pt-4 flex flex-row items-center text-md space-x-4">
                   <a target="_blank" href={authorTwitter} rel="noopener noreferrer">
                     <svg width="35" height="35" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <circle cx="25" cy="25" r="25" fill={authorTwitter === "" ? "#A3A3A3" : "#B41C2E"} />
@@ -164,7 +164,7 @@ function Home({ address }) {
                       />
                     </svg>
                   </a>
-                </div>
+                </div> */}
                 <div className="pt-4 flex flex-row items-center text-md">
                   <div
                     className="cursor-pointer rounded-lg text-green px-3 py-1 mr-4"
