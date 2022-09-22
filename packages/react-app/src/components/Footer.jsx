@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import discord from "../assets/discord.png";
+import discord from "../assets/discord-red.png";
 import minus from "../assets/minus.png";
 import plus from "../assets/plus.png";
 import logo from "../assets/talent-logo.png";
-import twitter from "../assets/twitter.png";
+import twitter from "../assets/twitter-red.png";
 
 function Footer() {
   const [show, setShow] = useState(false);
