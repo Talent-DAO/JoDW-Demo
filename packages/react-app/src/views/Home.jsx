@@ -119,7 +119,7 @@ function Home({ address }) {
                 {/* <div className="text-sm xl:text-lg text-primary hidden md:block">Author</div>
                 <div className="pt-2 text-3xl xl:text-4xl font-bold">James Andrew</div>
                 <div className="pt-4 text-base xl:text-sm text-darkgray hidden md:block">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut </div> */}
-                <div className="text-primary text-base">
+                <div className="text-primary text-base hidden md:inline lg:inline">
                   Author
                 </div>
                 <div

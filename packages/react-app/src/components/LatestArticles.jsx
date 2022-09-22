@@ -60,7 +60,7 @@ class LatestArticles extends Component {
         },
       ],
     };
-    console.log('TIGER', this.props.articles);
+    
     return (
       <>
         <div className="mx-4 flex justify-between pt-16 mb-4">
