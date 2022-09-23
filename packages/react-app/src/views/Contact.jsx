@@ -68,7 +68,7 @@ const Contact = () => {
   }, []);
 
   return (
-    <div className="flex flex-col" style={{ backgroundImage: "linear-gradient(#fff, #EEE" }}>
+    <div style={{ backgroundImage: "linear-gradient(#fff, #EEE" }}>
       <div className="relative">
         <img
           className="absolute top-0 left-0 w-full h-full"
@@ -288,19 +288,19 @@ const Contact = () => {
           </div>
         </div>
       </div>
-      <div className="relative p-4 my-4 mx-0 sm:mx-8 md:mx-10 xl:mx-20 overflow-hidden">
-        <img className="absolute rounded-2xl top-0 left-0 w-full h-full" src={contact_join_us}></img>
-        <div className="relative my-8 flex flex-col items-center space-y-8 text-white">
-          <div className="text-4xl font-bold">Want to Join us?</div>
-          <div className="text-lg">
-            We are a new generation of researchers building the world's first decentralized community-reviewed
-            publication protocol for the social sciences.
+      <div className="mx-auto pt-4 max-w-xl md:max-w-4xl xl:max-w-7xl overflow-hidden">
+        <div className="relative p-4 my-4">
+          <img className="absolute rounded-2xl top-0 left-0 w-full h-full" src={contact_join_us}></img>
+          <div className="relative my-8 flex flex-col items-center space-y-8 text-white">
+            <div className="text-4xl font-bold">Want to Join us?</div>
+            <div className="text-lg">
+              We are a new generation of researchers building the world's first decentralized community-reviewed
+              publication protocol for the social sciences.
+            </div>
+            <div className="px-8 py-2 bg-primary text-white rounded-full">GET STARTED</div>
           </div>
-          <div className="px-8 py-2 bg-primary text-white rounded-full">GET STARTED</div>
         </div>
-      </div>
-      <div className="mx-0 sm:mx-4 md:mx-10 xl:mx-20">
-        <Footer></Footer>
+        <Footer />
       </div>
     </div>
   );
