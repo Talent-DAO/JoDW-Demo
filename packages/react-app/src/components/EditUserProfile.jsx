@@ -180,7 +180,7 @@ const EditUserProfile = ({ address }) => {
         times_cited: timesCited,
         popularCategories: popularCategories,
       };
-      console.log("TIGER data", data);
+      
       if (existAuthor) {
         const res = await axios.put(server + "/api/author", data);
         console.log("res exist", res);

@@ -60,14 +60,13 @@ export const ArticleCard = ({ id }) => {
       setAuthorImage(authorSrc);
     }
   }, [author]);
-
   return (
     <div className="flex flex-col justify-center mx-2 my-4">
       <div className="rounded-2xl shadow-lg max-w-sm p-4" style={{ background: "#F1F1F1" }}>
         <a href="#!">
           {coverImage && (
             <img
-              className="rounded-xl cursor-pointer w-full h-32 bg-cover bg-center"
+              className="rounded-xl cursor-pointer w-full h-64 bg-cover bg-center"
               src={coverImage}
               alt=""
               onClick={() => navigate("/article")}
@@ -75,13 +74,13 @@ export const ArticleCard = ({ id }) => {
           )}
         </a>
         <div className="pt-4 flex flex-col">
-          <div className="h-10 flex flex-row justify-between items-start">
-            <div className="text-xl text-left font-bold cursor-pointer" onClick={() => navigate("/article")}>
+          <div className="h-10 grid grid-cols-5 gap-1 pr-2">
+            <div className="col-span-4 text-xl text-left font-bold cursor-pointer" onClick={() => navigate("/article")}>
               {article && article.title}
             </div>
-            <div className="flex flex-row items-center">
-              <img src={talentImage} className="-mr-2" alt="talent"></img>
-              <img src={etherImage} alt="ethereum"></img>
+            <div className="col-span-1 flex flex-row items-start">
+              <img src={talentImage} className="-mr-2 z-10" alt="talent"></img>
+              <img src={etherImage} className="z-0" alt="ethereum"></img>
             </div>
           </div>
           <div className="pt-8 flex flex-row justify-between items-center">
