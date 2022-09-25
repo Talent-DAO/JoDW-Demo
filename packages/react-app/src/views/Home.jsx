@@ -5,7 +5,6 @@ import arrowRightImage from "../assets/ArrowRight.png";
 import authorImage from "../assets/author.png";
 import lineImage from "../assets/line.png";
 import partnershipImage from "../assets/partnership.png";
-import profileImage from "../assets/profile.png";
 import { Footer, LatestArticles, Newsletter, Splash } from "../components";
 import { dataURLtoFile, getBgColorForCategory, getTextColorForCategory } from "../utils/utils";
 
@@ -82,7 +81,15 @@ function Home({ address }) {
       <div className="mx-auto pt-4 max-w-xl md:max-w-4xl xl:max-w-7xl overflow-hidden">
         <Splash address={address} />
         <div className="mx-4 flex flex-row items-center pt-6">
-          <img src={profileImage} alt="profile" className="pr-2"></img>
+          <div className="pr-2">
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="18" cy="18" r="18" fill="#D8D8D8" />
+              <path
+                d="M18 21.3271C22.3386 21.3271 26 22.0403 26 24.792C26 27.5446 22.3146 28.2326 18 28.2326C13.6624 28.2326 10 27.5194 10 24.7677C10 22.015 13.6854 21.3271 18 21.3271ZM18 8C20.9391 8 23.294 10.3814 23.294 13.3526C23.294 16.3238 20.9391 18.7062 18 18.7062C15.0619 18.7062 12.706 16.3238 12.706 13.3526C12.706 10.3814 15.0619 8 18 8Z"
+                fill="#B41C2E"
+              />
+            </svg>
+          </div>
           <div className="text-black font-semibold text-2xl">
             Got Talent? <span className="text-primary">Join Us.</span>
           </div>
@@ -98,9 +105,9 @@ function Home({ address }) {
               Featured Author
               <img className="pt-2" alt="featured author" src={lineImage}></img>
             </div>
-            <div className="pt-8 grid grid-cols-1 md:grid-cols-2 items-center">
+            <div className="pt-8 grid grid-cols-1 md:grid-cols-2 items-stretch">
               <div
-                className="rounded-2xl p-4 mr-0 md:mr-8 ml-0 md:ml-4"
+                className="rounded-2xl p-2 mr-0 md:mr-8 ml-0 md:ml-4"
                 style={{ boxShadow: "2px 0px 9px rgba(0, 0, 0, 0.15)" }}
               >
                 <img
@@ -110,10 +117,11 @@ function Home({ address }) {
                   onClick={() => navigate(`/author/${authorWalletId}`)}
                 ></img>
               </div>
-              <div className="flex flex-col items-start text-left">
+              <div className="flex flex-col items-start text-left py-2">
                 {/* <div className="text-sm xl:text-lg text-primary hidden md:block">Author</div>
                 <div className="pt-2 text-3xl xl:text-4xl font-bold">James Andrew</div>
                 <div className="pt-4 text-base xl:text-sm text-darkgray hidden md:block">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut </div> */}
+                <div className="text-primary text-base hidden md:inline lg:inline">Author</div>
                 <div
                   className="pt-2 text-3xl xl:text-4xl font-bold cursor-pointer"
                   onClick={() => navigate(`/author/${authorWalletId}`)}
@@ -135,7 +143,7 @@ function Home({ address }) {
                     </div>
                   ))}
                 </div>
-                <div className="pt-4 flex flex-row items-center text-lg space-x-4">
+                {/* <div className="pt-4 flex flex-row items-center text-md space-x-4">
                   <a target="_blank" href={authorTwitter} rel="noopener noreferrer">
                     <svg width="35" height="35" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <circle cx="25" cy="25" r="25" fill={authorTwitter === "" ? "#A3A3A3" : "#B41C2E"} />
@@ -156,8 +164,8 @@ function Home({ address }) {
                       />
                     </svg>
                   </a>
-                </div>
-                <div className="pt-4 flex flex-row items-center text-lg">
+                </div> */}
+                <div className="pt-4 flex flex-row items-center text-md">
                   <div
                     className="cursor-pointer rounded-lg text-green px-3 py-1 mr-4"
                     style={{ background: "rgba(60, 188, 0, 0.22)" }}
@@ -169,6 +177,11 @@ function Home({ address }) {
                     style={{ background: "rgba(113, 1, 255, 0.22)" }}
                   >
                     Romance
+                  </div>
+                </div>
+                <div className="pt-4 flex flex-row items-center text-md">
+                  <div className="rounded-full bg-primary text-white text-md px-8 py-2 cursor-pointer whitespace-nowrap">
+                    VISIT PAGE
                   </div>
                 </div>
               </div>

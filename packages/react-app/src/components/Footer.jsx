@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import discord from "../assets/discord.png";
+import discord from "../assets/discord-red.png";
 import minus from "../assets/minus.png";
 import plus from "../assets/plus.png";
 import logo from "../assets/talent-logo.png";
-import twitter from "../assets/twitter.png";
+import twitter from "../assets/twitter-red.png";
 
 function Footer() {
   const [show, setShow] = useState(false);
@@ -145,7 +145,7 @@ function Footer() {
           <div className="mt-4 lg:mt-0 rounded-2xl bg-gray px-8 flex flex-col space-y-4 py-4 justify-center">
             <div className="text-xl font-bold">LET'S GET STARTED</div>
             <div className="text-lg">Explore the journal of decentralized work</div>
-            <div className="flex flex-col lg:flex-row items-center lg:space-x-4 space-y-4 lg:space-y-0 text-center">
+            <div className="flex flex-col lg:flex-row items-center lg:space-x-4 space-y-6 lg:space-y-0 text-center">
               <div
                 className="w-full rounded-full bg-primary text-white text-xl px-4 py-2 cursor-pointer whitespace-nowrap"
                 onClick={() => navigate("/contact")}

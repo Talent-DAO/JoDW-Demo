@@ -68,12 +68,13 @@ const Contact = () => {
   }, []);
 
   return (
-    <div className="flex flex-col" style={{ backgroundImage: "linear-gradient(#fff, #EEE" }}>
+    <div style={{ backgroundImage: "linear-gradient(#fff, #EEE" }}>
       <div className="relative">
         <img
           className="absolute top-0 left-0 w-full h-full"
           src={contact_rect}
           style={{ transform: "matrix(-1, 0, 0, 1, 0, 0)" }}
+          alt="contact"
         ></img>
         <div className="mx-4 sm:mx-8 md:mx-10 xl:mx-20 overflow-hidden relative flex flex-col items-start text-left text-white space-y-8 py-16">
           <div className="text-6xl font-bold">Get in touch</div>
@@ -83,10 +84,10 @@ const Contact = () => {
             <br />
             We'd love to hear from you.{" "}
           </div>
-          <div className="flex flex-col lg:flex-row items-center space-x-0 lg:space-x-8">
+          <div className="flex flex-col lg:flex-row items-center space-x-0 space-y-4 lg:space-x-8 lg:space-y-0">
             <div className="rounded-full bg-primary px-10 py-4 cursor-pointer">MESSAGE</div>
             <div
-              className="rounded-full px-10 py-4 cursor-pointer"
+              className="rounded-full px-10 py-4 cursor-pointer border border-primary"
               style={{ backgroundColor: "rgba(180, 28, 46, 0.15)" }}
             >
               DISCORD
@@ -237,14 +238,26 @@ const Contact = () => {
                 </div>
                 <div className="flex flex-col my-4">
                   <div className="text-lg text-left px-4 py-2">Select Subject</div>
-                  <input
+                  {/* <input
                     type="text"
                     value={subject}
                     onChange={e => setSubject(e.target.value)}
                     className="px-4 py-2 text-lg bg-transparent rounded-xl border border-gray appearance-none lg:h-12 focus:outline-none focus:placeholder-transparent focus:ring-0"
                     placeholder="Articles, journals, documents..."
                     required=""
-                  />
+                  /> */}
+                  <select
+                    id="subject"
+                    name="subject"
+                    value={subject}
+                    onChange={e => setSubject(e.target.value)}
+                    placeholder="Articles, journals, documents..."
+                    className="py-2 px-4 text-lg bg-transparent rounded-xl border border-gray lg:h-12 focus:outline-none focus:placeholder-transparent focus:ring-0"
+                  >
+                    <option>Articles</option>
+                    <option>Journals</option>
+                    <option>Documents</option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -276,19 +289,19 @@ const Contact = () => {
           </div>
         </div>
       </div>
-      <div className="relative p-4 my-4 mx-0 sm:mx-8 md:mx-10 xl:mx-20 overflow-hidden">
-        <img className="absolute rounded-2xl top-0 left-0 w-full h-full" src={contact_join_us}></img>
-        <div className="relative my-8 flex flex-col items-center space-y-8 text-white">
-          <div className="text-4xl font-bold">Want to Join us?</div>
-          <div className="text-lg">
-            We are a new generation of researchers building the world's first decentralized community-reviewed
-            publication protocol for the social sciences.
+      <div className="mx-auto pt-4 max-w-xl md:max-w-4xl xl:max-w-7xl overflow-hidden">
+        <div className="relative p-4 my-4">
+          <img className="absolute rounded-2xl top-0 left-0 w-full h-full" src={contact_join_us}></img>
+          <div className="relative my-8 flex flex-col items-center space-y-8 text-white">
+            <div className="text-4xl font-bold">Want to Join us?</div>
+            <div className="text-lg">
+              We are a new generation of researchers building the world's first decentralized community-reviewed
+              publication protocol for the social sciences.
+            </div>
+            <div className="px-8 py-2 bg-primary text-white rounded-full">GET STARTED</div>
           </div>
-          <div className="px-8 py-2 bg-primary text-white rounded-full">GET STARTED</div>
         </div>
-      </div>
-      <div className="mx-0 sm:mx-4 md:mx-10 xl:mx-20">
-        <Footer></Footer>
+        <Footer />
       </div>
     </div>
   );

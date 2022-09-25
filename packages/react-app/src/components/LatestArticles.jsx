@@ -59,12 +59,15 @@ class LatestArticles extends Component {
         },
       ],
     };
-
+    
     return (
       <>
         <div className="mx-4 flex justify-between pt-16 mb-4">
           <div className="flex flex-row items-center">
-            <div className="font-bold text-lg sm:text-4xl pr-4">Latest Articles</div>
+            <div className="font-bold text-lg sm:text-4xl pr-4">
+              Latest Articles
+              <img className="pt-2" alt="featured author" src={lineImage}></img>
+            </div>
             <div
               className="rounded-md flex flex-row items-center py-1 px-2 mt-2 mr-4 cursor-pointer"
               style={{ background: "rgba(180, 28, 46, 0.06)" }}
