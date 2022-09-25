@@ -1,4 +1,3 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAccount } from "wagmi";
@@ -10,7 +9,7 @@ import profile from "../assets/profile.png";
 import logo from "../assets/talent-logo.png";
 import twitterImg from "../assets/twitter.png";
 import { getAuthorData } from "../utils/utils";
-import { CustomConnectButton } from  "./CustomConnectButton";
+import { CustomConnectButton } from "./CustomConnectButton";
 
 function Navbar({ userMenuOpen, handleUserMenuOpen }) {
   const navigate = useNavigate();

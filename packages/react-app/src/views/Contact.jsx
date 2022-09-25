@@ -74,6 +74,7 @@ const Contact = () => {
           className="absolute top-0 left-0 w-full h-full"
           src={contact_rect}
           style={{ transform: "matrix(-1, 0, 0, 1, 0, 0)" }}
+          alt="contact"
         ></img>
         <div className="mx-4 sm:mx-8 md:mx-10 xl:mx-20 overflow-hidden relative flex flex-col items-start text-left text-white space-y-8 py-16">
           <div className="text-6xl font-bold">Get in touch</div>

@@ -5,7 +5,6 @@ import arrowRightImage from "../assets/ArrowRight.png";
 import authorImage from "../assets/author.png";
 import lineImage from "../assets/line.png";
 import partnershipImage from "../assets/partnership.png";
-import profileImage from "../assets/profile.png";
 import { Footer, LatestArticles, Newsletter, Splash } from "../components";
 import { dataURLtoFile, getBgColorForCategory, getTextColorForCategory } from "../utils/utils";
 
@@ -84,8 +83,11 @@ function Home({ address }) {
         <div className="mx-4 flex flex-row items-center pt-6">
           <div className="pr-2">
             <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="18" cy="18" r="18" fill="#D8D8D8"/>
-              <path d="M18 21.3271C22.3386 21.3271 26 22.0403 26 24.792C26 27.5446 22.3146 28.2326 18 28.2326C13.6624 28.2326 10 27.5194 10 24.7677C10 22.015 13.6854 21.3271 18 21.3271ZM18 8C20.9391 8 23.294 10.3814 23.294 13.3526C23.294 16.3238 20.9391 18.7062 18 18.7062C15.0619 18.7062 12.706 16.3238 12.706 13.3526C12.706 10.3814 15.0619 8 18 8Z" fill="#B41C2E"/>
+              <circle cx="18" cy="18" r="18" fill="#D8D8D8" />
+              <path
+                d="M18 21.3271C22.3386 21.3271 26 22.0403 26 24.792C26 27.5446 22.3146 28.2326 18 28.2326C13.6624 28.2326 10 27.5194 10 24.7677C10 22.015 13.6854 21.3271 18 21.3271ZM18 8C20.9391 8 23.294 10.3814 23.294 13.3526C23.294 16.3238 20.9391 18.7062 18 18.7062C15.0619 18.7062 12.706 16.3238 12.706 13.3526C12.706 10.3814 15.0619 8 18 8Z"
+                fill="#B41C2E"
+              />
             </svg>
           </div>
           <div className="text-black font-semibold text-2xl">
@@ -119,9 +121,7 @@ function Home({ address }) {
                 {/* <div className="text-sm xl:text-lg text-primary hidden md:block">Author</div>
                 <div className="pt-2 text-3xl xl:text-4xl font-bold">James Andrew</div>
                 <div className="pt-4 text-base xl:text-sm text-darkgray hidden md:block">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut </div> */}
-                <div className="text-primary text-base hidden md:inline lg:inline">
-                  Author
-                </div>
+                <div className="text-primary text-base hidden md:inline lg:inline">Author</div>
                 <div
                   className="pt-2 text-3xl xl:text-4xl font-bold cursor-pointer"
                   onClick={() => navigate(`/author/${authorWalletId}`)}
