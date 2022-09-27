@@ -21,6 +21,8 @@ contract TalentDaoNftToken is Ownable, ERC721URIStorage {
     address public tDaoTokenAddress;
     IERC20 private tDaoToken;
 
+    event ArticlePublished(uint256 article, address indexed author);
+
     constructor(address _owner, address _tDaoToken) ERC721("Talent DAO Article NFT", "TDAO-ARTICLE") {
         tDaoToken = IERC20(_tDaoToken);
         tDaoTokenAddress = _tDaoToken;
@@ -48,6 +50,8 @@ contract TalentDaoNftToken is Ownable, ERC721URIStorage {
         uint256 newItemId = _tokenIds.current();
         _mint(authorAddress, newItemId);
         _setTokenURI(newItemId, metadataPtr);
+        
+        emit ArticlePublished(newItemId, authorAddress);
 
         return (newItemId);
     }

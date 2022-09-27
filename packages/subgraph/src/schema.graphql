@@ -1,15 +1,12 @@
-type Purpose @entity {
+type Article @entity {
   id: ID!
-  sender: Sender!
-  purpose: String!
+  articleId: BigInt!
+  author: Author!
   createdAt: BigInt!
-  transactionHash: String!
 }
 
-type Sender @entity {
+type Author @entity {
   id: ID!
   address: Bytes!
-  purposes: [Purpose!] @derivedFrom(field: "sender")
   createdAt: BigInt!
-  purposeCount: BigInt!
 }

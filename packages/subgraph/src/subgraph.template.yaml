@@ -3,23 +3,23 @@ schema:
   file: ./src/schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: YourContract
+    name: TalentDaoNftToken
     network: localhost
     source:
-      address: "{{localhost_YourContractAddress}}"
-      abi: YourContract
+      address: "{{localhost_TalentDaoNftTokenAddress}}"
+      abi: TalentDaoNftToken
       startBlock: 1
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - Purpose
-        - Sender
+        - Article
+        - Author
       abis:
-        - name: YourContract
-          file: ./abis/localhost_YourContract.json
+        - name: TalentDaoNftToken
+          file: ./abis/localhost_TalentDaoNftToken.json
       eventHandlers:
-        - event: SetPurpose(address,string)
-          handler: handleSetPurpose
+        - event: ArticlePublished(uint256,indexed address)
+          handler: handleArticlePublished
       file: ./src/mapping.ts

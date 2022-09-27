@@ -1,33 +1,30 @@
 import { BigInt, Address } from "@graphprotocol/graph-ts";
 import {
-  YourContract,
-  SetPurpose,
-} from "../generated/YourContract/YourContract";
-import { Purpose, Sender } from "../generated/schema";
+  TalentDaoNftToken,
+  ArticlePublished,
+} from "../generated/TalentDaoNftToken/TalentDaoNftToken";
+import { Article, Author } from "../generated/schema";
 
-export function handleSetPurpose(event: SetPurpose): void {
-  let senderString = event.params.sender.toHexString();
+export function handleArticlePublished(event: ArticlePublished): void {
 
-  let sender = Sender.load(senderString);
+  let articleId = event.params.article.toString();
+  let authorId = event.params.author.toHexString();
 
-  if (sender === null) {
-    sender = new Sender(senderString);
-    sender.address = event.params.sender;
-    sender.createdAt = event.block.timestamp;
-    sender.purposeCount = BigInt.fromI32(1);
-  } else {
-    sender.purposeCount = sender.purposeCount.plus(BigInt.fromI32(1));
+  let author = Author.load(authorId);
+  if (author === null) {
+    author = new Author(authorId);
+    author.address = event.params.author;
+    author.createdAt = event.block.timestamp;
+    author.save();
+  }
+  
+  let article = Article.load(articleId);
+  if (article === null) {
+    article = new Article(articleId);
+    article.articleId = event.params.article;
+    article.author = author.id;
+    article.createdAt = event.block.timestamp;
+    article.save();
   }
 
-  let purpose = new Purpose(
-    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
-  );
-
-  purpose.purpose = event.params.purpose;
-  purpose.sender = senderString;
-  purpose.createdAt = event.block.timestamp;
-  purpose.transactionHash = event.transaction.hash.toHex();
-
-  purpose.save();
-  sender.save();
 }
