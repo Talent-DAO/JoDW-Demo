@@ -13,6 +13,8 @@ const AdvancedSearch = () => {
   const [sortField, setSortField] = useState("username");
   const [value, setValue] = useState("");
   const [searchResult, setSearchResult] = useState([]);
+  const [journalTitle, setJournalTitle] = useState("");
+  const [ISBN, setISBN] = useState("");
   // const history = useHistory();
 
   // useEffect(() => {
@@ -99,6 +101,16 @@ const AdvancedSearch = () => {
     }
   };
 
+  const handleClearAll = event => {
+    setValue("");
+    setCategory("author");
+    setSearchResult([]);
+    setField("username");
+    setSortField("username");
+    setJournalTitle("");
+    setISBN("");
+  }
+
   return (
     <div style={{ backgroundImage: "linear-gradient(#fff, #EEEE" }}>
       <div className="relative" style={{ backgroundColor: "#e2e2e2" }}>
@@ -176,7 +188,7 @@ const AdvancedSearch = () => {
                   <option>English</option>
                 </select>
               </div>
-              <div className="hidden md:flex w-full md:w-auto flex-row items-center pb-4">
+              <div className="hidden md:flex w-full md:w-auto flex-row items-center pb-4 cursor-pointer" onClick={handleClearAll}>
                 <div className="text-sm" style={{ color: "rgba(133, 133, 133, 1)" }}>
                   Clear all
                 </div>
@@ -186,14 +198,24 @@ const AdvancedSearch = () => {
             <div className="w-full flex flex-col md:flex-row items-start md:items-end space-x-0 md:space-x-8 space-y-4 md:space-y-0">
               <div className="w-full md:w-1/2 flex flex-col space-y-2">
                 <div className="text-sm">Journal Title</div>
-                <input type="text" className="text-lg rounded-md p-2 focus:outline-none"></input>
+                <input 
+                  type="text"
+                  className="text-lg rounded-md p-2 focus:outline-none"
+                  onChange={e => setJournalTitle(e.target.value)}
+                  value={journalTitle}
+                ></input>
               </div>
               <div className="w-full md:w-1/2 flex flex-col space-y-2">
                 <div className="text-sm">ISBN</div>
-                <input type="text" className="text-lg rounded-md p-2 focus:outline-none"></input>
+                <input
+                  type="text"
+                  className="text-lg rounded-md p-2 focus:outline-none"
+                  onChange={e => setISBN(e.target.value)}
+                  value={ISBN}
+                ></input>
               </div>
             </div>
-            <div className="md:hidden w-full md:w-auto flex flex-row items-center pb-4">
+            <div className="md:hidden w-full md:w-auto flex flex-row items-center pb-4 cursor-pointer" onClick={handleClearAll}>
               <div className="text-sm" style={{ color: "rgba(133, 133, 133, 1)" }}>
                 Clear all
               </div>

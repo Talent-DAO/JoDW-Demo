@@ -93,6 +93,14 @@ const Search = () => {
     }
   };
 
+  const handleClearAll = event => {
+    setValue("");
+    setCategory("author");
+    setSearchResult([]);
+    setField("username");
+    setSortField("username");
+  }
+
   return (
     <div style={{ backgroundImage: "linear-gradient(#fff, #EEEE" }}>
       <div className="relative" style={{ backgroundColor: "#e2e2e2" }}>
@@ -173,7 +181,7 @@ const Search = () => {
                   <img className="pl-2" width={19} src={arrow} alt="advanced search"></img>
                 </div>
               </div>
-              <div className="w-full md:w-auto flex flex-row items-center pb-4">
+              <div className="w-full md:w-auto flex flex-row items-center pb-4 cursor-pointer" onClick={handleClearAll}>
                 <div className="text-sm" style={{ color: "rgba(133, 133, 133, 1)" }}>
                   Clear all
                 </div>

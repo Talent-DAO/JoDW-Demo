@@ -5,6 +5,7 @@ import "slick-carousel/slick/slick.css";
 import favImage from "../assets/favourite.png";
 import nextImage from "../assets/next.png";
 import prevImage from "../assets/prev.png";
+import lineImage from "../assets/line.png"
 import { LatestArticleCard } from "../components";
 
 class LatestArticles extends Component {
