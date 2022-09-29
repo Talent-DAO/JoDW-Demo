@@ -5,7 +5,7 @@ import arrow from "../assets/arrowWhite.svg";
 import clear from "../assets/clear.svg";
 import info from "../assets/info.svg";
 import search from "../assets/search.svg";
-import { AuthorCard, Footer, SubmissionCard } from "../components";
+import { AuthorCard, Footer, ArticleCard } from "../components";
 import { strcmp } from "../utils/utils";
 
 const server = "https://tdao-api.herokuapp.com";
@@ -93,8 +93,16 @@ const Search = () => {
     }
   };
 
+  const handleClearAll = event => {
+    setValue("");
+    setCategory("author");
+    setSearchResult([]);
+    setField("username");
+    setSortField("username");
+  }
+
   return (
-    <div className="flex flex-col" style={{ backgroundImage: "linear-gradient(#fff, #EEEE" }}>
+    <div style={{ backgroundImage: "linear-gradient(#fff, #EEEE" }}>
       <div className="relative" style={{ backgroundColor: "#e2e2e2" }}>
         <div className="lg:mx-auto lg:max-w-3xl overflow-hidden relative text-left space-y-8 py-16">
           <div className="mx-4 flex flex-col items-center justify-center space-y-8">
@@ -107,20 +115,20 @@ const Search = () => {
                 onKeyDown={handleKeyDown}
               ></input>
               <div
-                className="w-40 bg-primary rounded-full py-2 text-sm flex flex-row items-center justify-center cursor-pointer"
+                className="w-12 lg:w-40 bg-primary rounded-full py-2 text-sm flex flex-row items-center justify-center cursor-pointer space-x-2"
                 onClick={handleSearch}
               >
-                <img className="" alt="search" src={search} width={24} height={24}></img>
-                <div>Search</div>
+                <img className="" src={search} width={24} height={24}></img>
+                <div className="hidden md:inline">Search</div>
               </div>
             </div>
             <div className="w-full flex flex-col md:flex-row items-start md:items-end space-x-0 md:space-x-8 space-y-4 md:space-y-0">
               <div className="w-full md:w-auto flex flex-col space-y-2">
-                <div className="hidden md:block text-sm">Sort by:</div>
+                <div className="text-sm">Sort by:</div>
                 <select
                   id="select-blockchain"
                   name="select-blockchain"
-                  className="mt-1 block bg-transparent w-full pl-3 pr-10 py-2 text-lg rounded-xl border border-black"
+                  className="mt-1 block bg-white w-full pl-3 pr-10 py-2 text-lg rounded-lg"
                   value={sortField}
                   onChange={handleSortFieldChange}
                 >
@@ -148,11 +156,11 @@ const Search = () => {
                 </select>
               </div>
               <div className="w-full md:w-auto flex flex-col space-y-2">
-                <div className="hidden md:block text-sm">Category:</div>
+                <div className="text-sm">Category:</div>
                 <select
                   id="select-blockchain"
                   name="select-blockchain"
-                  className="mt-1 block bg-transparent w-full pl-3 pr-10 py-2 text-lg rounded-xl border border-black"
+                  className="mt-1 block bg-white w-full pl-3 pr-10 py-2 text-lg rounded-lg"
                   value={category}
                   onChange={handleCategoryChange}
                 >
@@ -168,12 +176,12 @@ const Search = () => {
                   <div>Narrow search</div>
                   <img className="pl-1" width={20} src={info} alt="search"></img>
                 </div>
-                <div className="mx-4 md:mx-0 bg-primary text-white text-lg p-2 rounded-full md:rounded-md flex flex-row items-center justify-center">
-                  <div>AdvancedSearch</div>
+                <div className="mx-4 md:mx-0 bg-primary text-white text-lg py-1 px-2 rounded-full md:rounded-md flex flex-row items-center justify-center">
+                  <div>Advanced Search</div>
                   <img className="pl-2" width={19} src={arrow} alt="advanced search"></img>
                 </div>
               </div>
-              <div className="w-full md:w-auto flex flex-row items-center pb-4">
+              <div className="w-full md:w-auto flex flex-row items-center pb-4 cursor-pointer" onClick={handleClearAll}>
                 <div className="text-sm" style={{ color: "rgba(133, 133, 133, 1)" }}>
                   Clear all
                 </div>
@@ -182,8 +190,8 @@ const Search = () => {
             </div>
           </div>
         </div>
-      </div>
-      <div className="px-4 sm:px-8 md:px-10 xl:px-20 overflow-hidden">
+      </div>      
+      <div className="mx-auto pt-4 max-w-xl md:max-w-4xl xl:max-w-7xl">
         <div className="text-sm pt-8 text-left">
           {category === "author" ? (
             <div>{searchResult.length} similar Authors found</div>
@@ -191,14 +199,12 @@ const Search = () => {
             <div>{searchResult.length} similar Articles found</div>
           )}
         </div>
-        <div className="py-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="py-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {category === "author"
             ? searchResult.map(item => <AuthorCard key={Math.random()} author={item}></AuthorCard>)
-            : searchResult.map(item => <SubmissionCard key={Math.random()} article={item}></SubmissionCard>)}
+            : searchResult.map(item => <ArticleCard key={Math.random()} article={item}></ArticleCard>)}
         </div>
-      </div>
-      <div className="px-4 sm:px-8 md:px-10 xl:px-20">
-        <Footer></Footer>
+        <Footer />
       </div>
     </div>
   );

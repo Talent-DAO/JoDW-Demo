@@ -1,4 +1,4 @@
-export { default as ArticleCard } from "./ArticleCard";
+export { default as LatestArticleCard } from "./LatestArticleCard";
 export { default as ArticleMintCard } from "./ArticleMintCard";
 export { default as AuthorCard } from "./AuthorCard";
 export { default as AuthorForm } from "./AuthorForm";
@@ -28,3 +28,4 @@ export { default as SubmitFile } from "./SubmitFile";
 export { default as UserArticles } from "./UserArticles";
 export { default as UserConnect } from "./UserConnect";
 export { default as UserSubmissions } from "./UserSubmissions";
+export { default as ArticleCard } from "./ArticleCard";
