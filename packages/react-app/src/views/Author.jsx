@@ -5,8 +5,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useContractWrite } from "wagmi";
 import mark from "../assets/best_mark.png";
 import check from "../assets/check.png";
+import lineImage from "../assets/line.png";
 import linkedin from "../assets/linkedin.png";
 import twitter from "../assets/twitter.png";
+import arrowRightImage from "../assets/arrow.png";
 import { ArticleMintCard, AuthorMark, Footer } from "../components";
 import { dataURLtoFile, getAuthorData } from "../utils/utils";
 
@@ -298,16 +300,17 @@ const Author = ({ tx, readContracts, writeContracts, address }) => {
                   </div>
                 </div>
 
-                <div className="rounded-2xl flex flex-col bg-white border border-lightgrey p-12">
-                  <div className="flex flex-row justify-between">
+                <div className="rounded-2xl flex flex-col bg-white border border-lightgrey p-12 space-y-6">
+                  <div className="flex flex-row justify-between items-center">
                     <div className="text-2xl font-bold font-mont">Publifications</div>
                     {articles.length > 5 && (
-                      <div className="mx-4 rounded-2xl bg-white text-lg font-bold text-primary">
-                        See all
+                      <div className="flex flex-row rounded-2xl text-lg items-center text-primary font-semibold cursor-pointer space-x-2">
+                        <span>See all</span>
+                        <img src={arrowRightImage} alt="right arrow"></img>
                       </div>
                     )}
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 gap-y-8">
                     {articles.map((article, index) => (
                       <ArticleMintCard
                         key={index}
