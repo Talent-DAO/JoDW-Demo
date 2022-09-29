@@ -25,11 +25,11 @@ export const CustomConnectButton = () => {
               if (!connected) {
                 return (
                   <button
-                    className="w-full rounded-full bg-primary text-white text-md px-8 py-2 cursor-pointer whitespace-nowrap"
+                    className="w-full rounded-full bg-primary text-white text-md px-8 py-3 cursor-pointer whitespace-nowrap font-mont font-medium"
                     onClick={openConnectModal}
                     type="button"
                   >
-                    CONNECT
+                    Connect Wallet
                   </button>
                 );
               }
@@ -37,11 +37,11 @@ export const CustomConnectButton = () => {
               if (chain.unsupported) {
                 return (
                   <button
-                    className="w-full rounded-full bg-primary text-white text-md px-8 py-2 cursor-pointer whitespace-nowrap"
+                    className="w-full rounded-full bg-primary text-white text-md px-8 py-3 cursor-pointer whitespace-nowrap font-mont font-medium"
                     onClick={openChainModal}
                     type="button"
                   >
-                    WRONG NETWORK
+                    Wrong Network
                   </button>
                 );
               }
