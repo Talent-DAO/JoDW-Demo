@@ -3,13 +3,10 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useContractWrite } from "wagmi";
-import mark from "../assets/best_mark.png";
-import check from "../assets/check.png";
-import lineImage from "../assets/line.png";
 import linkedin from "../assets/linkedin.png";
 import twitter from "../assets/twitter.png";
 import arrowRightImage from "../assets/arrow.png";
-import { ArticleMintCard, AuthorMark, Footer } from "../components";
+import { ArticleMintCard, Footer } from "../components";
 import { dataURLtoFile, getAuthorData } from "../utils/utils";
 
 const server = "https://tdao-api.herokuapp.com";
