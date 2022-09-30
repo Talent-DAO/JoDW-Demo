@@ -266,24 +266,24 @@ const Author = ({ tx, readContracts, writeContracts, address }) => {
                       <div className="text-lg text-center lg:text-left" style={{ color: "#909090" }}>{author.bio}</div>
                       <div className="flex flex-row space-x-3">
                         <div
-                          className="rounded-lg px-6 py-2 text-green"
+                          className="rounded-lg px-6 py-2 text-green font-mont"
                           style={{ backgroundColor: "rgba(60, 188, 0, 0.22)" }}
                         >
                           History
                         </div>
                         <div
-                          className="rounded-lg px-6 py-2 text-purple"
+                          className="rounded-lg px-6 py-2 text-purple font-mont"
                           style={{ backgroundColor: "rgba(113, 1, 255, 0.22)" }}
                         >
                           Romance
                         </div>
                         <div
-                          className="rounded-lg px-6 py-2 text-cyan"
+                          className="rounded-lg px-6 py-2 text-cyan font-mont"
                           style={{ backgroundColor: "rgba(0, 130, 114, 0.22)" }}
                         >
                           Nature
                         </div>
-                        <div className="rounded-lg px-6 py-2 text-red" style={{ backgroundColor: "rgba(255, 1, 1, 0.22)" }}>
+                        <div className="rounded-lg px-6 py-2 text-red font-mont" style={{ backgroundColor: "rgba(255, 1, 1, 0.22)" }}>
                           Sci-Fi
                         </div>
                       </div>
