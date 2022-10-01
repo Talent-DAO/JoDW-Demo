@@ -112,7 +112,7 @@ const AdvancedSearch = () => {
   }
 
   return (
-    <div style={{ backgroundImage: "linear-gradient(#fff, #EEEE" }}>
+    <div>
       <div className="relative" style={{ backgroundColor: "#e2e2e2" }}>
         <div className="lg:mx-auto lg:max-w-2xl overflow-hidden relative text-left space-y-8 py-16">
           <div className="mx-4 flex flex-col items-center justify-center space-y-8">
@@ -237,7 +237,7 @@ const AdvancedSearch = () => {
             ? searchResult.map(item => <AuthorCard key={Math.random()} author={item}></AuthorCard>)
             : searchResult.map(item => <ArticleCard key={Math.random()} article={item}></ArticleCard>)}
         </div>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </div>
   );

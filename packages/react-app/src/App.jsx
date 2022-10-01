@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { useAccount } from "wagmi";
 import "./App.css";
-import { Navbar } from "./components";
+import { Navbar, Footer } from "./components";
 import {
   AboutView,
   AdvancedSearchView,
@@ -83,6 +83,7 @@ const App = ({ ...props }) => {
         <Route path="/governance" element={<GovernanceView />} />
         <Route path="/request-feature" />
       </Routes>
+      <Footer />
     </div>
   );
 };
