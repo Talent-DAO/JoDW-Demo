@@ -1,4 +1,5 @@
-import { createHttpLink, MultiAPILink } from "apollo-link-http";
+import { createHttpLink } from "apollo-link-http";
+import { MultiAPILink } from "@habx/apollo-multi-endpoint-link";
 import { ApolloClient, ApolloLink, InMemoryCache, useQuery } from "@apollo/client";
 import gql from "graphql-tag";
 import { useNetwork } from "wagmi";
