@@ -19,7 +19,7 @@
     "@apollo/react-hooks": "^4.0.0",
     "@craco/craco": "^6.4.3",
     "@headlessui/react": "^1.7.3",
-    "@heroicons/react": "^1.0.5",
+    "@heroicons/react": "^2.0.11",
     "@portis/web3": "^4.0.5",
     "@rainbow-me/rainbowkit": "^0.5.0",
     "@ramp-network/ramp-instant-sdk": "^2.2.0",
