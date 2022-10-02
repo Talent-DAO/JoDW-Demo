@@ -8,12 +8,12 @@ import { WagmiConfig } from "wagmi";
 import App from "./App";
 import { ErrorBoundary } from "./components";
 import "./index.css";
-import { arweaveClient } from "./utils/graphqlClient";
+import { compositeClient } from "./utils/graphqlClient";
 import client, { chains } from "./utils/wagmi";
 
 ReactDOM.render(
   <ErrorBoundary>
-    <ApolloProvider client={arweaveClient}>
+    <ApolloProvider client={compositeClient}>
       <WagmiConfig client={client}>
         <RainbowKitProvider chains={chains}>
           <Router>
