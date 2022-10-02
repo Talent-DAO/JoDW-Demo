@@ -1,7 +1,11 @@
 import "@testing-library/jest-dom";
+import { render, screen } from "@testing-library/react";
+import { Home } from "../Home.jsx";
 
 describe("<Home /> view component", () => {
   it("should render the home view", () => {
-    expect(true).toBe(true);
+    render(<Home />);
+
+    expect(screen.queryByText("Home")).toBeInTheDocument();
   });
 });
