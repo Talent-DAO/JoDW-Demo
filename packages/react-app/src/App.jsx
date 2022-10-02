@@ -19,7 +19,7 @@ import {
   TermsOfServiceView,
   TokenView,
   UserView,
-  WalletConnectModalView
+  WalletConnectModalView,
 } from "./views";
 
 const App = ({ ...props }) => {
@@ -33,7 +33,7 @@ const App = ({ ...props }) => {
   return (
     <div className="App container-2xl mx-auto">
       <Navbar userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />
-      {!!address ?
+      {!address ? (
         <Routes>
           <Route index element={<HomeView address={address} />} />
           <Route path="/browse" />
@@ -49,31 +49,45 @@ const App = ({ ...props }) => {
           >
             <Route
               path="/user/submissions"
-              element={<UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />}
+              element={
+                <UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />
+              }
             />
             <Route
               path="/user/author"
-              element={<UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />}
+              element={
+                <UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />
+              }
             />
             <Route
               path="/user/articles"
-              element={<UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />}
+              element={
+                <UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />
+              }
             />
             <Route
               path="/user/notifications"
-              element={<UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />}
+              element={
+                <UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />
+              }
             />
             <Route
               path="/user/publisher"
-              element={<UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />}
+              element={
+                <UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />
+              }
             />
             <Route
               path="/user/rewards"
-              element={<UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />}
+              element={
+                <UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />
+              }
             />
             <Route
               path="/user/reputation"
-              element={<UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />}
+              element={
+                <UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />
+              }
             />
           </Route>
           <Route path="/debug" />
@@ -85,8 +99,9 @@ const App = ({ ...props }) => {
           <Route path="/governance" element={<GovernanceView />} />
           <Route path="/request-feature" />
         </Routes>
-        : <WalletConnectModalView />
-      }
+      ) : (
+        <WalletConnectModalView />
+      )}
     </div>
   );
 };

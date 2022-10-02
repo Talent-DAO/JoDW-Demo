@@ -4,8 +4,8 @@ import technologyDataImage from "../assets/technology-data.png";
 
 function Newsletter() {
   return (
-    // <div className="newsletter" style={{background: 'linear-gradient(90deg, #090909 0%, #3F040B 100%)'}}>
-    // </div>
+  // <div className="newsletter" style={{background: 'linear-gradient(90deg, #090909 0%, #3F040B 100%)'}}>
+  // </div>
 
     <div className="demo-wrap rounded-3xl p-6 lg:p-16">
       <img className="demo-bg" src={technologyDataImage} alt="" />

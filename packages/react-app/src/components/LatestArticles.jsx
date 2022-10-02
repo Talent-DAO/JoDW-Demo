@@ -3,9 +3,9 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import favImage from "../assets/favourite.png";
+import lineImage from "../assets/line.png";
 import nextImage from "../assets/next.png";
 import prevImage from "../assets/prev.png";
-import lineImage from "../assets/line.png"
 import { LatestArticleCard } from "../components";
 
 class LatestArticles extends Component {
@@ -60,7 +60,7 @@ class LatestArticles extends Component {
         },
       ],
     };
-    
+
     return (
       <>
         <div className="mx-4 flex justify-between pt-16 mb-4">

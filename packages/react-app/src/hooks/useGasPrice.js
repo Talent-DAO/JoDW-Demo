@@ -22,6 +22,6 @@ const useGasPrice = (targetNetwork, speed) => {
 
   usePoller(loadGasPrice, 39999);
   return gasPrice;
-}
+};
 
 export default useGasPrice;

@@ -23,6 +23,7 @@
     "server": "yarn workspace @jodw/backend server",
     "prestart": "yarn workspace @jodw/react-app prestart",
     "start": "yarn workspace @jodw/react-app start",
+    "lint": "yarn workspace @jodw/react-app lint",
     "compile": "yarn workspace @jodw/hardhat compile",
     "deploy": "yarn workspace @jodw/hardhat deploy",
     "verify": "yarn workspace @jodw/hardhat verify",
