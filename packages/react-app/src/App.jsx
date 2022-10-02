@@ -1,5 +1,5 @@
 import "antd/dist/antd.css";
-import React, { PropTypes, useState } from "react";
+import React, { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { useAccount } from "wagmi";
 import "./App.css";
@@ -33,7 +33,7 @@ const App = ({ ...props }) => {
   return (
     <div className="App container-2xl mx-auto">
       <Navbar userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />
-      {!!address ? (
+      {!address ? (
         <Routes>
           <Route index element={<HomeView address={address} />} />
           <Route path="/browse" />
@@ -104,10 +104,6 @@ const App = ({ ...props }) => {
       )}
     </div>
   );
-};
-
-App.propTypes = {
-  subgraphUri: PropTypes.string,
 };
 
 export default App;
