@@ -17,6 +17,7 @@ module.exports = {
       cyan: "#008272",
       red: "#ff0101",
       black: "#000",
+      darkblack: "#090909"
     },
     fontFamily: {
       'mont': ["Montserrat", "ui-sans-serif", "system-ui"],
