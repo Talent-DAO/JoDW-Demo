@@ -17,10 +17,13 @@ module.exports = {
       cyan: "#008272",
       red: "#ff0101",
       black: "#000",
+      lavender: "#f0f0f1",
+      guyabano: "#f8f8f8",
+      gray91: "#e8e8e8"
     },
     fontFamily: {
       'mont': ["Montserrat", "ui-sans-serif", "system-ui"],
-    }
+    },
   },
   plugins: [
     // require("@tailwindcss/forms"),

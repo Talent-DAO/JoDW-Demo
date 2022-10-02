@@ -58,7 +58,7 @@ const ArticleMintCard = ({ article, tx, writeContracts, readContracts, address }
   return (
     <div
       className="rounded-2xl bg-white flex flex-col space-y-4 border-2 border-lightgrey" >
-      <img className="rounded-2xl w-full h-60" src={coverImage} alt="cover"></img>
+      <img className="rounded-t-2xl w-full h-60" src={coverImage} alt="cover"></img>
       <div className="flex flex-col px-4">
 
         <div className="text-xl font-bold text-left pb-2 font-mont">{article?.title}</div>

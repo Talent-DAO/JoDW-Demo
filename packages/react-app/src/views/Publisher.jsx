@@ -5,13 +5,17 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useContractWrite } from "wagmi";
 import linkedin from "../assets/linkedin.png";
 import twitter from "../assets/twitter.png";
+import followImage from "../assets/add.png";
+import emailImage from "../assets/email.png";
 import arrowRightImage from "../assets/arrow.png";
+import verifiedImage from "../assets/verified.png";
 import { ArticleMintCard, Footer } from "../components";
 import { dataURLtoFile, getAuthorData } from "../utils/utils";
+import MessageModal from "../components/MessageModal";
 
 const server = "https://tdao-api.herokuapp.com";
 
-const Author = ({ tx, readContracts, writeContracts, address }) => {
+const Publisher = ({ tx, readContracts, writeContracts, address }) => {
   const navigate = useNavigate();
   const { walletId } = useParams();
   const [author, setAuthor] = useState(null);
@@ -25,6 +29,15 @@ const Author = ({ tx, readContracts, writeContracts, address }) => {
   const [tipAmount, setTipAmount] = useState(0);
   const [token, setToken] = useState("ETH");
   const [loading, setLoading] = useState(false);
+  const [messageModalOpen, setMessageModalOpen] = useState(false);
+
+  const handleSubmitMessage = ({title, message}) => {
+    console.log('Message modal submit: ', title, message);
+  };
+
+  const handleCloseMessageModal = () => {
+    setMessageModalOpen(false);
+  }
 
   const scrollTop = () => {
     document.documentElement.scrollTo({
@@ -144,10 +157,6 @@ const Author = ({ tx, readContracts, writeContracts, address }) => {
     functionName: "",
   });
 
-  const tipAuthorTalent = async amount => {};
-
-  const tipAuthorEth = async amount => {};
-
   return (
     <>
       {author && articles && (
@@ -170,90 +179,31 @@ const Author = ({ tx, readContracts, writeContracts, address }) => {
                           className="w-32 py-3 rounded-full bg-primary text-white font-semibold flex flex-row items-center justify-center cursor-pointer font-mont"
                           onClick={() => handleSubscribeChange()}
                         >
-                          Subscribe
+                          <img className="pr-1" src={followImage} />
+                          Follow
                         </div>
-                        <div className="relative">
-                          <div
-                            className="w-32 py-3 rounded-full cursor-pointer text-primary font-semibold font-mont"
-                            style={{ backgroundColor: "rgba(180, 28, 46, 0.15)" }}
-                            onClick={e => {
-                              setTipDropDown(!tipDropDown);
-                            }}
-                          >
-                            Tip Author
-                          </div>
-                          {/* {
-                            tipDropDown && (
-                              <div className="mt-2 w-40 absolute cursor-pointer flex flex-row items-center justify-between border border-primary rounded-lg overflow-hidden">
-                                <div className="w-full py-2 text-primary border-r hover:bg-primary hover:text-white" onClick={() => { tipAuthor(10); setTipDropDown(false) }}>10</div>
-                                <div className="w-full py-2 text-primary border-r hover:bg-primary hover:text-white" onClick={() => { tipAuthor(50); setTipDropDown(false) }}>50</div>
-                                <div className="w-full py-2 text-primary hover:bg-primary hover:text-white" onClick={() => { tipAuthor(100); setTipDropDown(false) }}>100</div>
-                              </div>
-                            )
-                          } */}
+                        <div
+                          className="flex flex-row w-32 py-3 rounded-full cursor-pointer text-primary font-semibold font-mont justify-center border border-primary"
+                          style={{ backgroundColor: "rgba(180, 28, 46, 0.15)" }}
+                          onClick={e => {
+                            setTipDropDown(!tipDropDown);
+                            setMessageModalOpen(true);
+                          }}
+                        >
+                          <img className="pr-1" src={emailImage} />
+                          Message
                         </div>
-                        {tipDropDown && (
-                          <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-                            <div className="relative p-8 w-full max-w-md h-full md:h-auto bg-white rounded-lg">
-                              <div className="flex flex-col space-y-4">
-                                <div className="flex flex-row items-center">
-                                  <div className="w-40 text-lg text-black">Amount:</div>
-                                  <input
-                                    type="text"
-                                    value={tipAmount}
-                                    className="my-1 px-4 py-2 bg-transparent rounded-xl block w-full focus:outline-none text-lg border border-lightgray"
-                                    onChange={event => {
-                                      setTipAmount(event.target.value);
-                                      console.log("Tip Amount", tipAmount);
-                                    }}
-                                  />
-                                </div>
-                                <div className="flex flex-row items-center">
-                                  <div className="w-40 text-lg text-black">Token:</div>
-                                  <select
-                                    id="select-blockchain"
-                                    name="select-blockchain"
-                                    className="mt-1 block bg-transparent w-full pl-3 pr-10 py-2 text-lg rounded-xl border border-black"
-                                    value={token}
-                                    onChange={e => setToken(e.target.value)}
-                                  >
-                                    <option>ETH</option>
-                                    <option>TALENT</option>
-                                  </select>
-                                </div>
-                                <div className="flex flex-row items-center space-x-0 md:space-x-4 space-y-4 md:space-y-0">
-                                  <div
-                                    className="w-full rounded-full bg-primary text-white text-xl px-4 py-2 cursor-pointer"
-                                    onClick={() => {
-                                      if (token == "ETH") {
-                                        tipAuthorEth(tipAmount);
-                                      } else {
-                                        tipAuthorTalent(tipAmount);
-                                      }
-                                      setTipDropDown(false);
-                                    }}
-                                  >
-                                    OK
-                                  </div>
-                                  <div
-                                    className="w-full rounded-full border border-primary bg-white text-primary text-xl px-4 py-2 cursor-pointer"
-                                    onClick={() => {
-                                      setTipDropDown(false);
-                                    }}
-                                  >
-                                    CANCEL
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        )}
                       </div>
                     </div>
                     <div className="flex flex-col w-full space-y-4">
                       <div className="flex flex-col text-center lg:text-left">
                         <div className="flex flex-row justify-between">
-                          <div className="text-4xl font-bold self-start">{author.username}</div>
+                          <div className="flex flex-row text-4xl font-bold self-start">
+                            {author.username}
+                            <div className="ml-2">
+                              <img src={verifiedImage} />
+                            </div>
+                          </div>
                           <div className="flex flex-row items-center space-x-4 self-start">
                             <div className="cursor-pointer">
                               <img src={twitter} width={40} alt="twitter"></img>
@@ -288,8 +238,8 @@ const Author = ({ tx, readContracts, writeContracts, address }) => {
                           Sci-Fi
                         </div>
                       </div>
-                    </div>                    
-                    
+                    </div>
+
                     <div className="w-full space-x-8">
                       <div className="col-span-6 text-left rounded-xl py-4 flex flex-col space-y-2">
                         <div className="text-lg font-bold font-mont">Summary</div>
@@ -303,7 +253,7 @@ const Author = ({ tx, readContracts, writeContracts, address }) => {
 
                 <div className="rounded-2xl flex flex-col bg-white border border-lightgrey p-12 space-y-6">
                   <div className="flex flex-row justify-between items-center">
-                    <div className="text-2xl font-bold font-mont">Publifications</div>
+                    <div className="text-2xl font-bold font-mont">Published</div>
                     {articles.length > 5 && (
                       <div className="flex flex-row rounded-2xl text-lg items-center text-primary font-semibold cursor-pointer space-x-2">
                         <span>See all</span>
@@ -321,34 +271,31 @@ const Author = ({ tx, readContracts, writeContracts, address }) => {
                         readContracts={readContracts}
                         address={address}
                       ></ArticleMintCard>
-                      ))}
+                    ))}
                   </div>
                 </div>
               </div>
               <div className="col-span-1">
-                  <div className="flex flex-col bg-white rounded-2xl px-8 py-10 border border-lightgrey space-y-4 font-mont">
-                    <div className="flex justify-between">
-                      <div className="text-darkgrey">Member Since</div>
-                      <div className="text-darkgray">{memberSince > 0 ? `${memberSince} days` : "Today"}</div>
-                    </div>
-                    <div className="flex justify-between">
-                      <div className="text-darkgrey">Publifications</div>
-                      <div className="text-darkgray">{articles.length}</div>
-                    </div>
-                    <div className="flex justify-between">
-                      <div className="text-darkgrey">Subscribed Readers</div>
-                      <div className="text-darkgray">{readers.length}</div>
-                    </div>
-                    <div className="flex justify-between">
-                      <div className="text-darkgrey">Times Cited</div>
-                      <div className="text-darkgray">{timesCited}</div>
-                    </div>
+                <div className="flex flex-col bg-white rounded-2xl px-8 py-10 border border-lightgrey space-y-4 font-mont">
+                  <div className="flex justify-between">
+                    <div className="text-darkgrey">Total Reviewed</div>
+                    <div className="text-darkgray">24</div>
                   </div>
+                  <div className="flex justify-between">
+                    <div className="text-darkgrey">Published</div>
+                    <div className="text-darkgray">20</div>
+                  </div>
+                  <div className="flex justify-between">
+                    <div className="text-darkgrey">Followers</div>
+                    <div className="text-darkgray">11</div>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="mx-4 md:mx-0">
               <Footer></Footer>
             </div>
+            <MessageModal open={messageModalOpen} onClose={handleCloseMessageModal} onSubmit={handleSubmitMessage}/>
           </div>
         </div>
       )}
@@ -356,4 +303,4 @@ const Author = ({ tx, readContracts, writeContracts, address }) => {
   );
 };
 
-export default Author;
+export default Publisher;

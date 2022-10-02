@@ -18,6 +18,7 @@
     "@apollo/client": "^3.3.21",
     "@apollo/react-hooks": "^4.0.0",
     "@craco/craco": "^6.4.3",
+    "@headlessui/react": "^1.7.3",
     "@heroicons/react": "^1.0.5",
     "@portis/web3": "^4.0.5",
     "@rainbow-me/rainbowkit": "^0.5.0",
@@ -64,14 +65,14 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "4.0.0",
     "react-slick": "^0.28.1",
+    "recharts": "^2.1.13",
     "slick-carousel": "^1.8.1",
     "styled-components": "^5.3.3",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "tw-elements": "^1.0.0-alpha10",
     "wagmi": "^0.6.3",
     "walletlink": "^2.1.5",
-    "web3modal": "^1.9.1",
-    "recharts": "^2.1.13"
+    "web3modal": "^1.9.1"
   },
   "devDependencies": {
     "@apollo/client": "^3.3.21",
