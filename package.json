@@ -19,7 +19,7 @@
     "chain": "yarn workspace @jodw/hardhat chain",
     "fork": "yarn workspace @jodw/hardhat fork",
     "node": "yarn workspace @jodw/hardhat chain",
-    "test": "yarn workspace @jodw/hardhat test",
+    "test": "yarn workspace @jodw/react-app test",
     "server": "yarn workspace @jodw/backend server",
     "prestart": "yarn workspace @jodw/react-app prestart",
     "start": "yarn workspace @jodw/react-app start",
