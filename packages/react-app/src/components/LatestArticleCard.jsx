@@ -86,8 +86,8 @@ export const LatestArticleCard = ({ id, article }) => {
           </div>
           <div className="pt-8 flex flex-row justify-between items-center">
             <div className="flex flex-row items-center cursor-pointer" onClick={() => navigate("/author")}>
-              {article.image ? (
-                <img alt="author" src={article.image} width={30} height={30}></img>
+              {article.author.image ? (
+                <img alt="author" src={article.author.image} width={30} height={30}></img>
               ) : (
                 <img alt="author" src={authorimg} width={30} height={30}></img>
               )}
