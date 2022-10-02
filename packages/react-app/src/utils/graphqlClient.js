@@ -88,16 +88,16 @@ export function useFetchedSubgraphStatus() {
     useQuery <
     HealthResponse >
     (SUBGRAPH_HEALTH,
-    {
-      client: healthClient,
-      fetchPolicy: "no-cache",
-      variables: {
-        name:
+      {
+        client: healthClient,
+        fetchPolicy: "no-cache",
+        variables: {
+          name:
           chain?.id === 69
             ? "danielesalatti/project-registry-optimism-kovan"
             : "danielesalatti/project-registry-goerli",
-      },
-    });
+        },
+      });
 
   const parsed = data?.indexingStatusForCurrentVersion;
 

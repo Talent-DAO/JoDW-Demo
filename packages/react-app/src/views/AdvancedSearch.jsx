@@ -109,7 +109,7 @@ const AdvancedSearch = () => {
     setSortField("username");
     setJournalTitle("");
     setISBN("");
-  }
+  };
 
   return (
     <div style={{ backgroundImage: "linear-gradient(#fff, #EEEE" }}>

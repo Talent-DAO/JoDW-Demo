@@ -41,7 +41,7 @@ function Footer() {
                   <div className="flex items-center justify-between m-4">
                     <p
                       id="insta3"
-                      tabindex="0"
+                      tabIndex="0"
                       className="focus:outline-none text-sm leading-normal ml-2 text-gray-800"
                     >
                       English
@@ -50,7 +50,7 @@ function Footer() {
                   <div className="flex items-center justify-between m-4">
                     <p
                       id="insta3"
-                      tabindex="0"
+                      tabIndex="0"
                       className="focus:outline-none text-sm leading-normal ml-2 text-gray-800"
                     >
                       French
