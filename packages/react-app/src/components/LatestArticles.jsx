@@ -90,8 +90,8 @@ class LatestArticles extends Component {
         </div>
         <div className="relative roadmap_container">
           <Slider ref={c => (this.slider = c)} {...settings}>
-            {this.props.articles.map((article_id, index) => (
-              <LatestArticleCard key={index} id={article_id}></LatestArticleCard>
+            {this.props.articles.map((article, index) => (
+              <LatestArticleCard key={index} id={article.id} article={article}></LatestArticleCard>
             ))}
           </Slider>
           <div className="md:hidden absolute top-1/2 left-4">
