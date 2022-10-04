@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -138,7 +137,11 @@ const Author = ({ tx, readContracts, writeContracts, address }) => {
   // Set up the contract values
 
   // Contract interactions
-  const { write: tipAuthor, isLoading, isSuccess } = useContractWrite({
+  const {
+    write: tipAuthor,
+    isLoading,
+    isSuccess,
+  } = useContractWrite({
     addressOrName: "",
     contractInterface: [],
     functionName: "",

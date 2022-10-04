@@ -57,6 +57,6 @@ const useLocalStorage = (key, initialValue, ttl) => {
   };
 
   return [storedValue, setValue];
-}
+};
 
 export default useLocalStorage;
