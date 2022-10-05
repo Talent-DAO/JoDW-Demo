@@ -22,7 +22,7 @@ const About = () => {
   }, []);
 
   return (
-    <div style={{ backgroundImage: "linear-gradient(#fff, #EEEE" }}>
+    <div>
       <div className="mt-4 md:mt-8 mx-auto max-w-xl md:max-w-4xl xl:max-w-7xl overflow-hidden">
         <div className="flex flex-col items-center space-y-8">
           <div className="text-4xl text-primary font-bold">
@@ -98,9 +98,9 @@ const About = () => {
             </div>
           </div>
         </div>
-        <div className="md:mx-0">
+        {/* <div className="md:mx-0">
           <Footer></Footer>
-        </div>
+        </div> */}
       </div>
     </div>
   );

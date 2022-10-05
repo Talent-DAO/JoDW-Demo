@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { useAccount } from "wagmi";
 import "./App.css";
-import { Navbar } from "./components";
+import { Navbar, Footer } from "./components";
 import {
   AboutView,
   AdvancedSearchView,
@@ -46,62 +46,42 @@ const App = ({ ...props }) => {
           <Route
             path="/user"
             element={<UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />}
-          >
-            <Route
-              path="/user/submissions"
-              element={
-                <UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />
-              }
-            />
-            <Route
-              path="/user/author"
-              element={
-                <UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />
-              }
-            />
-            <Route
-              path="/user/articles"
-              element={
-                <UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />
-              }
-            />
-            <Route
-              path="/user/notifications"
-              element={
-                <UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />
-              }
-            />
-            <Route
-              path="/user/publisher"
-              element={
-                <UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />
-              }
-            />
-            <Route
-              path="/user/rewards"
-              element={
-                <UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />
-              }
-            />
-            <Route
-              path="/user/reputation"
-              element={
-                <UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />
-              }
-            />
-          </Route>
-          <Route path="/debug" />
-          <Route path="/submit/:walletId" element={<SubmitView address={address} />} />
-          <Route path="/termsofservice" element={<TermsOfServiceView />} />
-          <Route path="/privacypolicy" element={<PrivacyPolicyView />} />
-          <Route path="/subgraph" element={<SubgraphView subgraphUri={props.subgraphUri} />} />
-          <Route path="/token" element={<TokenView />} />
-          <Route path="/governance" element={<GovernanceView />} />
-          <Route path="/request-feature" />
-        </Routes>
-      ) : (
-        <WalletConnectModalView />
-      )}
+          />
+          <Route
+            path="/user/author"
+            element={<UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />}
+          />
+          <Route
+            path="/user/articles"
+            element={<UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />}
+          />
+          <Route
+            path="/user/notifications"
+            element={<UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />}
+          />
+          <Route
+            path="/user/publisher"
+            element={<UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />}
+          />
+          <Route
+            path="/user/rewards"
+            element={<UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />}
+          />
+          <Route
+            path="/user/reputation"
+            element={<UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />}
+          />
+        </Route>
+        <Route path="/debug" />
+        <Route path="/submit/:walletId" element={<SubmitView address={address} />} />
+        <Route path="/termsofservice" element={<TermsOfServiceView />} />
+        <Route path="/privacypolicy" element={<PrivacyPolicyView />} />
+        <Route path="/subgraph" element={<SubgraphView subgraphUri={props.subgraphUri} />} />
+        <Route path="/token" element={<TokenView />} />
+        <Route path="/governance" element={<GovernanceView />} />
+        <Route path="/request-feature" />
+      </Routes>
+      <Footer />
     </div>
   );
 };
