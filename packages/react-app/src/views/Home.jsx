@@ -205,8 +205,6 @@ function Home({ address }) {
         <div className="mt-10">
           <Newsletter />
         </div>
-        {/* Footer Component Section */}
-        {/* <Footer /> */}
       </div>
     </div>
   );

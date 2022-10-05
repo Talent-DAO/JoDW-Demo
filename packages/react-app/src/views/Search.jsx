@@ -204,7 +204,6 @@ const Search = () => {
             ? searchResult.map(item => <AuthorCard key={Math.random()} author={item}></AuthorCard>)
             : searchResult.map(item => <ArticleCard key={Math.random()} article={item}></ArticleCard>)}
         </div>
-        {/* <Footer /> */}
       </div>
     </div>
   );

@@ -301,7 +301,6 @@ const Contact = () => {
             <div className="px-8 py-2 bg-primary text-white rounded-full">GET STARTED</div>
           </div>
         </div>
-        {/* <Footer /> */}
       </div>
     </div>
   );

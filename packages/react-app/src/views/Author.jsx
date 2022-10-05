@@ -355,9 +355,6 @@ const Author = ({ tx, readContracts, writeContracts, address }) => {
               SHOW MORE
             </div>
           )}
-          {/* <div className="mx-4 md:mx-0">
-            <Footer></Footer>
-          </div> */}
         </div>
       )}
     </>

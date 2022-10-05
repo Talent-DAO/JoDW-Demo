@@ -98,9 +98,6 @@ const About = () => {
             </div>
           </div>
         </div>
-        {/* <div className="md:mx-0">
-          <Footer></Footer>
-        </div> */}
       </div>
     </div>
   );
