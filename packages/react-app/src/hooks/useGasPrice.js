@@ -5,6 +5,7 @@ import { useState } from "react";
 const useGasPrice = (targetNetwork, speed) => {
   const [gasPrice, setGasPrice] = useState();
   const loadGasPrice = async () => {
+    // eslint-disable-next-line no-prototype-builtins
     if (targetNetwork.hasOwnProperty("gasPrice")) {
       setGasPrice(targetNetwork.gasPrice);
     } else {
