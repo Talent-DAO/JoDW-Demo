@@ -35,7 +35,7 @@ const App = ({ ...props }) => {
   return (
     <div className="App container-2xl mx-auto">
       <Navbar userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />
-      {!address ? (
+      {address ? (
         <Routes>
           <Route index element={<HomeView address={address} />} />
           <Route path="/browse" />

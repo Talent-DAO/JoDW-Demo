@@ -47,7 +47,7 @@ const deploy = async () => {
   console.log("🛰  Sending to IPFS...");
   const { cid } = await pushDirectoryToIPFS("./build");
   if (!cid) {
-    console.log(`📡 App deployment failed`);
+    console.log("📡 App deployment failed");
     return false;
   }
   console.log(`📡 App deployed to IPFS with hash: ${chalk.cyan(cid.toString())}`);

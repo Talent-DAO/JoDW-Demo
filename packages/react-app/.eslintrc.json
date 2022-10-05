@@ -1,7 +1,7 @@
 {
   "parser": "babel-eslint",
   "extends": ["eslint:recommended"],
-  "ignorePatterns": ["node_modules/*", "build/*", "public/*", "**/*.config.*"],
+  "ignorePatterns": ["src/**/*.test.js", "node_modules/*", "build/*", "public/*", "**/*.config.*"],
   "rules": {
     // enable additional rules
     "indent": ["error", 2],
