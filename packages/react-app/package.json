@@ -18,10 +18,9 @@
     "@apollo/client": "^3.3.21",
     "@apollo/react-hooks": "^4.0.0",
     "@craco/craco": "^6.4.3",
+    "@habx/apollo-multi-endpoint-link": "^2.8.0",
     "@headlessui/react": "^1.7.3",
     "@heroicons/react": "^2.0.11",
-    "@habx/apollo-multi-endpoint-link": "^2.8.0",
-    "@heroicons/react": "^1.0.5",
     "@portis/web3": "^4.0.5",
     "@rainbow-me/rainbowkit": "^0.5.0",
     "@ramp-network/ramp-instant-sdk": "^2.2.0",
@@ -91,12 +90,12 @@
     "gulp-less": "^4.0.1",
     "gulp-postcss": "^9.0.0",
     "ipfs-http-client": "^45.0.0",
+    "jest-environment-jsdom": "^29.0.3",
+    "jest-when": "^3.5.1",
     "less-plugin-npm-import": "^2.1.0",
     "prettier": "^2.0.5",
     "s3-folder-upload": "^2.3.1",
-    "surge": "^0.21.5",
-    "jest-environment-jsdom": "^29.0.3",
-    "jest-when": "^3.5.1"
+    "surge": "^0.21.5"
   },
   "eslintConfig": {
     "extends": [

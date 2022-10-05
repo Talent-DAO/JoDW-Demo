@@ -154,7 +154,7 @@ const Author = ({ tx, readContracts, writeContracts, address }) => {
   return (
     <>
       {author && articles && (
-        <div style={{ backgroundColor: "#FAFAFA" }} >
+        <div style={{ backgroundColor: "#FAFAFA" }}>
           <div className="mx-auto pt-4 max-w-xl md:max-w-4xl xl:max-w-7xl overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10">
               <div className="col-span-2 space-y-8">
@@ -267,7 +267,9 @@ const Author = ({ tx, readContracts, writeContracts, address }) => {
                           </div>
                         </div>
                       </div>
-                      <div className="text-lg text-center lg:text-left" style={{ color: "#909090" }}>{author.bio}</div>
+                      <div className="text-lg text-center lg:text-left" style={{ color: "#909090" }}>
+                        {author.bio}
+                      </div>
                       <div className="flex flex-row space-x-3">
                         <div
                           className="rounded-lg px-6 py-2 text-green font-mont"
@@ -287,12 +289,15 @@ const Author = ({ tx, readContracts, writeContracts, address }) => {
                         >
                           Nature
                         </div>
-                        <div className="rounded-lg px-6 py-2 text-red font-mont" style={{ backgroundColor: "rgba(255, 1, 1, 0.22)" }}>
+                        <div
+                          className="rounded-lg px-6 py-2 text-red font-mont"
+                          style={{ backgroundColor: "rgba(255, 1, 1, 0.22)" }}
+                        >
                           Sci-Fi
                         </div>
                       </div>
-                    </div>                    
-                    
+                    </div>
+
                     <div className="w-full space-x-8">
                       <div className="col-span-6 text-left rounded-xl py-4 flex flex-col space-y-2">
                         <div className="text-lg font-bold font-mont">Summary</div>
@@ -324,29 +329,29 @@ const Author = ({ tx, readContracts, writeContracts, address }) => {
                         readContracts={readContracts}
                         address={address}
                       ></ArticleMintCard>
-                      ))}
+                    ))}
                   </div>
                 </div>
               </div>
               <div className="col-span-1">
-                  <div className="flex flex-col bg-white rounded-2xl px-8 py-10 border border-lightgrey space-y-4 font-mont">
-                    <div className="flex justify-between">
-                      <div className="text-darkgrey">Member Since</div>
-                      <div className="text-darkgray">{memberSince > 0 ? `${memberSince} days` : "Today"}</div>
-                    </div>
-                    <div className="flex justify-between">
-                      <div className="text-darkgrey">Publifications</div>
-                      <div className="text-darkgray">{articles.length}</div>
-                    </div>
-                    <div className="flex justify-between">
-                      <div className="text-darkgrey">Subscribed Readers</div>
-                      <div className="text-darkgray">{readers.length}</div>
-                    </div>
-                    <div className="flex justify-between">
-                      <div className="text-darkgrey">Times Cited</div>
-                      <div className="text-darkgray">{timesCited}</div>
-                    </div>
+                <div className="flex flex-col bg-white rounded-2xl px-8 py-10 border border-lightgrey space-y-4 font-mont">
+                  <div className="flex justify-between">
+                    <div className="text-darkgrey">Member Since</div>
+                    <div className="text-darkgray">{memberSince > 0 ? `${memberSince} days` : "Today"}</div>
                   </div>
+                  <div className="flex justify-between">
+                    <div className="text-darkgrey">Publifications</div>
+                    <div className="text-darkgray">{articles.length}</div>
+                  </div>
+                  <div className="flex justify-between">
+                    <div className="text-darkgrey">Subscribed Readers</div>
+                    <div className="text-darkgray">{readers.length}</div>
+                  </div>
+                  <div className="flex justify-between">
+                    <div className="text-darkgrey">Times Cited</div>
+                    <div className="text-darkgray">{timesCited}</div>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="mx-4 md:mx-0">

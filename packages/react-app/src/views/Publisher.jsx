@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -31,13 +30,13 @@ const Publisher = ({ tx, readContracts, writeContracts, address }) => {
   const [loading, setLoading] = useState(false);
   const [messageModalOpen, setMessageModalOpen] = useState(false);
 
-  const handleSubmitMessage = ({title, message}) => {
-    console.log('Message modal submit: ', title, message);
+  const handleSubmitMessage = ({ title, message }) => {
+    console.log("Message modal submit: ", title, message);
   };
 
   const handleCloseMessageModal = () => {
     setMessageModalOpen(false);
-  }
+  };
 
   const scrollTop = () => {
     document.documentElement.scrollTo({
@@ -151,7 +150,11 @@ const Publisher = ({ tx, readContracts, writeContracts, address }) => {
   // Set up the contract values
 
   // Contract interactions
-  const { write: tipAuthor, isLoading, isSuccess } = useContractWrite({
+  const {
+    write: tipAuthor,
+    isLoading,
+    isSuccess,
+  } = useContractWrite({
     addressOrName: "",
     contractInterface: [],
     functionName: "",
@@ -160,7 +163,7 @@ const Publisher = ({ tx, readContracts, writeContracts, address }) => {
   return (
     <>
       {author && articles && (
-        <div style={{ backgroundColor: "#FAFAFA" }} >
+        <div style={{ backgroundColor: "#FAFAFA" }}>
           <div className="mx-auto pt-4 max-w-xl md:max-w-4xl xl:max-w-7xl overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10">
               <div className="col-span-2 space-y-8">
@@ -214,7 +217,9 @@ const Publisher = ({ tx, readContracts, writeContracts, address }) => {
                           </div>
                         </div>
                       </div>
-                      <div className="text-lg text-center lg:text-left" style={{ color: "#909090" }}>{author.bio}</div>
+                      <div className="text-lg text-center lg:text-left" style={{ color: "#909090" }}>
+                        {author.bio}
+                      </div>
                       <div className="flex flex-row space-x-3">
                         <div
                           className="rounded-lg px-6 py-2 text-green font-mont"
@@ -234,7 +239,10 @@ const Publisher = ({ tx, readContracts, writeContracts, address }) => {
                         >
                           Nature
                         </div>
-                        <div className="rounded-lg px-6 py-2 text-red font-mont" style={{ backgroundColor: "rgba(255, 1, 1, 0.22)" }}>
+                        <div
+                          className="rounded-lg px-6 py-2 text-red font-mont"
+                          style={{ backgroundColor: "rgba(255, 1, 1, 0.22)" }}
+                        >
                           Sci-Fi
                         </div>
                       </div>
@@ -295,7 +303,7 @@ const Publisher = ({ tx, readContracts, writeContracts, address }) => {
             <div className="mx-4 md:mx-0">
               <Footer></Footer>
             </div>
-            <MessageModal open={messageModalOpen} onClose={handleCloseMessageModal} onSubmit={handleSubmitMessage}/>
+            <MessageModal open={messageModalOpen} onClose={handleCloseMessageModal} onSubmit={handleSubmitMessage} />
           </div>
         </div>
       )}

@@ -20,8 +20,8 @@ import {
   TermsOfServiceView,
   TokenView,
   UserView,
-  ReviewerView
-  WalletConnectModalView,
+  ReviewerView,
+  WalletConnectModalView
 } from "./views";
 
 const App = ({ ...props }) => {
@@ -42,6 +42,8 @@ const App = ({ ...props }) => {
           <Route path="/about" element={<AboutView />} />
           <Route path="/contact" element={<ContactView />} />
           <Route path="/author/:walletId" element={<AuthorView address={address} />} />
+          <Route path="/reviewer/:walletId" element={<ReviewerView address={address} />} />
+          <Route path="/publisher/:walletId" element={<PublisherView address={address} />} />
           <Route path="/article/:id" element={<ArticleView address={address} />} />
           <Route path="/search" element={<SearchView address={address} />} />
           <Route path="/advancedsearch" element={<AdvancedSearchView address={address} />} />
