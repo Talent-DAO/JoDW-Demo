@@ -99,7 +99,7 @@ const Search = () => {
     setSearchResult([]);
     setField("username");
     setSortField("username");
-  }
+  };
 
   return (
     <div>

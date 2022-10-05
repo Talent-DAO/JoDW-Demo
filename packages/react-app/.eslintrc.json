@@ -1,0 +1,24 @@
+{
+  "parser": "babel-eslint",
+  "extends": ["eslint:recommended"],
+  "ignorePatterns": ["node_modules/*", "build/*", "public/*", "**/*.config.*"],
+  "rules": {
+    // enable additional rules
+    "indent": ["error", 2],
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["error", "double"],
+    "semi": ["error", "always"],
+    "no-console": "warn",
+    "no-unused-vars": 0,
+    "no-undef": "warn",
+    "no-constant-condition": "warn",
+    "eqeqeq": "warn",
+
+    // override configuration set by extending "eslint:recommended"
+    "no-empty": "warn",
+    // "no-cond-assign": ["error", "always"],
+
+    // disable rules from base configurations
+    "for-direction": "off"
+  }
+}

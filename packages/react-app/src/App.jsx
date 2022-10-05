@@ -19,6 +19,7 @@ import {
   TermsOfServiceView,
   TokenView,
   UserView,
+  WalletConnectModalView,
 } from "./views";
 
 const App = ({ ...props }) => {
@@ -32,21 +33,18 @@ const App = ({ ...props }) => {
   return (
     <div className="App container-2xl mx-auto">
       <Navbar userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />
-      <Routes>
-        <Route index element={<HomeView address={address} />} />
-        <Route path="/browse" />
-        <Route path="/about" element={<AboutView />} />
-        <Route path="/contact" element={<ContactView />} />
-        <Route path="/author/:walletId" element={<AuthorView address={address} />} />
-        <Route path="/article/:id" element={<ArticleView address={address} />} />
-        <Route path="/search" element={<SearchView address={address} />} />
-        <Route path="/advancedsearch" element={<AdvancedSearchView address={address} />} />
-        <Route
-          path="/user"
-          element={<UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />}
-        >
+      {!address ? (
+        <Routes>
+          <Route index element={<HomeView address={address} />} />
+          <Route path="/browse" />
+          <Route path="/about" element={<AboutView />} />
+          <Route path="/contact" element={<ContactView />} />
+          <Route path="/author/:walletId" element={<AuthorView address={address} />} />
+          <Route path="/article/:id" element={<ArticleView address={address} />} />
+          <Route path="/search" element={<SearchView address={address} />} />
+          <Route path="/advancedsearch" element={<AdvancedSearchView address={address} />} />
           <Route
-            path="/user/submissions"
+            path="/user"
             element={<UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />}
           />
           <Route

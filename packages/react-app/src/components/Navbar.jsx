@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAccount } from "wagmi";
 import discord from "../assets/discord.png";
-import divideImage from "../assets/divide.png";
 import menuImage from "../assets/menu.png";
 import menuIconImage from "../assets/menu_icon.png";
 import profile from "../assets/profile.png";
@@ -133,7 +132,7 @@ function Navbar({ userMenuOpen, handleUserMenuOpen }) {
                   role="menu"
                   aria-orientation="vertical"
                   aria-labelledby="menu-button"
-                  tabindex="-1"
+                  tabIndex="-1"
                 >
                   <div className="py-1" role="none">
                     <div

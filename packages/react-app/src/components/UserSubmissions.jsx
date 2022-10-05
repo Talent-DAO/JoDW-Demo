@@ -38,7 +38,7 @@ const UserSubmissions = ({ address }) => {
             <div className="flex flex-row space-x-4">
               <div
                 className="ml-1 -mt-0.5 cursor-pointer text-lg text-primary"
-                onClick={() => navigate(`/user/publisher`)}
+                onClick={() => navigate("/user/publisher")}
               >
                 See Reviewers & Publishers
               </div>
@@ -46,9 +46,9 @@ const UserSubmissions = ({ address }) => {
                 <path
                   d="M4 12H20M13 5L20 12L13 19"
                   stroke="#B41C2E"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </svg>
             </div>

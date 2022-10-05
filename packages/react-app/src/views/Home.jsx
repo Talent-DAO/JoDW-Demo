@@ -5,10 +5,32 @@ import arrowRightImage from "../assets/ArrowRight.png";
 import authorImage from "../assets/author.png";
 import lineImage from "../assets/line.png";
 import partnershipImage from "../assets/partnership.png";
+import { gql, useQuery } from "@apollo/client";
 import { Footer, LatestArticles, Newsletter, Splash } from "../components";
 import { dataURLtoFile, getBgColorForCategory, getTextColorForCategory } from "../utils/utils";
 
 const server = "https://tdao-api.herokuapp.com";
+
+// Lens graphql queries
+export const GET_LATEST_ARTICLES = gql`
+query GetLatestArticles @api(name: lens) {
+  posts(first: 10, orderBy: timestamp, orderDirection: desc) {
+    id
+    pubId
+    profileId {
+        handle
+        imageURI
+        owner
+    }
+    comments {
+        pubId
+        timestamp
+    }
+    contentURI
+    timestamp
+  }
+}
+`;
 
 /**
  * web3 props can be passed from '../App.jsx' into your local view component for use
@@ -19,20 +41,37 @@ const server = "https://tdao-api.herokuapp.com";
 function Home({ address }) {
   const [articles, setArticles] = useState(null);
 
-  useEffect(() => {
-    const getLatestArticle = async () => {
-      try {
-        const articleResponse = await axios.get(`${server}/api/articles_latest`, {});
-        if (articleResponse.data.success) {
-          setArticles(articleResponse.data.data);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    };
+  // useEffect(() => {
+  //   const getLatestArticle = async () => {
+  //     try {
+  //       const articleResponse = await axios.get(`${server}/api/articles_latest`, {});
+  //       if (articleResponse.data.success) {
+  //         setArticles(articleResponse.data.data);
+  //       }
+  //     } catch (e) {
+  //       console.error(e);
+  //     }
+  //   };
 
-    getLatestArticle();
-  }, []);
+  //   getLatestArticle();
+  // }, []);
+
+  const { loadingArticles, loadArticlesError, articleData } = useQuery(GET_LATEST_ARTICLES, {
+    onCompleted: (data) => {
+      let articleData = data.posts.map(post => {
+        return {
+          id: post.id,
+          author: {
+            handle: post.profileId.handle,
+            image: post.profileId.imageURI,
+            walletId: post.profileId.owner
+          },
+          timestamp: post.timestamp
+        };
+      });
+      setArticles(articleData);
+    }
+  });
 
   // Featured Author State
   const [authorName, setAuthorName] = useState("");
@@ -96,7 +135,7 @@ function Home({ address }) {
         </div>
 
         {/* Latest Articles Component Section */}
-        {articles && <LatestArticles articles={articles} />}
+        {!loadingArticles && articles && <LatestArticles articles={articles} />}
 
         {/* Featured Author & Updates Section  */}
         <div className="pt-16 grid grid-cols-1 xl:grid-cols-2">

@@ -35,6 +35,45 @@ function Footer() {
                 <option value="English" className="font-bold">English</option>
                 <option value="French" className="font-bold">French</option>
               </select>
+                English
+                <div>
+                  {show ? (
+                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5.00016 0.666664L9.66683 5.33333L0.333496 5.33333L5.00016 0.666664Z" fill="#1F2937" />
+                    </svg>
+                  ) : (
+                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5.00016 5.33333L0.333496 0.666664H9.66683L5.00016 5.33333Z" fill="#1F2937" />
+                    </svg>
+                  )}
+                </div>
+              </button>
+              {show && (
+                <div className="absolute w-64 mt-2 px-4 bg-white shadow rounded" id="dropdown">
+                  <div className="flex items-center justify-between m-4">
+                    <p
+                      id="insta3"
+                      tabIndex="0"
+                      className="focus:outline-none text-sm leading-normal ml-2 text-gray-800"
+                    >
+                      English
+                    </p>
+                  </div>
+                  <div className="flex items-center justify-between m-4">
+                    <p
+                      id="insta3"
+                      tabIndex="0"
+                      className="focus:outline-none text-sm leading-normal ml-2 text-gray-800"
+                    >
+                      French
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="flex flex-row items-center">
+              <img className="mx-2" src={twitter} alt="twitter logo" width={40} height={40} layout="fixed" />
+              <img src={discord} alt="discord logo" width={40} height={40} layout="fixed" />
             </div>
           </div>
         </div>
