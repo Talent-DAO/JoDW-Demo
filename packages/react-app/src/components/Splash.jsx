@@ -23,7 +23,7 @@ export default function Splash({ address }) {
         <div className="text-white font-bold text-4xl md:text-6xl lg:text-8xl items-center">Decentralized Work</div>
         <div className="pt-10 lg:pt-16 flex flex-col lg:flex-row lg:items-center">
           <div className="w-72 border rounded-lg border-primary focus-within:border-primary focus-within:ring-primary focus-within:ring-opacity-40 bg-white">
-            <form action="/search" className="flex flex-row items-center">
+            <form action="/search" className="flex flex-row items-center justify-between">
               <input
                 type="search"
                 name="query"
