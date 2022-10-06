@@ -24,7 +24,7 @@ const PublisherPage = ({ address }) => {
               fill="black"
             />
           </svg>
-          <div className="ml-2 -mt-1 font-bold cursor-pointer" onClick={() => navigate(`/user/submissions`)}>
+          <div className="ml-2 -mt-1 font-bold cursor-pointer" onClick={() => navigate("/user/submissions")}>
             Back
           </div>
         </div>

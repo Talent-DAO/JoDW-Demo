@@ -85,23 +85,23 @@ const Submit = ({ address, tx, writeContracts, readContracts }) => {
 
     const articleFile = selectedManuscriptFile
       ? {
-          filename: selectedManuscriptFile.name,
-          data: selectedManuscriptFile ? await toBase64(selectedManuscriptFile) : "",
-        }
+        filename: selectedManuscriptFile.name,
+        data: selectedManuscriptFile ? await toBase64(selectedManuscriptFile) : "",
+      }
       : {
-          filename: "",
-          data: "",
-        };
+        filename: "",
+        data: "",
+      };
 
     const articleCover = selectedArticleCover
       ? {
-          filename: selectedArticleCover.name,
-          data: selectedArticleCover ? await toBase64(selectedArticleCover) : "",
-        }
+        filename: selectedArticleCover.name,
+        data: selectedArticleCover ? await toBase64(selectedArticleCover) : "",
+      }
       : {
-          filename: "",
-          data: "",
-        };
+        filename: "",
+        data: "",
+      };
 
     // add categories here
     let articleCategories = [];

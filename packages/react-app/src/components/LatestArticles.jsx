@@ -3,9 +3,10 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import favImage from "../assets/favourite.png";
+import lineImage from "../assets/line.png";
 import nextImage from "../assets/next.png";
 import prevImage from "../assets/prev.png";
-import { ArticleCard } from "../components";
+import { LatestArticleCard } from "../components";
 
 class LatestArticles extends Component {
   constructor(props) {
@@ -64,7 +65,10 @@ class LatestArticles extends Component {
       <>
         <div className="mx-4 flex justify-between pt-16 mb-4">
           <div className="flex flex-row items-center">
-            <div className="font-bold text-lg sm:text-4xl pr-4">Latest Articles</div>
+            <div className="font-bold text-lg sm:text-4xl pr-4">
+              Latest Articles
+              <img className="pt-2" alt="featured author" src={lineImage}></img>
+            </div>
             <div
               className="rounded-md flex flex-row items-center py-1 px-2 mt-2 mr-4 cursor-pointer"
               style={{ background: "rgba(180, 28, 46, 0.06)" }}
@@ -86,8 +90,8 @@ class LatestArticles extends Component {
         </div>
         <div className="relative roadmap_container">
           <Slider ref={c => (this.slider = c)} {...settings}>
-            {this.props.articles.map((article_id, index) => (
-              <ArticleCard key={index} id={article_id}></ArticleCard>
+            {this.props.articles.map((article, index) => (
+              <LatestArticleCard key={index} id={article.id} article={article}></LatestArticleCard>
             ))}
           </Slider>
           <div className="md:hidden absolute top-1/2 left-4">

@@ -2,7 +2,7 @@ import React from "react";
 
 const RewardsCard = ({ data }) => {
   return (
-    <div className={`w-full rounded-md border border-gray p-4 mb-8 `} style={{ backgroundColor: "#FCFCFC" }}>
+    <div className={"w-full rounded-md border border-gray p-4 mb-8 "} style={{ backgroundColor: "#FCFCFC" }}>
       <div className="flex flex-row  ">
         {data.map((item, index) => {
           return (

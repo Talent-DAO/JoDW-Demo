@@ -23,7 +23,7 @@ try {
 } catch (e) {
   console.log(e);
   console.log(
-    '☢️   Create an aws.json credentials file in packages/react-app/ like { "accessKeyId": "xxx", "secretAccessKey": "xxx", "region": "xxx" } ',
+    "☢️   Create an aws.json credentials file in packages/react-app/ like { \"accessKeyId\": \"xxx\", \"secretAccessKey\": \"xxx\", \"region\": \"xxx\" } ",
   );
   process.exit(1);
 }
@@ -40,29 +40,29 @@ const options = {
 ///////////// First, let's automatically create the bucket if it doesn't exist...
 /////////////
 
-var AWS = require('aws-sdk');
+var AWS = require("aws-sdk");
 // Load credentials and set Region from JSON file
-AWS.config.loadFromPath('./aws.json');
+AWS.config.loadFromPath("./aws.json");
 
 // Create S3 service object
-s3 = new AWS.S3({apiVersion: '2006-03-01'});
+s3 = new AWS.S3({apiVersion: "2006-03-01"});
 
 // Create params JSON for S3.createBucket
 var bucketParams = {
   Bucket : BUCKETNAME,
-  ACL : 'public-read'
+  ACL : "public-read"
 };
 
 // Create params JSON for S3.setBucketWebsite
 var staticHostParams = {
   Bucket: BUCKETNAME,
   WebsiteConfiguration: {
-  ErrorDocument: {
-    Key: 'index.html'
-  },
-  IndexDocument: {
-    Suffix: 'index.html'
-  },
+    ErrorDocument: {
+      Key: "index.html"
+    },
+    IndexDocument: {
+      Suffix: "index.html"
+    },
   }
 };
 

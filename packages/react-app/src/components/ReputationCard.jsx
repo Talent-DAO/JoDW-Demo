@@ -28,7 +28,7 @@ const ReputationCard = ({data, showTitle}) => {
                   </div> 
                   <div className="text-sm text-darkgrey flex justify-center">{item}</div>
                 </div>
-              )
+              );
             })
           }
           

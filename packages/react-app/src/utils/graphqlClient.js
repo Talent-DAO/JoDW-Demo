@@ -1,4 +1,6 @@
-import { ApolloClient, InMemoryCache, useQuery } from "@apollo/client";
+import { createHttpLink } from "apollo-link-http";
+import { MultiAPILink } from "@habx/apollo-multi-endpoint-link";
+import { ApolloClient, ApolloLink, InMemoryCache, useQuery } from "@apollo/client";
 import gql from "graphql-tag";
 import { useNetwork } from "wagmi";
 
@@ -63,6 +65,47 @@ export const arweaveClient = new ApolloClient({
   },
 });
 
+/**
+ * Composite subgraph.
+ */
+export const compositeClient = new ApolloClient({
+  link: ApolloLink.from([
+    new MultiAPILink({
+      endpoints: {
+        goerli: "https://api.thegraph.com/subgraphs/name/codenamejason/reputation-goerli",
+        arweave: "https://arweave.net/graphql",
+        lens: "https://api.thegraph.com/subgraphs/name/supriyaamisshra/lens-tdao-test-1"
+      },
+      createHttpLink: () => createHttpLink(),
+      httpSuffix: ""
+    }),
+  ]),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Token: {
+        // Singleton types that have no identifying field can use an empty
+        // array for their keyFields.
+        keyFields: false,
+      },
+      Pool: {
+        // Singleton types that have no identifying field can use an empty
+        // array for their keyFields.
+        keyFields: false,
+      },
+    },
+  }),
+  queryDeduplication: true,
+  defaultOptions: {
+    watchQuery: {
+      fetchPolicy: "no-cache",
+    },
+    query: {
+      fetchPolicy: "no-cache",
+      errorPolicy: "all",
+    },
+  },
+});
+
 /** SUBGRAPH HEALTH */
 export const SUBGRAPH_HEALTH = gql`
   query health($name: Bytes) {
@@ -88,16 +131,16 @@ export function useFetchedSubgraphStatus() {
     useQuery <
     HealthResponse >
     (SUBGRAPH_HEALTH,
-    {
-      client: healthClient,
-      fetchPolicy: "no-cache",
-      variables: {
-        name:
+      {
+        client: healthClient,
+        fetchPolicy: "no-cache",
+        variables: {
+          name:
           chain?.id === 69
             ? "danielesalatti/project-registry-optimism-kovan"
             : "danielesalatti/project-registry-goerli",
-      },
-    });
+        },
+      });
 
   const parsed = data?.indexingStatusForCurrentVersion;
 
