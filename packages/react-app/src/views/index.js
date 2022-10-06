@@ -12,4 +12,6 @@ export { default as SubmitView } from "./Submit";
 export { default as TermsOfServiceView } from "./TermsOfService";
 export { default as TokenView } from "./Token";
 export { default as UserView } from "./User";
+export { default as PublisherView } from "./Publisher";
+export { default as ReviewerView } from "./Reviewer";
 export { default as WalletConnectModalView} from "./WalletConnectModal";
