@@ -68,7 +68,7 @@ const Contact = () => {
   }, []);
 
   return (
-    <div style={{ backgroundImage: "linear-gradient(#fff, #EEE" }}>
+    <div>
       <div className="relative">
         <img
           className="absolute top-0 left-0 w-full h-full"
@@ -301,7 +301,6 @@ const Contact = () => {
             <div className="px-8 py-2 bg-primary text-white rounded-full">GET STARTED</div>
           </div>
         </div>
-        <Footer />
       </div>
     </div>
   );

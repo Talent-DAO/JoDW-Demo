@@ -79,7 +79,7 @@ function Home({ address }) {
   }, [address]);
 
   return (
-    <div style={{ backgroundImage: "linear-gradient(#fff, #EEEE" }}>
+    <div>
       <div className="mx-auto pt-4 max-w-xl md:max-w-4xl xl:max-w-7xl overflow-hidden">
         <Splash address={address} />
         <div className="mx-4 flex flex-row items-center pt-6">
@@ -205,8 +205,6 @@ function Home({ address }) {
         <div className="mt-10">
           <Newsletter />
         </div>
-        {/* Footer Component Section */}
-        <Footer />
       </div>
     </div>
   );
