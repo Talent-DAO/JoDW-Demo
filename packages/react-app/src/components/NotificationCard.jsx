@@ -4,9 +4,9 @@ const NotificationCard = ({ state }) => {
   const [styles, setStyles] = useState({ backgroundColor: "#D8FCE4" });
 
   useEffect(() => {
-    if (state == "Published") {
+    if (state === "Published") {
       setStyles({ backgroundColor: "#D8FCE4", color: "#01930F" });
-    } else if (state == "Comment") {
+    } else if (state === "Comment") {
       setStyles({ backgroundColor: "#DCE2F6", color: "#0058DD" });
     } else {
       setStyles({ backgroundColor: "#F6DCDC", color: "#B41C2E" });

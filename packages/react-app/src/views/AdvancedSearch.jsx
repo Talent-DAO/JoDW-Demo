@@ -82,7 +82,7 @@ const AdvancedSearch = () => {
     setValue("");
     setSearchResult([]);
     setCategory(event.target.value);
-    if (event.target.value == "author") {
+    if (event.target.value === "author") {
       setField("username");
       setSortField("username");
     } else {

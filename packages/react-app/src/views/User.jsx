@@ -40,17 +40,17 @@ export default function User({ userMenuOpen, handleUserMenuOpen }) {
   const handleConfigTypeChanged = type => {
     if (type === configUserType.submission) {
       navigate("/user/submissions");
-    } else if (type == configUserType.article) {
+    } else if (type === configUserType.article) {
       navigate("/user/articles");
-    } else if (type == configUserType.edit_profile) {
+    } else if (type === configUserType.edit_profile) {
       navigate("/user/author");
-    } else if (type == configUserType.notifications) {
+    } else if (type === configUserType.notifications) {
       navigate("/user/notifications");
-    } else if (type == configUserType.publisher) {
+    } else if (type === configUserType.publisher) {
       navigate("/user/publisher");
-    } else if (type == configUserType.reputation) {
+    } else if (type === configUserType.reputation) {
       navigate("/user/reputation");
-    } else if (type == configUserType.rewards) {
+    } else if (type === configUserType.rewards) {
       navigate("/user/rewards");
     }
 

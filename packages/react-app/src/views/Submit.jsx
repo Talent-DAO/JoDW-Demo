@@ -130,7 +130,6 @@ const Submit = ({ address, tx, writeContracts, readContracts }) => {
       console.log(res);
       if (res.status === 200) {
         // clear the form and send to the creators/authors profile pag
-
       }
     } catch (e) {
       console.log(e);

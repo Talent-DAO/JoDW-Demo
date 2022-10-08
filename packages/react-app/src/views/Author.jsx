@@ -185,15 +185,6 @@ const Author = ({ tx, readContracts, writeContracts, address }) => {
                           >
                             Tip Author
                           </div>
-                          {/* {
-                            tipDropDown && (
-                              <div className="mt-2 w-40 absolute cursor-pointer flex flex-row items-center justify-between border border-primary rounded-lg overflow-hidden">
-                                <div className="w-full py-2 text-primary border-r hover:bg-primary hover:text-white" onClick={() => { tipAuthor(10); setTipDropDown(false) }}>10</div>
-                                <div className="w-full py-2 text-primary border-r hover:bg-primary hover:text-white" onClick={() => { tipAuthor(50); setTipDropDown(false) }}>50</div>
-                                <div className="w-full py-2 text-primary hover:bg-primary hover:text-white" onClick={() => { tipAuthor(100); setTipDropDown(false) }}>100</div>
-                              </div>
-                            )
-                          } */}
                         </div>
                         {tipDropDown && (
                           <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
@@ -228,7 +219,7 @@ const Author = ({ tx, readContracts, writeContracts, address }) => {
                                   <div
                                     className="w-full rounded-full bg-primary text-white text-xl px-4 py-2 cursor-pointer"
                                     onClick={() => {
-                                      if (token == "ETH") {
+                                      if (token === "ETH") {
                                         tipAuthorEth(tipAmount);
                                       } else {
                                         tipAuthorTalent(tipAmount);

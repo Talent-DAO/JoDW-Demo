@@ -35,7 +35,7 @@ const Search = () => {
   }, [sortField]);
 
   const sortSearchResult = result => {
-    console.log("sortField == ", sortField);
+    console.log("sortField === ", sortField);
     if (result !== []) {
       let isSorted = false;
       result.sort((a, b) => {
@@ -43,7 +43,7 @@ const Search = () => {
         if (swapped < 0) isSorted = true;
         return swapped;
       });
-      console.log("isSorted == ", isSorted);
+      console.log("isSorted === ", isSorted);
       if (isSorted) setSearchResult([...result]);
       else setSearchResult(result);
     }
@@ -74,7 +74,7 @@ const Search = () => {
     setValue("");
     setSearchResult([]);
     setCategory(event.target.value);
-    if (event.target.value == "author") {
+    if (event.target.value === "author") {
       setField("username");
       setSortField("username");
     } else {

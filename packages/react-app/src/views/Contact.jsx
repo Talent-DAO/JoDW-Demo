@@ -4,7 +4,6 @@ import contact_join_us from "../assets/contact_join_us.png";
 import contact_rect from "../assets/contact_rect.png";
 import faqArrow from "../assets/faqArrow.png";
 import lineImage from "../assets/line.png";
-import { Footer } from "../components";
 
 const FAQStateType = {
   none: "",
@@ -109,7 +108,7 @@ const Contact = () => {
                   src={faqArrow}
                   className="cursor-pointer"
                   onClick={() =>
-                    FAQState != FAQStateType.first ? setFAQState(FAQStateType.first) : setFAQState(FAQStateType.none)
+                    FAQState !== FAQStateType.first ? setFAQState(FAQStateType.first) : setFAQState(FAQStateType.none)
                   }
                 ></img>
               </div>
@@ -130,7 +129,7 @@ const Contact = () => {
                   src={faqArrow}
                   className="cursor-pointer"
                   onClick={() =>
-                    FAQState != FAQStateType.second ? setFAQState(FAQStateType.second) : setFAQState(FAQStateType.none)
+                    FAQState !== FAQStateType.second ? setFAQState(FAQStateType.second) : setFAQState(FAQStateType.none)
                   }
                 ></img>
               </div>
@@ -151,7 +150,7 @@ const Contact = () => {
                   src={faqArrow}
                   className="cursor-pointer"
                   onClick={() =>
-                    FAQState != FAQStateType.third ? setFAQState(FAQStateType.third) : setFAQState(FAQStateType.none)
+                    FAQState !== FAQStateType.third ? setFAQState(FAQStateType.third) : setFAQState(FAQStateType.none)
                   }
                 ></img>
               </div>
@@ -172,7 +171,7 @@ const Contact = () => {
                   src={faqArrow}
                   className="cursor-pointer"
                   onClick={() =>
-                    FAQState != FAQStateType.fourth ? setFAQState(FAQStateType.fourth) : setFAQState(FAQStateType.none)
+                    FAQState !== FAQStateType.fourth ? setFAQState(FAQStateType.fourth) : setFAQState(FAQStateType.none)
                   }
                 ></img>
               </div>
@@ -238,14 +237,6 @@ const Contact = () => {
                 </div>
                 <div className="flex flex-col my-4">
                   <div className="text-lg text-left px-4 py-2">Select Subject</div>
-                  {/* <input
-                    type="text"
-                    value={subject}
-                    onChange={e => setSubject(e.target.value)}
-                    className="px-4 py-2 text-lg bg-transparent rounded-xl border border-gray appearance-none lg:h-12 focus:outline-none focus:placeholder-transparent focus:ring-0"
-                    placeholder="Articles, journals, documents..."
-                    required=""
-                  /> */}
                   <select
                     id="subject"
                     name="subject"
