@@ -1,12 +1,14 @@
 import { useQuery } from "@apollo/client";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import arrowRightImage from "../assets/ArrowRight.png";
 import authorImage from "../assets/author.png";
 import lineImage from "../assets/line.png";
 import partnershipImage from "../assets/partnership.png";
-import { Footer, LatestArticles, Newsletter, Splash } from "../components";
+import { LatestArticles, Newsletter, Splash } from "../components";
+import { getPublicationsFailure, getPublicationsSuccess } from "../features/publication/publicationSlice";
 import { GET_LATEST_ARTICLES } from "../graphql/queries/lens";
 import { dataURLtoFile, getBgColorForCategory, getTextColorForCategory } from "../utils/utils";
 
@@ -18,8 +20,20 @@ const server = "https://tdao-api.herokuapp.com";
  */
 function Home({ address }) {
   const [articles, setArticles] = useState(null);
+  const dispatch = useDispatch();
 
-  const { loadingArticles, loadArticlesError } = useQuery(GET_LATEST_ARTICLES, {
+  const props = useSelector(state => {
+    const publications = state.publications;
+
+    return {
+      publications,
+    };
+  });
+
+  const { loadingArticles } = useQuery(GET_LATEST_ARTICLES, {
+    onError: error => {
+      dispatch(getPublicationsFailure(error));
+    },
     onCompleted: data => {
       let articleData = data.posts.map(post => {
         return {
@@ -33,8 +47,11 @@ function Home({ address }) {
         };
       });
       setArticles(articleData);
+      dispatch(getPublicationsSuccess(articleData));
     },
   });
+
+  console.log("state => ", props);
 
   // Featured Author State
   const [authorName, setAuthorName] = useState("");
