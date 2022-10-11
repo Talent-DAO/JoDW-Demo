@@ -1,17 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { UserRootState } from "../user/userSlice";
 
-const publicationState = {
+export const publicationState = {
   id: undefined,
-  author: {
-    handle: undefined,
-    image: undefined,
-    walletId: undefined,
-  },
+  author: UserRootState,
   timestamp: undefined,
 };
 
 const initialState = {
-  handle: "",
   publications: [publicationState],
   status: "idle",
   error: null,
@@ -31,7 +27,7 @@ export const publicationSlice = createSlice({
     },
     getPublicationsSuccess: (state, action) => {
       state.publications = action.payload;
-      state.status = "succeeded";
+      state.status = "success";
     },
     getPublicationsFailure: (state, action) => {
       state.status = "failed";
@@ -44,7 +40,7 @@ export const publicationSlice = createSlice({
         state.status = "loading";
       })
       .addCase(getPublicationsForUser.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.status = "success";
         state.publications.push(action.payload);
       })
       .addCase(getPublicationsForUser.rejected, (state, action) => {

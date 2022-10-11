@@ -5,6 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import { chainId, useAccount, useNetwork } from "wagmi";
 import "./App.css";
 import { Navbar, Footer } from "./components";
+import { fetchUserStart, userWalletUpdated } from "./features/user/userSlice";
 import { accountUpdated, chainIdUpdated } from "./features/web3/web3Slice";
 import {
   AboutView,
@@ -41,7 +42,9 @@ const App = ({ ...props }) => {
   }, [chain, dispatch]);
 
   useEffect(() => {
+    dispatch(fetchUserStart());
     dispatch(accountUpdated(address));
+    dispatch(userWalletUpdated({ walletId: address }));
   }, [address, dispatch]);
 
   return (
