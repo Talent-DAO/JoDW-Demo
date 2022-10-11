@@ -1,11 +1,19 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export const UserRootState = {
-  id: null,
+export interface UserState {
+  id: number;
+  handle: string | undefined;
+  image: string | undefined;
+  walletId: string | undefined;
+  status: "idle" | "loading" | "success" | "failed";
+}
+
+export const UserRootState: UserState = {
+  id: 0,
   handle: "",
-  image: null,
+  image: "",
   walletId: "",
-  status: "",
+  status: "idle",
 };
 
 export const userSlice = createSlice({
@@ -15,7 +23,7 @@ export const userSlice = createSlice({
     fetchUserStart: state => {
       state.status = "loading";
     },
-    userWalletUpdated: (state, action) => {
+    userWalletUpdated: (state, action: PayloadAction<UserState>) => {
       state.walletId = action.payload.walletId;
       state.status = "success";
     },

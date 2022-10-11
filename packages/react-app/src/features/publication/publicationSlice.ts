@@ -1,16 +1,22 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserRootState } from "../user/userSlice";
 
-export const publicationState = {
-  id: undefined,
-  author: UserRootState,
-  timestamp: undefined,
-};
+export interface Publication {
+  id: number;
+  author: typeof UserRootState;
+  timestamp: number;
+}
 
-const initialState = {
-  publications: [publicationState],
+export interface PublicationState {
+  publications: Publication[] | undefined | [];
+  status: "idle" | "loading" | "success" | "failed";
+  error: string | undefined;
+}
+
+const initialState: PublicationState = {
+  publications: [],
   status: "idle",
-  error: null,
+  error: undefined,
 };
 
 const getPublicationsForUser = createAsyncThunk("publication/getPublicationsForUser", async handle => {
@@ -39,11 +45,11 @@ export const publicationSlice = createSlice({
       .addCase(getPublicationsForUser.pending, state => {
         state.status = "loading";
       })
-      .addCase(getPublicationsForUser.fulfilled, (state, action) => {
+      .addCase(getPublicationsForUser.fulfilled, (state, action: PayloadAction<any>) => {
         state.status = "success";
         state.publications.push(action.payload);
       })
-      .addCase(getPublicationsForUser.rejected, (state, action) => {
+      .addCase(getPublicationsForUser.rejected, (state, action: PayloadAction<any>) => {
         state.status = "failed";
         state.error = action.payload;
       });

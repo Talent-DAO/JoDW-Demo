@@ -1,20 +1,24 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Chain } from "wagmi";
 
-export const web3State = {
-  chain: {},
-  account: null,
+export interface Web3State {
+  chain: Chain | undefined;
+  account: string | undefined;
+}
+
+export const initialState: Web3State = {
+  chain: undefined,
+  account: undefined,
 };
-
-const initialState = web3State;
 
 export const web3Slice = createSlice({
   name: "web3",
   initialState,
   reducers: {
-    chainIdUpdated: (state, action) => {
+    chainIdUpdated: (state, action: PayloadAction<Chain>) => {
       state.chain = action.payload;
     },
-    accountUpdated: (state, action) => {
+    accountUpdated: (state, action: PayloadAction<string>) => {
       state.account = action.payload;
     },
   },
