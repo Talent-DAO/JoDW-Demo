@@ -205,7 +205,7 @@ const EditUserProfile = ({ address }) => {
             className="absolute top-0 left-0 rounded-2xl object-cover w-full h-56"
           ></img>
           <div className="flex flex-row justify-end pr-8 pt-4">
-            <label htmlFor="cover-upload" className="rounded-full cursor-pointer z-10">
+            <label htmlFor="cover-upload" className="rounded-full cursor-pointer z-1">
               <span>
                 <svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -231,8 +231,8 @@ const EditUserProfile = ({ address }) => {
               className="-mt-20 w-40 h-40 border-2 relative border-white rounded-full flex justify-center items-center overflow-hidden"
               style={{ backgroundColor: "rgba(220, 220, 220, 1)" }}
             >
-              <img id="user-image" className="absolute top-0 left-0 rounded-full z-10" alt="user"></img>
-              <label htmlFor="image-upload" className="rounded-full cursor-pointer z-10">
+              <img id="user-image" className="absolute top-0 left-0 rounded-full z-1" alt="user"></img>
+              <label htmlFor="image-upload" className="rounded-full cursor-pointer z-1">
                 <span>
                   <svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
