@@ -15,3 +15,4 @@ export { default as UserView } from "./User";
 export { default as PublisherView } from "./Publisher";
 export { default as ReviewerView } from "./Reviewer";
 export { default as WalletConnectModalView} from "./WalletConnectModal";
+export { default as AuthorDashboard } from "./AuthorDashboard";
