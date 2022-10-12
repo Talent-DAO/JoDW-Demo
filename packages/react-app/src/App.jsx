@@ -11,6 +11,7 @@ import {
   AboutView,
   AdvancedSearchView,
   ArticleView,
+  LensArticleView,
   AuthorView,
   ContactView,
   GovernanceView,
@@ -60,7 +61,7 @@ const App = ({ ...props }) => {
             <Route path="/author/:walletId" element={<AuthorView address={address} />} />
             <Route path="/reviewer/:walletId" element={<ReviewerView address={address} />} />
             <Route path="/publisher/:walletId" element={<PublisherView address={address} />} />
-            <Route path="/article/:id" element={<ArticleView address={address} />} />
+            <Route path="/article/:id" element={<LensArticleView address={address} />} />
             <Route path="/search" element={<SearchView address={address} />} />
             <Route path="/advancedsearch" element={<AdvancedSearchView address={address} />} />
             <Route

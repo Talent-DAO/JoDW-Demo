@@ -10,6 +10,7 @@ import partnershipImage from "../assets/partnership.png";
 import { LatestArticles, Newsletter, Splash } from "../components";
 import { getPublicationsFailure, getPublicationsSuccess } from "../features/publication/publicationSlice";
 import { GET_LATEST_ARTICLES } from "../graphql/queries/lens";
+import { getLensArticleData } from "../helpers/articles";
 import { dataURLtoFile, getBgColorForCategory, getTextColorForCategory } from "../utils/utils";
 
 const server = "https://tdao-api.herokuapp.com";
@@ -35,25 +36,15 @@ function Home({ address }) {
       dispatch(getPublicationsFailure(error));
     },
     onCompleted: data => {
-      let articleData = data.posts.map(post => {
-        return {
-          id: post.id,
-          pubId: post.pubId,
-          author: {
-            handle: post.profileId.handle,
-            image: post.profileId.imageURI,
-            walletId: post.profileId.owner,
-          },
-          comments: {
-            pubId: post.comments.pubId,
-            timestamp: post.comments.timestamp,
-          },
-          contentUri: post.contentURI,
-          timestamp: post.timestamp,
-        };
+      let unresolvedArticleData = data.posts.map(async (post) => {
+        const artdata = await getLensArticleData(post);
+        return artdata;
       });
-      setArticles(articleData);
-      dispatch(getPublicationsSuccess(articleData));
+      Promise.all(unresolvedArticleData).then(articleData => {
+        setArticles(articleData);
+        dispatch(getPublicationsSuccess(articleData));
+      });
+      
     },
   });
 
