@@ -6,12 +6,10 @@ export const getLensArticleData = async (post) => {
   if (post.contentURI.startsWith("ipfs://")) {
     uri = "https://superfun.infura-ipfs.io/ipfs/" + post.contentURI.substring(7);
   }
-  const content = await axios.get(uri);
-  // TODO: check for errors
-  return {
+  const postData = {
     id: post.id,
     contentURI: post.contentURI,
-    content: content.data,
+    content: {},
     author: {
       handle: post.profileId.handle,
       image: post.profileId.imageURI,
@@ -19,4 +17,13 @@ export const getLensArticleData = async (post) => {
     },
     timestamp: post.timestamp,
   };
+  try {
+    const content = await axios.get(uri);
+    // TODO: check for errors
+    postData.content = content.data;
+  } catch(error) {
+    console.error("Error loading post content: %s", post);
+  }
+
+  return postData;
 };

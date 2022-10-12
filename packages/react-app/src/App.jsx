@@ -1,9 +1,12 @@
 import "antd/dist/antd.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Route, Routes } from "react-router-dom";
-import { useAccount } from "wagmi";
+import { chainId, useAccount, useNetwork } from "wagmi";
 import "./App.css";
 import { Navbar, Footer } from "./components";
+import { fetchUserStart, userWalletUpdated } from "./features/user/userSlice";
+import { accountUpdated, chainIdUpdated } from "./features/web3/web3Slice";
 import {
   AboutView,
   AdvancedSearchView,
@@ -27,11 +30,23 @@ import {
 
 const App = ({ ...props }) => {
   const { address } = useAccount();
+  const { chain } = useNetwork();
+  const dispatch = useDispatch();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   const handleUserMenuOpen = state => {
     setUserMenuOpen(state);
   };
+
+  useEffect(() => {
+    dispatch(chainIdUpdated(chain));
+  }, [chain, dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchUserStart());
+    dispatch(accountUpdated(address));
+    dispatch(userWalletUpdated({ walletId: address }));
+  }, [address, dispatch]);
 
   return (
     <div className="App container-2xl mx-auto">
