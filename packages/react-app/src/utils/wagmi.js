@@ -7,12 +7,16 @@ import { publicProvider } from "wagmi/providers/public";
 
 const alchemyId = process.env.ALCHEMY_ID;
 const infuraId = process.env.INFURA_ID;
+const useLocalHardhatFork = process.env.REACT_APP_USE_LOCAL_HARDHAT_FORK;
 
 const activeChains = [];
 if (process.env.REACT_APP_ENV === "production") {
   activeChains.push(chain.polygon);
 } else {
   activeChains.push(chain.goerli, chain.polygonMumbai);
+  if (useLocalHardhatFork) {
+    activeChains.push(chain.hardhat);
+  }
 }
 
 export const { chains, provider, webSocketProvider } = configureChains(activeChains, [
