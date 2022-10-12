@@ -38,11 +38,17 @@ function Home({ address }) {
       let articleData = data.posts.map(post => {
         return {
           id: post.id,
+          pubId: post.pubId,
           author: {
             handle: post.profileId.handle,
             image: post.profileId.imageURI,
             walletId: post.profileId.owner,
           },
+          comments: {
+            pubId: post.comments.pubId,
+            timestamp: post.comments.timestamp,
+          },
+          contentUri: post.contentURI,
           timestamp: post.timestamp,
         };
       });

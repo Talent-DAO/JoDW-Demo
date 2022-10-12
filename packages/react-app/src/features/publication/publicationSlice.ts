@@ -1,21 +1,36 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserRootState } from "../user/userSlice";
+import { LensUserState } from "../user/userSlice";
+
+export enum Status {
+  Idle = "idle",
+  Loading = "loading",
+  Success = "success",
+  Failed = "failed",
+}
+
+export interface Comment {
+  pubId: string;
+  timestamp: number;
+}
 
 export interface Publication {
   id: number;
-  author: typeof UserRootState;
+  pubId: number | undefined;
+  author: LensUserState;
+  comments: Comment[];
+  contentUri: string | undefined;
   timestamp: number;
 }
 
 export interface PublicationState {
-  publications: Publication[] | undefined | [];
-  status: "idle" | "loading" | "success" | "failed";
+  publications: Publication[];
+  status: Status;
   error: string | undefined;
 }
 
 const initialState: PublicationState = {
   publications: [],
-  status: "idle",
+  status: Status.Idle,
   error: undefined,
 };
 
@@ -29,28 +44,28 @@ export const publicationSlice = createSlice({
   initialState,
   reducers: {
     getPublicationsStart: state => {
-      state.status = "loading";
+      state.status = Status.Loading;
     },
     getPublicationsSuccess: (state, action) => {
       state.publications = action.payload;
-      state.status = "success";
+      state.status = Status.Success;
     },
     getPublicationsFailure: (state, action) => {
-      state.status = "failed";
+      state.status = Status.Failed;
       state.error = action.payload;
     },
   },
   extraReducers: builder => {
     builder
       .addCase(getPublicationsForUser.pending, state => {
-        state.status = "loading";
+        state.status = Status.Loading;
       })
-      .addCase(getPublicationsForUser.fulfilled, (state, action: PayloadAction<any>) => {
-        state.status = "success";
+      .addCase(getPublicationsForUser.fulfilled, (state, action: PayloadAction<PublicationState | any>) => {
+        state.status = Status.Success;
         state.publications.push(action.payload);
       })
-      .addCase(getPublicationsForUser.rejected, (state, action: PayloadAction<any>) => {
-        state.status = "failed";
+      .addCase(getPublicationsForUser.rejected, (state, action: PayloadAction<string | any>) => {
+        state.status = Status.Failed;
         state.error = action.payload;
       });
   },
