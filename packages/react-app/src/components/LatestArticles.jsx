@@ -66,7 +66,7 @@ class LatestArticles extends Component {
         <div className="mx-4 flex justify-between pt-16 mb-4">
           <div className="flex flex-row items-center">
             <div className="font-bold text-lg sm:text-4xl pr-4">
-              Latest Articles
+              Latest Publications
               <img className="pt-2" alt="featured author" src={lineImage}></img>
             </div>
             <div

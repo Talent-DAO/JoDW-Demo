@@ -8,6 +8,7 @@ import lineImage from "../assets/line.png";
 import partnershipImage from "../assets/partnership.png";
 import { Footer, LatestArticles, Newsletter, Splash } from "../components";
 import { GET_LATEST_ARTICLES } from "../graphql/queries/lens";
+import { getLensArticleData } from "../helpers/articles";
 import { dataURLtoFile, getBgColorForCategory, getTextColorForCategory } from "../utils/utils";
 
 const server = "https://tdao-api.herokuapp.com";
@@ -21,18 +22,11 @@ function Home({ address }) {
 
   const { loadingArticles, loadArticlesError } = useQuery(GET_LATEST_ARTICLES, {
     onCompleted: data => {
-      let articleData = data.posts.map(post => {
-        return {
-          id: post.id,
-          author: {
-            handle: post.profileId.handle,
-            image: post.profileId.imageURI,
-            walletId: post.profileId.owner,
-          },
-          timestamp: post.timestamp,
-        };
+      let unresolvedArticleData = data.posts.map(async (post) => {
+        const artdata = await getLensArticleData(post);
+        return artdata;
       });
-      setArticles(articleData);
+      Promise.all(unresolvedArticleData).then(articleData => setArticles(articleData));
     },
   });
 

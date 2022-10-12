@@ -19,3 +19,23 @@ export const GET_LATEST_ARTICLES = gql`
     }
   }
 `;
+
+export const GET_ARTICLE_DETAILS = gql`
+  query GetArticle($id: ID!) @api(name: lens) {
+    post(id: $id) {
+      id
+      pubId
+      profileId {
+        handle
+        imageURI
+        owner
+      }
+      comments {
+        pubId
+        timestamp
+      }
+      contentURI
+      timestamp
+    }
+  }
+`;

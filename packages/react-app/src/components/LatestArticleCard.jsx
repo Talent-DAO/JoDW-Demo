@@ -76,8 +76,9 @@ export const LatestArticleCard = ({ id, article }) => {
         </a>
         <div className="pt-4 flex flex-col">
           <div className="h-10 flex flex-row justify-between items-start">
-            <div className="text-xl text-left font-bold cursor-pointer" onClick={() => navigate("/article")}>
+            <div className="text-xl text-left font-bold cursor-pointer" onClick={() => navigate("/article/" + id)}>
               {article && article.title}
+              {article && article.content.name}
             </div>
             <div className="flex flex-row items-center">
               <img src={talentImage} className="-mr-2" alt="talent"></img>
