@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable no-undef */
 import { useQuery } from "@apollo/client";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -44,7 +46,6 @@ function Home({ address }) {
         setArticles(articleData);
         dispatch(getPublicationsSuccess(articleData));
       });
-      
     },
   });
 

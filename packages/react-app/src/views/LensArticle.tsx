@@ -1,8 +1,10 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-console */
 import { Tooltip } from "antd";
 import React, { useEffect, useState } from "react";
 import { pdfjs } from "react-pdf";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@apollo/client";
+import { QueryResult, useQuery } from "@apollo/client";
 import article_back from "../assets/article_back.png";
 import author_pro from "../assets/author_pro.png";
 import ethereum from "../assets/ethereum.png";
@@ -10,9 +12,16 @@ import matic from "../assets/matic.png";
 import { SimilarArticleCard } from "../components";
 import { GET_ARTICLE_DETAILS } from "../graphql/queries/lens";
 import { getLensArticleData } from "../helpers/articles";
+import { useAccount } from "wagmi";
 pdfjs.GlobalWorkerOptions.workerSrc = "pdf.worker.min.js";
 
-const tabType = {
+type TabType = {
+  detail: string;
+  history: string;
+  author: string;
+}
+
+const tabType: TabType = {
   detail: "details",
   history: "history",
   author: "authors",
@@ -24,7 +33,8 @@ const dateTimeFormat = new Intl.DateTimeFormat("en", {
   day: "numeric",
 });
 
-const LensArticle = ({ readContracts, writeContracts, address, tx }) => {
+const LensArticle = () => {
+  const { address } = useAccount();
   const [tab, setTab] = useState(tabType.detail);
   const [article, setArticle] = useState(null);
   const [author, setAuthor] = useState(null);
@@ -33,14 +43,19 @@ const LensArticle = ({ readContracts, writeContracts, address, tx }) => {
 
   const { id } = useParams();
 
-  const { loadingArticle, loadArticleError } = useQuery(GET_ARTICLE_DETAILS, {
+  const { loadingArticle }: any = useQuery(GET_ARTICLE_DETAILS, {
     variables: { id },
+    onError: error => {
+      // dispatch(getPublicationDetailsFailure(error));
+      console.log("error => ", error);
+    },
     onCompleted: data => {
       getLensArticleData(data.post)
-        .then(artdata => {
+        .then((artdata) => {
           console.log(artdata);
           setArticle(artdata);
         });
+      // dispatch(getPublicationDetailsSuccess(data.post));
     },
   });
 
@@ -191,10 +206,10 @@ const LensArticle = ({ readContracts, writeContracts, address, tx }) => {
 
           <div className="hidden lg:block my-8 max-w-screen-lg mx-auto text-lg text-left">{article.content.content}</div>
           <div className="pb-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            <SimilarArticleCard address={address}></SimilarArticleCard>
-            <SimilarArticleCard address={address}></SimilarArticleCard>
-            <SimilarArticleCard address={address}></SimilarArticleCard>
-            <SimilarArticleCard address={address}></SimilarArticleCard>
+            <SimilarArticleCard />
+            <SimilarArticleCard />
+            <SimilarArticleCard />
+            <SimilarArticleCard />
           </div>
         </div>
       )}

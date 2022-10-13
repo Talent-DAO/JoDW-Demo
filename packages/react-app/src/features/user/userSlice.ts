@@ -7,7 +7,7 @@ export enum Status {
   Failed = "failed",
 }
 
-export interface LensUserState {
+export interface LensUser {
   id: number;
   handle: string | undefined;
   image: string | undefined;
@@ -15,14 +15,14 @@ export interface LensUserState {
   status: Status;
 }
 
-export interface UserState {
+export interface User {
   walletId: string | undefined;
-  lensProfile: LensUserState | undefined;
+  lensProfile: LensUser | undefined;
   status: Status;
 }
 
 export interface UserRootState {
-  user: UserState;
+  user: User;
   status: Status;
   error: string;
 }
@@ -45,7 +45,7 @@ export const userSlice = createSlice({
     fetchUserStart: state => {
       state.status = Status.Loading;
     },
-    fetchUserSuccess: (state, action: PayloadAction<UserState>) => {
+    fetchUserSuccess: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
       state.status = Status.Success;
     },
@@ -57,7 +57,7 @@ export const userSlice = createSlice({
     fetchLensUserStart: state => {
       state.status = Status.Loading;
     },
-    fetchLensUserSuccess: (state, action: PayloadAction<LensUserState>) => {
+    fetchLensUserSuccess: (state, action: PayloadAction<LensUser>) => {
       state.user.lensProfile = action.payload;
       state.status = Status.Success;
     },
@@ -66,7 +66,7 @@ export const userSlice = createSlice({
       state.error = action.payload;
     },
     // Update user profile reducers
-    userWalletUpdated: (state, action: PayloadAction<UserState>) => {
+    userWalletUpdated: (state, action: PayloadAction<User>) => {
       // this is only updating the user wallet id, not the lens profile which is fetched separately
       state.user.walletId = action.payload.walletId;
       state.status = Status.Success;
