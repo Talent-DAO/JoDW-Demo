@@ -1,5 +1,9 @@
+import { useQuery } from "@apollo/client";
+import { Dispatch } from "@reduxjs/toolkit";
 import axios from "axios";
+import { getPublicationsFailure, getPublicationsSuccess } from "../features/publication/publicationSlice";
 import { LensUser } from "../features/user/userSlice";
+import { GET_LATEST_ARTICLES } from "../graphql/queries/lens";
 
 type LensPublicationContent = {
   version: string;
@@ -22,6 +26,22 @@ type LensPublicationDetails = {
   timestamp: number;
 }
 
+export const getLatestArticles = async () => (dispatch: Dispatch) => {
+  useQuery(GET_LATEST_ARTICLES, {
+    onError: error => {
+      dispatch(getPublicationsFailure(error));
+    },
+    onCompleted: data => {
+      let unresolvedArticleData = data.posts.map(async (post: any) => {
+        const artdata = await getLensArticleData(post);
+        return artdata;
+      });
+      Promise.all(unresolvedArticleData).then(articleData => {
+        dispatch(getPublicationsSuccess(articleData));
+      });
+    },
+  });
+};
 
 export const getLensArticleData = async (post: any) => {
   //console.log("Loading article data: %s", post.contentURI);

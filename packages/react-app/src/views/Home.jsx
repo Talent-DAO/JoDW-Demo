@@ -38,7 +38,7 @@ function Home({ address }) {
       dispatch(getPublicationsFailure(error));
     },
     onCompleted: data => {
-      let unresolvedArticleData = data.posts.map(async (post) => {
+      let unresolvedArticleData = data.posts.map(async post => {
         const artdata = await getLensArticleData(post);
         return artdata;
       });
@@ -113,11 +113,7 @@ function Home({ address }) {
         </div>
 
         {/* Latest Articles Component Section */}
-        {!loadingArticles && articles ? (
-          <LatestArticles articles={articles} />
-        ) : (
-          <div>Loading...</div>
-        )}
+        {!loadingArticles && articles ? <LatestArticles articles={articles} /> : <div>Loading...</div>}
         {/* Featured Author & Updates Section  */}
         <div className="pt-16 grid grid-cols-1 xl:grid-cols-2">
           <div className="mx-4 flex flex-col">

@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { getLatestArticles } from "../../helpers/articles";
 import { LensUserState } from "../user/userSlice";
 
 export enum Status {
@@ -36,7 +37,10 @@ const initialState: PublicationState = {
 
 const getPublicationsForUser = createAsyncThunk("publication/getPublicationsForUser", async handle => {
   // todo: get publications for user from lens graphql api
-  // todo: https://redux-toolkit.js.org/rtk-query/usage/examples#react-with-graphql
+});
+
+const getLatestPublications = createAsyncThunk("publication/getLatestPublications", async () => {
+  getLatestArticles();
 });
 
 export const publicationSlice = createSlice({
@@ -67,10 +71,25 @@ export const publicationSlice = createSlice({
       .addCase(getPublicationsForUser.rejected, (state, action: PayloadAction<string | any>) => {
         state.status = Status.Failed;
         state.error = action.payload;
+      })
+      .addCase(getLatestPublications.pending, state => {
+        state.status = Status.Loading;
+      })
+      .addCase(getLatestPublications.fulfilled, (state, action: PayloadAction<any>) => {
+        state.status = Status.Success;
+        state.publications.push(action.payload);
+      })
+      .addCase(getLatestPublications.rejected, (state, action: PayloadAction<string | any>) => {
+        state.status = Status.Failed;
+        state.error = action.payload;
       });
   },
 });
 
 const { actions, reducer } = publicationSlice;
-export const { getPublicationsStart, getPublicationsSuccess, getPublicationsFailure } = actions;
+export const {
+  getPublicationsStart,
+  getPublicationsSuccess,
+  getPublicationsFailure,
+} = actions;
 export default reducer;
