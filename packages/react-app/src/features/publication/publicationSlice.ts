@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getLatestArticles } from "../../helpers/articles";
-import { LensUserState } from "../user/userSlice";
+import { LensUser } from "../user/userSlice";
 
 export enum Status {
   Idle = "idle",
@@ -17,7 +17,7 @@ export interface Comment {
 export interface Publication {
   id: number;
   pubId: number | undefined;
-  author: LensUserState;
+  author: LensUser | undefined;
   comments: Comment[];
   contentUri: string | undefined;
   timestamp: number;
@@ -35,13 +35,17 @@ const initialState: PublicationState = {
   error: undefined,
 };
 
-const getPublicationsForUser = createAsyncThunk("publication/getPublicationsForUser", async handle => {
-  // todo: get publications for user from lens graphql api
-});
+const getPublicationsForUser = createAsyncThunk(
+  "publication/getPublicationsForUser",
+  async (handle: string) => {
+    // todo: get publications for user from lens graphql api
+  });
 
-const getLatestPublications = createAsyncThunk("publication/getLatestPublications", async () => {
-  getLatestArticles();
-});
+const getLatestPublications = createAsyncThunk(
+  "publication/getLatestPublications",
+  async () => {
+    getLatestArticles();
+  });
 
 export const publicationSlice = createSlice({
   name: "publication",

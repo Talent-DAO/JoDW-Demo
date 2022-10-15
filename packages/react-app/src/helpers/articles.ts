@@ -1,20 +1,36 @@
 import { useQuery } from "@apollo/client";
 import { Dispatch } from "@reduxjs/toolkit";
 import axios from "axios";
-import { getPublicationsFailure, getPublicationsSuccess } from "../features/publication/publicationSlice";
+import { getPublicationsFailure, getPublicationsSuccess, Publication } from "../features/publication/publicationSlice";
 import { LensUser } from "../features/user/userSlice";
 import { GET_LATEST_ARTICLES } from "../graphql/queries/lens";
+
+export type Tags = {
+  [key: string]: string;
+}
+
+export type Media = {
+  [key: number]: {
+    item: string;
+    type: string;
+    altTag: string;
+  }
+}
 
 type LensPublicationContent = {
   version: string;
   metadata_id: string;
   description: string;
+  locale?: string;
+  tags?: Tags;
+  mainContentFocus?: string;
   content: string;
   external_url?: string;
   image?: string;
   imageMimeType?: string;
   name: string;
-  media: [];
+  media?: Media;
+  attributes?: [];
   appId: string;
 }
 
@@ -32,7 +48,7 @@ export const getLatestArticles = async () => (dispatch: Dispatch) => {
       dispatch(getPublicationsFailure(error));
     },
     onCompleted: data => {
-      let unresolvedArticleData = data.posts.map(async (post: any) => {
+      let unresolvedArticleData = data.posts.map(async (post: Publication) => {
         const artdata = await getLensArticleData(post);
         return artdata;
       });
