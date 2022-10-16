@@ -19,12 +19,12 @@ export interface Publication {
   pubId: number | undefined;
   author: LensUser | undefined;
   comments: Comment[] | undefined;
-  contentUri: string | undefined;
+  contentURI: string | undefined;
   timestamp: number | undefined;
 }
 
 export interface PublicationState {
-  publications: Publication[];
+  publications: Publication[] | undefined;
   status: Status;
   error: string | undefined;
 }
@@ -70,7 +70,7 @@ export const publicationSlice = createSlice({
       })
       .addCase(getPublicationsForUser.fulfilled, (state, action: PayloadAction<PublicationState | any>) => {
         state.status = Status.Success;
-        state.publications.push(action.payload);
+        state.publications?.push(action.payload);
       })
       .addCase(getPublicationsForUser.rejected, (state, action: PayloadAction<string | any>) => {
         state.status = Status.Failed;
@@ -81,7 +81,7 @@ export const publicationSlice = createSlice({
       })
       .addCase(getLatestPublications.fulfilled, (state, action: PayloadAction<any>) => {
         state.status = Status.Success;
-        state.publications.push(action.payload);
+        state.publications?.push(action.payload);
       })
       .addCase(getLatestPublications.rejected, (state, action: PayloadAction<string | any>) => {
         state.status = Status.Failed;

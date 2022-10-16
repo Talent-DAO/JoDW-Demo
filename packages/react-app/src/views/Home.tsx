@@ -14,6 +14,8 @@ import { getPublicationsFailure, getPublicationsSuccess } from "../features/publ
 import { GET_LATEST_ARTICLES } from "../graphql/queries/lens";
 import { getLensArticleData } from "../helpers/articles";
 import { dataURLtoFile, getBgColorForCategory, getTextColorForCategory } from "../utils/utils";
+import { RootState } from "../app/store";
+import { useAccount } from "wagmi";
 
 const server = "https://tdao-api.herokuapp.com";
 
@@ -21,24 +23,25 @@ const server = "https://tdao-api.herokuapp.com";
  * web3 props can be passed from '../App.jsx' into your local view component for use
  * @returns react component
  */
-function Home({ address }) {
-  const [publications, setPublications] = useState(null);
+function Home() {
+  const [publications, setPublications] = useState<any>(null);
+  const { address } = useAccount();
   const dispatch = useDispatch();
 
-  const props = useSelector(state => {
-    const publications = state.publications;
+  const props = useSelector((state: RootState) => {
+    const publications = state.publication.publications;
 
     return {
       publications,
     };
   });
 
-  const { loadingPublications } = useQuery(GET_LATEST_ARTICLES, {
+  const { loading: loadingPublications } = useQuery<any>(GET_LATEST_ARTICLES, {
     onError: error => {
       dispatch(getPublicationsFailure(error));
     },
     onCompleted: data => {
-      let unresolvedPublicationData = data.posts.map(async post => {
+      let unresolvedPublicationData = data.posts.map(async (post: any) => {
         const artdata = await getLensArticleData(post);
         return artdata;
       });
@@ -48,8 +51,6 @@ function Home({ address }) {
       });
     },
   });
-
-  console.log("state => ", props);
 
   // Featured Author State
   const [authorName, setAuthorName] = useState("");

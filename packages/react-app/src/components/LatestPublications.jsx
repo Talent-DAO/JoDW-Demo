@@ -8,7 +8,7 @@ import lineImage from "../assets/line.png";
 import nextImage from "../assets/next.png";
 import prevImage from "../assets/prev.png";
 
-const LatestPublications = (props) => {
+const LatestPublications = ({ publications }) => {
   const settings = {
     dots: false,
     infinite: false,
@@ -84,7 +84,7 @@ const LatestPublications = (props) => {
       </div>
       <div className="relative roadmap_container">
         <Slider ref={c => (slider = c)} {...settings}>
-          {props.publications.map((publication, index) => (
+          {publications.map((publication, index) => (
             <LatestPublicationCard key={index} id={publication.id} publication={publication}></LatestPublicationCard>
           ))}
         </Slider>

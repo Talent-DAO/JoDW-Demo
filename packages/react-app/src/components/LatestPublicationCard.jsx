@@ -1,76 +1,26 @@
 // import axios from "axios";
-import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAccount } from "wagmi";
 import authorimg from "../assets/author.png";
 import etherImage from "../assets/ethereum.png";
 import heartImage from "../assets/heart.png";
 import talentImage from "../assets/talent.png";
 // import { dataURLtoFile } from "../utils/utils";
 
-const server = "https://talentdao-api.herokuapp.com";
-
-export const LatestPublicationCard = ({ id, publication }) => {
+export const LatestPublicationCard = ({ key, id, publication }) => {
   const navigate = useNavigate();
-  const [coverImage, setCoverImage] = useState(null);
-  // const [article, setArticle] = useState(null);
-  // const [author, setAuthor] = useState(null);
-  // const [authorImage, setAuthorImage] = useState(null);
-
-  // useEffect(() => {
-  //   const getArticle = async () => {
-  //     try {
-  //       const params = new URLSearchParams([["_id", id]]);
-  //       const articleResponse = await axios.get(server + "/api/articles", { params });
-  //       if (articleResponse.data.success) {
-  //         setArticle(articleResponse.data.data[0]);
-  //       }
-  //     } catch (e) {
-  //       console.error(e);
-  //     }
-  //   };
-  //   getArticle();
-  // }, [id]);
-
-  // useEffect(() => {
-  //   const getAuthorData = async () => {
-  //     const params = new URLSearchParams([["walletId", article.walletId]]);
-  //     try {
-  //       const res = await axios.get(server + "/api/authors", { params });
-  //       if (res?.data?.success) {
-  //         setAuthor(res?.data?.data[0]);
-  //       }
-  //     } catch (e) {
-  //       console.error(e);
-  //     }
-  //   };
-  //   if (!article) return;
-  //   var cover = dataURLtoFile(article?.cover?.data, article?.cover?.filename);
-  //   var coverSrc = URL.createObjectURL(cover);
-  //   setCoverImage(coverSrc);
-  //   getAuthorData();
-  // }, [article]);
-
-  // useEffect(() => {
-  //   if (!author) return;
-  //   if (author?.authorImage?.data.length === 0 || author?.authorImage?.filename.length === 0) {
-  //     setAuthorImage(null);
-  //   } else {
-  //     var image = dataURLtoFile(author?.authorImage?.data, author?.authorImage?.filename);
-  //     var authorSrc = URL.createObjectURL(image);
-  //     setAuthorImage(authorSrc);
-  //   }
-  // }, [author]);
+  const { address } = useAccount();
 
   return (
-    <div className="flex flex-col justify-center mx-2 my-4">
+    <div key={key} className="flex flex-col justify-center mx-2 my-4">
       <div className="rounded-2xl shadow-lg max-w-sm p-4" style={{ background: "#F1F1F1" }}>
         <a href="#!">
-          {coverImage && (
+          {publication.authorimg && (
             <img
               className="rounded-xl cursor-pointer w-full h-32 bg-cover bg-center"
-              src={coverImage}
+              src={publication.authorimg}
               alt=""
-              onClick={() => navigate("/article")}
+              onClick={() => navigate("/publication/" + id)}
             />
           )}
         </a>
@@ -86,7 +36,7 @@ export const LatestPublicationCard = ({ id, publication }) => {
             </div>
           </div>
           <div className="pt-8 flex flex-row justify-between items-center">
-            <div className="flex flex-row items-center cursor-pointer" onClick={() => navigate("/author")}>
+            <div className="flex flex-row items-center cursor-pointer" onClick={() => navigate("/author/" + address)}>
               {publication.author.image ? (
                 <img alt="author" src={publication.author.image} width={30} height={30}></img>
               ) : (
