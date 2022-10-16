@@ -278,7 +278,7 @@ const EditUserProfile = ({ address }) => {
       </div>
       <div className="rounded-2xl flex flex-col px-8 pt-6 pb-8 bg-white space-y-4">
         <div className="flex flex-col">
-          <label htmlFor="article-title" className="pl-4 block text-left text-lg font-bold">
+          <label htmlFor="publication-title" className="pl-4 block text-left text-lg font-bold">
             Name <span className="pl-1 text-primary">*</span>
           </label>
           <input
@@ -289,7 +289,7 @@ const EditUserProfile = ({ address }) => {
           />
         </div>
         <div className="flex flex-col">
-          <label htmlFor="article-title" className="pl-4 block text-left text-lg font-bold">
+          <label htmlFor="publication-title" className="pl-4 block text-left text-lg font-bold">
             Bio <span className="pl-1 text-primary">*</span>
           </label>
           <input
@@ -300,7 +300,7 @@ const EditUserProfile = ({ address }) => {
           />
         </div>
         <div className="flex flex-col">
-          <label htmlFor="article-title" className="pl-4 block text-left text-lg font-bold">
+          <label htmlFor="publication-title" className="pl-4 block text-left text-lg font-bold">
             About Me <span className="pl-1 text-primary">*</span>
           </label>
           <textarea
@@ -458,7 +458,7 @@ const EditUserProfile = ({ address }) => {
         </div>
       </div>
       <div className="flex flex-col">
-        <label htmlFor="article-title" className="pl-4 block text-left text-lg font-bold">
+        <label htmlFor="publication-title" className="pl-4 block text-left text-lg font-bold">
           On The Web
         </label>
         <div className="rounded-2xl border border-lightgray p-4 flex flex-col">
@@ -503,7 +503,7 @@ const EditUserProfile = ({ address }) => {
         </div>
       </div>
       <div className="flex flex-col">
-        <label htmlFor="article-title" className="pl-4 block text-left text-lg font-bold">
+        <label htmlFor="publication-title" className="pl-4 block text-left text-lg font-bold">
           Tip Address <span className="pl-1 text-primary">*</span>
         </label>
         <input

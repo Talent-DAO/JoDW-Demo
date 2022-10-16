@@ -9,7 +9,7 @@ import article_back from "../assets/article_back.png";
 import author_pro from "../assets/author_pro.png";
 import ethereum from "../assets/ethereum.png";
 import matic from "../assets/matic.png";
-import { SimilarArticleCard } from "../components";
+import { SimilarPublicationCard } from "../components";
 import { GET_ARTICLE_DETAILS } from "../graphql/queries/lens";
 import { getLensArticleData } from "../helpers/articles";
 import { useAccount } from "wagmi";
@@ -206,10 +206,10 @@ const LensArticle = () => {
 
           <div className="hidden lg:block my-8 max-w-screen-lg mx-auto text-lg text-left">{article.content.content}</div>
           <div className="pb-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            <SimilarArticleCard />
-            <SimilarArticleCard />
-            <SimilarArticleCard />
-            <SimilarArticleCard />
+            <SimilarPublicationCard />
+            <SimilarPublicationCard />
+            <SimilarPublicationCard />
+            <SimilarPublicationCard />
           </div>
         </div>
       )}

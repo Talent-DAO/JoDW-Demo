@@ -61,7 +61,7 @@ const App = ({ ...props }) => {
             <Route path="/author/:walletId" element={<AuthorView address={address} />} />
             <Route path="/reviewer/:walletId" element={<ReviewerView address={address} />} />
             <Route path="/publisher/:walletId" element={<PublisherView address={address} />} />
-            <Route path="/article/:id" element={<LensArticleView address={address} />} />
+            <Route path="/publication/:id" element={<LensArticleView address={address} />} />
             <Route path="/search" element={<SearchView address={address} />} />
             <Route path="/advancedsearch" element={<AdvancedSearchView address={address} />} />
             <Route
@@ -81,7 +81,7 @@ const App = ({ ...props }) => {
                 }
               />
               <Route
-                path="/user/articles"
+                path="/user/publications"
                 element={
                   <UserView address={address} userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />
                 }

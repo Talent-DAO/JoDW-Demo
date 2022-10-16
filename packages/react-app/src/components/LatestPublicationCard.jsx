@@ -1,15 +1,15 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+// import axios from "axios";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import authorimg from "../assets/author.png";
 import etherImage from "../assets/ethereum.png";
 import heartImage from "../assets/heart.png";
 import talentImage from "../assets/talent.png";
-import { dataURLtoFile } from "../utils/utils";
+// import { dataURLtoFile } from "../utils/utils";
 
 const server = "https://talentdao-api.herokuapp.com";
 
-export const LatestArticleCard = ({ id, article }) => {
+export const LatestPublicationCard = ({ id, publication }) => {
   const navigate = useNavigate();
   const [coverImage, setCoverImage] = useState(null);
   // const [article, setArticle] = useState(null);
@@ -76,9 +76,9 @@ export const LatestArticleCard = ({ id, article }) => {
         </a>
         <div className="pt-4 flex flex-col">
           <div className="h-10 flex flex-row justify-between items-start">
-            <div className="text-xl text-left font-bold cursor-pointer" onClick={() => navigate("/article/" + id)}>
-              {article && article.title}
-              {article && article.content.name}
+            <div className="text-xl text-left font-bold cursor-pointer" onClick={() => navigate("/publication/" + id)}>
+              {publication && publication.title}
+              {publication && publication.content.name}
             </div>
             <div className="flex flex-row items-center">
               <img src={talentImage} className="-mr-2" alt="talent"></img>
@@ -87,12 +87,12 @@ export const LatestArticleCard = ({ id, article }) => {
           </div>
           <div className="pt-8 flex flex-row justify-between items-center">
             <div className="flex flex-row items-center cursor-pointer" onClick={() => navigate("/author")}>
-              {article.author.image ? (
-                <img alt="author" src={article.author.image} width={30} height={30}></img>
+              {publication.author.image ? (
+                <img alt="author" src={publication.author.image} width={30} height={30}></img>
               ) : (
                 <img alt="author" src={authorimg} width={30} height={30}></img>
               )}
-              <div className="pl-2 text-lg text-darkgray">{article?.author.handle}</div>
+              <div className="pl-2 text-lg text-darkgray">{publication?.author.handle}</div>
             </div>
             <img src={heartImage} alt="heart"></img>
           </div>
@@ -102,4 +102,4 @@ export const LatestArticleCard = ({ id, article }) => {
   );
 };
 
-export default LatestArticleCard;
+export default LatestPublicationCard;

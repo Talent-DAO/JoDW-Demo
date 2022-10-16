@@ -11,13 +11,26 @@ export type Tags = {
 
 export type Media = {
   [key: number]: {
-    item: string;
-    type: string;
-    altTag: string;
-  }
+    item: string,
+    type: string,
+    altTag: string,
+  };
+  attributes: Attribute;
+  appId: string;
 }
 
-type LensPublicationContent = {
+export type Attribute = {
+  [key: number]: {
+    value: string,
+    traitType: string,
+    displayType: string,
+  };
+  media: Media;
+  createdOn: string;
+  appId: string;
+}
+
+export type LensPublicationContent = {
   version: string;
   metadata_id: string;
   description: string;
@@ -30,11 +43,12 @@ type LensPublicationContent = {
   imageMimeType?: string;
   name: string;
   media?: Media;
-  attributes?: [];
+  attributes?: Attribute[];
+  createdOn: string;
   appId: string;
 }
 
-type LensPublicationDetails = {
+export type LensPublicationDetails = {
   id: string;
   contentURI: string;
   content?: LensPublicationContent;
@@ -80,7 +94,7 @@ export const getLensArticleData = async (post: any) => {
     const content = await axios.get(uri);
     // TODO: check for errors
     postData.content = content.data;
-  } catch(error) {
+  } catch (error) {
     console.error("Error loading post content: %s", post);
   }
 

@@ -11,7 +11,7 @@ import article_back from "../assets/article_back.png";
 import author_pro from "../assets/author_pro.png";
 import ethereum from "../assets/ethereum.png";
 import matic from "../assets/matic.png";
-import { SimilarArticleCard } from "../components";
+import { SimilarPublicationCard } from "../components";
 import { dataURLtoFile, getAuthorData, readTextFile } from "../utils/utils";
 pdfjs.GlobalWorkerOptions.workerSrc = "pdf.worker.min.js";
 
@@ -34,7 +34,7 @@ const tabType = {
   author: "authors",
 };
 
-const Article = ({ readContracts, writeContracts, address, tx }) => {
+const Article = () => {
   const [tab, setTab] = useState(tabType.detail);
   const [article, setArticle] = useState(null);
   const [author, setAuthor] = useState(null);
@@ -308,10 +308,10 @@ const Article = ({ readContracts, writeContracts, address, tx }) => {
 
           <div className="hidden lg:block my-8 max-w-screen-lg mx-auto text-lg text-left">{articleText}</div>
           <div className="pb-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            <SimilarArticleCard address={address}></SimilarArticleCard>
-            <SimilarArticleCard address={address}></SimilarArticleCard>
-            <SimilarArticleCard address={address}></SimilarArticleCard>
-            <SimilarArticleCard address={address}></SimilarArticleCard>
+            <SimilarPublicationCard />
+            <SimilarPublicationCard />
+            <SimilarPublicationCard />
+            <SimilarPublicationCard />
           </div>
         </div>
       )}

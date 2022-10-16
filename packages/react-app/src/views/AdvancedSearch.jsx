@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import clear from "../assets/clear.svg";
 import search from "../assets/search.svg";
-import { AuthorCard, Footer, ArticleCard } from "../components";
+import { AuthorCard, Footer, PublicationCard } from "../components";
 import { strcmp } from "../utils/utils";
 
 const server = "https://tdao-api.herokuapp.com";
@@ -235,7 +235,7 @@ const AdvancedSearch = () => {
         <div className="py-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {category === "author"
             ? searchResult.map(item => <AuthorCard key={Math.random()} author={item}></AuthorCard>)
-            : searchResult.map(item => <ArticleCard key={Math.random()} article={item}></ArticleCard>)}
+            : searchResult.map(item => <PublicationCard key={Math.random()} publication={item}></PublicationCard>)}
         </div>
       </div>
     </div>

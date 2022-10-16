@@ -4,7 +4,7 @@ import article_back from "../assets/article_back.png";
 import author_pro from "../assets/author_pro.png";
 
 // todo: add live data
-const SimilarArticleCard = () => {
+const SimilarPublicationCard = () => {
   const navigate = useNavigate();
 
   return (
@@ -38,4 +38,4 @@ const SimilarArticleCard = () => {
   );
 };
 
-export default SimilarArticleCard;
+export default SimilarPublicationCard;

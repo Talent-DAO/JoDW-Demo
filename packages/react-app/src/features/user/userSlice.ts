@@ -17,7 +17,7 @@ export interface LensUser {
 
 export interface User {
   walletId: string | undefined;
-  lensProfile: LensUser | undefined;
+  lensProfile: LensUser;
   status: Status;
 }
 
@@ -30,7 +30,13 @@ export interface UserRootState {
 const initialState: UserRootState = {
   user: {
     walletId: "",
-    lensProfile: undefined,
+    lensProfile: {
+      id: 0,
+      handle: "",
+      image: "",
+      walletId: "",
+      status: Status.Idle,
+    },
     status: Status.Idle,
   },
   status: Status.Idle,
@@ -45,28 +51,28 @@ export const userSlice = createSlice({
     fetchUserStart: state => {
       state.status = Status.Loading;
     },
-    fetchUserSuccess: (state, action: PayloadAction<User>) => {
+    fetchUserSuccess: (state: UserRootState, action: PayloadAction<User>) => {
       state.user = action.payload;
       state.status = Status.Success;
     },
-    fetchUserFailure: (state, action: PayloadAction<string>) => {
+    fetchUserFailure: (state: UserRootState, action: PayloadAction<string>) => {
       state.status = Status.Failed;
       state.error = action.payload;
     },
     // Fetch user profile reducers
-    fetchLensUserStart: state => {
-      state.status = Status.Loading;
+    fetchLensUserStart: (state: UserRootState) => {
+      state.user.lensProfile.status = Status.Loading;
     },
-    fetchLensUserSuccess: (state, action: PayloadAction<LensUser>) => {
+    fetchLensUserSuccess: (state: UserRootState, action: PayloadAction<LensUser>) => {
       state.user.lensProfile = action.payload;
       state.status = Status.Success;
     },
-    fetchLensUserFailure: (state, action: PayloadAction<string>) => {
+    fetchLensUserFailure: (state: UserRootState, action: PayloadAction<string>) => {
       state.status = Status.Failed;
       state.error = action.payload;
     },
     // Update user profile reducers
-    userWalletUpdated: (state, action: PayloadAction<User>) => {
+    userWalletUpdated: (state: UserRootState, action: PayloadAction<User>) => {
       // this is only updating the user wallet id, not the lens profile which is fetched separately
       state.user.walletId = action.payload.walletId;
       state.status = Status.Success;

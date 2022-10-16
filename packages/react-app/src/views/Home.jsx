@@ -9,7 +9,7 @@ import arrowRightImage from "../assets/ArrowRight.png";
 import authorImage from "../assets/author.png";
 import lineImage from "../assets/line.png";
 import partnershipImage from "../assets/partnership.png";
-import { LatestArticles, Newsletter, Splash } from "../components";
+import { LatestPublications, Newsletter, Splash } from "../components";
 import { getPublicationsFailure, getPublicationsSuccess } from "../features/publication/publicationSlice";
 import { GET_LATEST_ARTICLES } from "../graphql/queries/lens";
 import { getLensArticleData } from "../helpers/articles";
@@ -22,7 +22,7 @@ const server = "https://tdao-api.herokuapp.com";
  * @returns react component
  */
 function Home({ address }) {
-  const [articles, setArticles] = useState(null);
+  const [publications, setPublications] = useState(null);
   const dispatch = useDispatch();
 
   const props = useSelector(state => {
@@ -33,18 +33,18 @@ function Home({ address }) {
     };
   });
 
-  const { loadingArticles } = useQuery(GET_LATEST_ARTICLES, {
+  const { loadingPublications } = useQuery(GET_LATEST_ARTICLES, {
     onError: error => {
       dispatch(getPublicationsFailure(error));
     },
     onCompleted: data => {
-      let unresolvedArticleData = data.posts.map(async post => {
+      let unresolvedPublicationData = data.posts.map(async post => {
         const artdata = await getLensArticleData(post);
         return artdata;
       });
-      Promise.all(unresolvedArticleData).then(articleData => {
-        setArticles(articleData);
-        dispatch(getPublicationsSuccess(articleData));
+      Promise.all(unresolvedPublicationData).then(publicationData => {
+        setPublications(publicationData);
+        dispatch(getPublicationsSuccess(publicationData));
       });
     },
   });
@@ -112,8 +112,8 @@ function Home({ address }) {
           </div>
         </div>
 
-        {/* Latest Articles Component Section */}
-        {!loadingArticles && articles ? <LatestArticles articles={articles} /> : <div>Loading...</div>}
+        {/* Latest Publications Component Section */}
+        {!loadingPublications && publications ? <LatestPublications publications={publications} /> : <div>Loading...</div>}
         {/* Featured Author & Updates Section  */}
         <div className="pt-16 grid grid-cols-1 xl:grid-cols-2">
           <div className="mx-4 flex flex-col">

@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
+import { LatestPublicationCard } from ".";
 import favImage from "../assets/favourite.png";
 import lineImage from "../assets/line.png";
 import nextImage from "../assets/next.png";
 import prevImage from "../assets/prev.png";
-import { LatestArticleCard } from "../components";
 
-const LatestArticles = (props) => {
+const LatestPublications = (props) => {
   const settings = {
     dots: false,
     infinite: false,
@@ -84,8 +84,8 @@ const LatestArticles = (props) => {
       </div>
       <div className="relative roadmap_container">
         <Slider ref={c => (slider = c)} {...settings}>
-          {props.articles.map((article, index) => (
-            <LatestArticleCard key={index} id={article.id} article={article}></LatestArticleCard>
+          {props.publications.map((publication, index) => (
+            <LatestPublicationCard key={index} id={publication.id} publication={publication}></LatestPublicationCard>
           ))}
         </Slider>
         <div className="md:hidden absolute top-1/2 left-4">
@@ -99,4 +99,4 @@ const LatestArticles = (props) => {
   );
 };
 
-export default LatestArticles;
+export default LatestPublications;

@@ -8,13 +8,13 @@ import followImage from "../assets/add.png";
 import emailImage from "../assets/email.png";
 import arrowRightImage from "../assets/arrow.png";
 import verifiedImage from "../assets/verified.png";
-import { ArticleMintCard, Footer } from "../components";
+import { PublicationMintCard, Footer } from "../components";
 import { dataURLtoFile, getAuthorData } from "../utils/utils";
 import MessageModal from "../components/MessageModal";
 
 const server = "https://tdao-api.herokuapp.com";
 
-const Publisher = ({ tx, readContracts, writeContracts, address }) => {
+const Publisher = () => {
   const navigate = useNavigate();
   const { walletId } = useParams();
   const [author, setAuthor] = useState(null);
@@ -168,7 +168,7 @@ const Publisher = ({ tx, readContracts, writeContracts, address }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10">
               <div className="col-span-2 space-y-8">
                 <div className="rounded-2xl flex flex-col bg-white border border-lightgrey">
-                  <img src={coverImage} alt="article cover" className="rounded-2xl w-full h-80 bg-gray"></img>
+                  <img src={coverImage} alt="publication cover" className="rounded-2xl w-full h-80 bg-gray"></img>
                   <div className="flex flex-col px-12 pb-12 space-y-8">
                     <div className="flex flex-col md:flex-row items-center md:justify-between">
                       <img
@@ -270,15 +270,11 @@ const Publisher = ({ tx, readContracts, writeContracts, address }) => {
                     )}
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 gap-y-8">
-                    {articles.map((article, index) => (
-                      <ArticleMintCard
+                    {articles.map((publication, index) => (
+                      <PublicationMintCard
                         key={index}
-                        article={article}
-                        tx={tx}
-                        writeContracts={writeContracts}
-                        readContracts={readContracts}
-                        address={address}
-                      ></ArticleMintCard>
+                        publication={publication}
+                      ></PublicationMintCard>
                     ))}
                   </div>
                 </div>

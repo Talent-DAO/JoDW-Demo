@@ -18,9 +18,9 @@ export interface Publication {
   id: number;
   pubId: number | undefined;
   author: LensUser | undefined;
-  comments: Comment[];
+  comments: Comment[] | undefined;
   contentUri: string | undefined;
-  timestamp: number;
+  timestamp: number | undefined;
 }
 
 export interface PublicationState {
@@ -54,7 +54,7 @@ export const publicationSlice = createSlice({
     getPublicationsStart: state => {
       state.status = Status.Loading;
     },
-    getPublicationsSuccess: (state, action) => {
+    getPublicationsSuccess: (state: PublicationState, action: PayloadAction<Publication[]>) => {
       state.publications = action.payload;
       state.status = Status.Success;
     },
