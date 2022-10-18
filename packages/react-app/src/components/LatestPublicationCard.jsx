@@ -27,7 +27,6 @@ export const LatestPublicationCard = ({ key, id, publication }) => {
         <div className="pt-4 flex flex-col">
           <div className="h-10 flex flex-row justify-between items-start">
             <div className="text-xl text-left font-bold cursor-pointer" onClick={() => navigate("/publication/" + id)}>
-              {publication && publication.title}
               {publication && publication.content.name}
             </div>
             <div className="flex flex-row items-center">

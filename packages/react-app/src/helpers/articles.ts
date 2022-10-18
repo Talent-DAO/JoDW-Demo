@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { Dispatch } from "@reduxjs/toolkit";
 import axios from "axios";
-import { getPublicationsFailure, getPublicationsSuccess, Publication } from "../features/publication/publicationSlice";
+import { getPublicationsFailure, getPublicationsSuccess, TPublication } from "../features/publication/publicationSlice";
 import { LensUser } from "../features/user/userSlice";
 import { GET_LATEST_ARTICLES } from "../graphql/queries/lens";
 
@@ -11,12 +11,12 @@ export type Tags = {
 
 export type Media = {
   [key: number]: {
-    item: string,
-    type: string,
-    altTag: string,
+    item: string | undefined,
+    type: string | undefined,
+    altTag: string | undefined,
   };
-  attributes: Attribute;
-  appId: string;
+  attributes?: Attribute | undefined;
+  appId?: string | undefined;
 }
 
 export type Attribute = {
@@ -25,35 +25,35 @@ export type Attribute = {
     traitType: string,
     displayType: string,
   };
-  media: Media;
-  createdOn: string;
-  appId: string;
+  media: Media | undefined;
+  createdOn: string | undefined;
+  appId: string | undefined;
 }
 
 export type LensPublicationContent = {
   version: string;
-  metadata_id: string;
-  description: string;
-  locale?: string;
-  tags?: Tags;
-  mainContentFocus?: string;
-  content: string;
-  external_url?: string;
-  image?: string;
-  imageMimeType?: string;
-  name: string;
-  media?: Media;
-  attributes?: Attribute[];
-  createdOn: string;
-  appId: string;
+  metadata_id: string | undefined;
+  description: string | undefined;
+  locale?: string | undefined;
+  tags?: Tags | undefined;
+  mainContentFocus?: string | undefined;
+  content: string | undefined;
+  external_url?: string | undefined;
+  image?: string | undefined;
+  imageMimeType?: string | undefined;
+  name: string | undefined;
+  media?: Media | undefined;
+  attributes?: Attribute[] | undefined;
+  createdOn: string | undefined;
+  appId: string | undefined;
 }
 
 export type LensPublicationDetails = {
-  id: string;
-  contentURI: string;
-  content?: LensPublicationContent;
-  author: LensUser;
-  timestamp: number;
+  id: string | undefined;
+  contentURI: string | undefined;
+  content?: LensPublicationContent | undefined;
+  author?: LensUser | undefined;
+  timestamp: number | undefined;
 }
 
 export const getLatestArticles = async () => (dispatch: Dispatch) => {
@@ -62,7 +62,7 @@ export const getLatestArticles = async () => (dispatch: Dispatch) => {
       dispatch(getPublicationsFailure(error));
     },
     onCompleted: data => {
-      let unresolvedArticleData = data.posts.map(async (post: Publication) => {
+      let unresolvedArticleData = data.posts.map(async (post: TPublication) => {
         const artdata = await getLensArticleData(post);
         return artdata;
       });
@@ -90,6 +90,41 @@ export const getLensArticleData = async (post: any) => {
     },
     timestamp: post.timestamp,
   };
+
+  // todo: set this up for the return type using the lens graphql api
+  // and replace postData 
+  const response: LensPublicationDetails = {
+    id: "",
+    contentURI: "",
+    content: {
+      version: "",
+      metadata_id: "",
+      description: "",
+      locale: "",
+      tags: {},
+      mainContentFocus: "",
+      content: "",
+      external_url: "",
+      image: "",
+      imageMimeType: "",
+      name: "",
+      media: {
+        0: {
+          item: "",
+          type: "",
+          altTag: "",
+        },
+        attributes: undefined,
+        appId: "",
+      },
+      attributes: [],
+      createdOn: "",
+      appId: "",
+    },
+    author: undefined,
+    timestamp: 0,
+  };
+
   try {
     const content = await axios.get(uri);
     // TODO: check for errors

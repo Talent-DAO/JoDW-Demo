@@ -9,22 +9,22 @@ export enum Status {
   Failed = "failed",
 }
 
-export interface Comment {
+export type TComment = {
   pubId: string;
   timestamp: number;
 }
 
-export interface Publication {
+export type TPublication = {
   id: number;
   pubId: number | undefined;
   author: LensUser | undefined;
-  comments: Comment[] | undefined;
+  comments: TComment[] | undefined;
   contentURI: string | undefined;
   timestamp: number | undefined;
 }
 
 export interface PublicationState {
-  publications: Publication[] | undefined;
+  publications: TPublication[] | undefined;
   status: Status;
   error: string | undefined;
 }
@@ -54,7 +54,7 @@ export const publicationSlice = createSlice({
     getPublicationsStart: state => {
       state.status = Status.Loading;
     },
-    getPublicationsSuccess: (state: PublicationState, action: PayloadAction<Publication[]>) => {
+    getPublicationsSuccess: (state: PublicationState, action: PayloadAction<TPublication[]>) => {
       state.publications = action.payload;
       state.status = Status.Success;
     },

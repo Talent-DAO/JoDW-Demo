@@ -15,13 +15,13 @@ import { getLensArticleData } from "../helpers/articles";
 import { useAccount } from "wagmi";
 pdfjs.GlobalWorkerOptions.workerSrc = "pdf.worker.min.js";
 
-type TabType = {
+type TTabType = {
   detail: string;
   history: string;
   author: string;
 }
 
-const tabType: TabType = {
+const tabType: TTabType = {
   detail: "details",
   history: "history",
   author: "authors",
@@ -36,7 +36,7 @@ const dateTimeFormat = new Intl.DateTimeFormat("en", {
 const LensArticle = () => {
   const { address } = useAccount();
   const [tab, setTab] = useState(tabType.detail);
-  const [article, setArticle] = useState(null);
+  const [article, setArticle] = useState<any>(null);
   const [author, setAuthor] = useState(null);
   const [coverImage, setCoverImage] = useState(null);
   const [authorImage, setAuthorImage] = useState(null);
@@ -206,7 +206,6 @@ const LensArticle = () => {
 
           <div className="hidden lg:block my-8 max-w-screen-lg mx-auto text-lg text-left">{article.content.content}</div>
           <div className="pb-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            <SimilarPublicationCard />
             <SimilarPublicationCard />
             <SimilarPublicationCard />
             <SimilarPublicationCard />
