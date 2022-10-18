@@ -10,7 +10,7 @@ import { dataURLtoFile, getAuthorData } from "../utils/utils";
 
 const server = "https://tdao-api.herokuapp.com";
 
-const Author = ({ tx, readContracts, writeContracts, address }) => {
+const Author = () => {
   const navigate = useNavigate();
   const { walletId } = useParams();
   const [author, setAuthor] = useState(null);

@@ -15,7 +15,7 @@ export const web3Slice = createSlice({
   name: "web3",
   initialState,
   reducers: {
-    chainIdUpdated: (state, action: PayloadAction<Chain>) => {
+    chainUpdated: (state, action: PayloadAction<Chain>) => {
       state.chain = action.payload;
     },
     accountUpdated: (state, action: PayloadAction<string>) => {
@@ -24,5 +24,5 @@ export const web3Slice = createSlice({
   },
 });
 
-export const { accountUpdated, chainIdUpdated } = web3Slice.actions;
+export const { accountUpdated, chainUpdated } = web3Slice.actions;
 export default web3Slice.reducer;

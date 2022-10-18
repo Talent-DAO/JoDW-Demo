@@ -7,7 +7,7 @@ export enum Status {
   Failed = "failed",
 }
 
-export interface LensUser {
+export type LensUser = {
   id: number;
   handle: string | undefined;
   image: string | undefined;
@@ -15,7 +15,7 @@ export interface LensUser {
   status: Status;
 }
 
-export interface User {
+export type User = {
   walletId: string | undefined;
   lensProfile: LensUser;
   status: Status;

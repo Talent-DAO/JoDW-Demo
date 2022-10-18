@@ -20,11 +20,11 @@ if (process.env.REACT_APP_ENV === "production") {
 }
 
 export const { chains, provider, webSocketProvider } = configureChains(activeChains, [
-  jsonRpcProvider({
-    rpc: () => ({
-      http: "http://localhost:8545",
-    }),
-  }),
+  // jsonRpcProvider({
+  //   rpc: () => ({
+  //     http: "http://localhost:8545",
+  //   }),
+  // }),
   alchemyProvider({ apiKey: alchemyId, priority: 1 }),
   infuraProvider({ apiKey: infuraId, priority: 2 }),
   publicProvider({ priority: 0 }),

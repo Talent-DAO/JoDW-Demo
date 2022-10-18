@@ -24,7 +24,7 @@ const server = "https://tdao-api.herokuapp.com";
  * @returns react component
  */
 function Home() {
-  const [publications, setPublications] = useState<any>(null);
+  // const [publications, setPublications] = useState<any>(null);
   const { address } = useAccount();
   const dispatch = useDispatch();
 
@@ -36,6 +36,8 @@ function Home() {
     };
   });
 
+  console.log("Publications => ", props.publications);
+
   const { loading: loadingPublications } = useQuery<any>(GET_LATEST_ARTICLES, {
     onError: error => {
       dispatch(getPublicationsFailure(error));
@@ -46,7 +48,7 @@ function Home() {
         return artdata;
       });
       Promise.all(unresolvedPublicationData).then(publicationData => {
-        setPublications(publicationData);
+        // setPublications(publicationData);
         dispatch(getPublicationsSuccess(publicationData));
       });
     },
@@ -114,7 +116,7 @@ function Home() {
         </div>
 
         {/* Latest Publications Component Section */}
-        {!loadingPublications && publications ? <LatestPublications publications={publications} /> : <div>Loading...</div>}
+        {!loadingPublications && props.publications ? <LatestPublications publications={props.publications} /> : <div>Loading...</div>}
         {/* Featured Author & Updates Section  */}
         <div className="pt-16 grid grid-cols-1 xl:grid-cols-2">
           <div className="mx-4 flex flex-col">

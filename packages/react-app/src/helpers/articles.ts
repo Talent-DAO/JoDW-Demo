@@ -32,6 +32,7 @@ export type Attribute = {
 
 export type LensPublicationContent = {
   version: string;
+  animation_url: string;
   metadata_id: string | undefined;
   description: string | undefined;
   locale?: string | undefined;
@@ -63,10 +64,15 @@ export const getLatestArticles = async () => (dispatch: Dispatch) => {
     },
     onCompleted: data => {
       let unresolvedArticleData = data.posts.map(async (post: TPublication) => {
-        const artdata = await getLensArticleData(post);
-        return artdata;
+        try {
+          const artdata = await getLensArticleData(post);
+          return artdata;
+        } catch (err) {
+          console.error("Error loading article: ", err);
+        }
       });
       Promise.all(unresolvedArticleData).then(articleData => {
+        console.log("loaded art data");
         dispatch(getPublicationsSuccess(articleData));
       });
     },
@@ -74,14 +80,23 @@ export const getLatestArticles = async () => (dispatch: Dispatch) => {
 };
 
 export const getLensArticleData = async (post: any) => {
-  //console.log("Loading article data: %s", post.contentURI);
+  console.log("Loading article data: %s", post.contentURI);
   let uri = post.contentURI;
   if (post.contentURI.startsWith("ipfs://")) {
     uri = "https://superfun.infura-ipfs.io/ipfs/" + post.contentURI.substring(7);
+  } else if (post.contentURI.startsWith("https://arweave.net/")) {
+    uri = post.contentURI;
+  } else if (!post.contentURI.includes("://")) {
+    uri = "https://superfun.infura-ipfs.io/ipfs/" + post.contentURI;
+    console.log("CID only URI: %s", uri);
   }
+  // bafybeihnndltmxfycnk2kzl3oyci3v4s5mvg7pwm6elelrhlddlyy5nwiy
+  // https://explore.ipld.io/#/explore/bafybeihz2elht6oiet5f6nslgawatxmlrfnxduhbwprrvpz7enpeiggkle
+  // https://superfun.infura-ipfs.io/ipfs/bafybeihnndltmxfycnk2kzl3oyci3v4s5mvg7pwm6elelrhlddlyy5nwiy
+  // https://superfun.infura-ipfs.io/ipfs/bafybeihnndltmxfycnk2kzl3oyci3v4s5mvg7pwm6elelrhlddlyy5nwiy/json
   const postData = {
     id: post.id,
-    contentURI: post.contentURI,
+    contentURI: uri,
     content: {},
     author: {
       handle: post.profileId.handle,
@@ -91,13 +106,16 @@ export const getLensArticleData = async (post: any) => {
     timestamp: post.timestamp,
   };
 
+  console.log("Post Data", postData);
+
   // todo: set this up for the return type using the lens graphql api
   // and replace postData 
   const response: LensPublicationDetails = {
-    id: "",
+    id: post.id,
     contentURI: "",
     content: {
       version: "",
+      animation_url: "",
       metadata_id: "",
       description: "",
       locale: "",
@@ -126,9 +144,13 @@ export const getLensArticleData = async (post: any) => {
   };
 
   try {
-    const content = await axios.get(uri);
+    var content: any = await axios.get(uri, {timeout: 50});
     // TODO: check for errors
+    if (content.headers["content-type"] === "text/html") {
+      content = await axios.get(uri + "/json");
+    }
     postData.content = content.data;
+    console.log("content", content);
   } catch (error) {
     console.error("Error loading post content: %s", post);
   }
