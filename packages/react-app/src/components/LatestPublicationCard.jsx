@@ -1,5 +1,3 @@
-// import axios from "axios";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAccount } from "wagmi";
 import authorimg from "../assets/author.png";
@@ -18,7 +16,7 @@ export const LatestPublicationCard = ({ key, id, publication }) => {
           {publication && (
             <img
               className="rounded-xl cursor-pointer w-full h-32 bg-cover bg-center"
-              src={publication.author.image}
+              src={publication.author?.image}
               alt=""
               onClick={() => navigate("/publication/" + id)}
             />
@@ -38,11 +36,11 @@ export const LatestPublicationCard = ({ key, id, publication }) => {
           <div className="pt-8 flex flex-row justify-between items-center">
             <div className="flex flex-row items-center cursor-pointer" onClick={() => navigate("/author/" + address)}>
               {publication && publication.author?.image ? (
-                <img alt="author" src={publication.author.image} width={30} height={30}></img>
+                <img alt="author" src={publication.author?.image} width={30} height={30}></img>
               ) : (
                 <img alt="author" src={authorimg} width={30} height={30}></img>
               )}
-              <div className="pl-2 text-lg text-darkgray">{publication.author.handle}</div>
+              <div className="pl-2 text-lg text-darkgray">{publication.author?.handle}</div>
             </div>
             <img src={heartImage} alt="heart"></img>
           </div>

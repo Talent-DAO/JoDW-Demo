@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getLatestArticles } from "../../helpers/articles";
+import { getLatestArticles } from "../../helpers/graphql/articles";
 import { LensUser } from "../user/userSlice";
 
 export enum Status {

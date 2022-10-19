@@ -5,6 +5,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useAccount } from "wagmi";
+import { RootState } from "../app/store";
 import arrowRightImage from "../assets/ArrowRight.png";
 import authorImage from "../assets/author.png";
 import lineImage from "../assets/line.png";
@@ -12,27 +14,22 @@ import partnershipImage from "../assets/partnership.png";
 import { LatestPublications, Newsletter, Splash } from "../components";
 import { getPublicationsFailure, getPublicationsSuccess } from "../features/publication/publicationSlice";
 import { GET_LATEST_ARTICLES } from "../graphql/queries/lens";
-import { getLensArticleData } from "../helpers/articles";
+import { getLensArticleData } from "../helpers/graphql/articles";
 import { dataURLtoFile, getBgColorForCategory, getTextColorForCategory } from "../utils/utils";
-import { RootState } from "../app/store";
-import { useAccount } from "wagmi";
 
 const server = "https://tdao-api.herokuapp.com";
 
-/**
- * web3 props can be passed from '../App.jsx' into your local view component for use
- * @returns react component
- */
 function Home() {
-  // const [publications, setPublications] = useState<any>(null);
   const { address } = useAccount();
   const dispatch = useDispatch();
 
   const props = useSelector((state: RootState) => {
     const publications = state.publication.publications;
+    const addr = state.user.user.walletId;
 
     return {
       publications,
+      addr
     };
   });
 

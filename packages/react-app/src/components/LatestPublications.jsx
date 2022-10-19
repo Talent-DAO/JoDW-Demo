@@ -14,7 +14,7 @@ const LatestPublications = ({ publications }) => {
     infinite: false,
     speed: 500,
     slidesToScroll: 1,
-    slidesToShow: 5,
+    slidesToShow: 4,
     arrows: false,
     draggable: false,
     accessibility: false,
