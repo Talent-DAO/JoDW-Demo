@@ -5,6 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import { Chain, chainId, useAccount, useNetwork } from "wagmi";
 import "./App.css";
 import { Navbar, Footer } from "./components";
+import LensLogin from "./components/lens/LensLogin";
 import { fetchUserStart, userWalletUpdated } from "./features/user/userSlice";
 import { accountUpdated, chainUpdated } from "./features/web3/web3Slice";
 import {
@@ -54,6 +55,7 @@ const App = ({ ...props }) => {
         <>
           <Routes>
             <Route index element={<HomeView />} />
+            <Route path="lens-login" element={<LensLogin />} />
             <Route path="/browse" />
             <Route path="/about" element={<AboutView />} />
             <Route path="/contact" element={<ContactView />} />
