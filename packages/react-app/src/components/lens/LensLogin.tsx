@@ -22,6 +22,7 @@ export type TLensAuthResponse = {
 
 const LensLogin = () => {
   const { address } = useAccount();
+  const [accessToken, setAccessToken] = React.useState<string>("");
   const [refreshToken, setRefreshToken] = React.useState<string>("");
   const { data, error, isLoading, signMessage } = useSignMessage({
     onSuccess(data, variables) {
@@ -57,10 +58,17 @@ const LensLogin = () => {
   const VerifySignature = async (sign: any) => {
     // Sending the signature to the server for verification
     const response: any = await Lens.Authenticate(address ?? "", sign);
+    setAccessToken(response.data.authenticate.accessToken);
     setRefreshToken(response.data.authenticate.refreshToken);
     console.log(response);
 
     // If the signature is valid, the server will return a JWT token
+  };
+
+  const verifyToken = () => {
+    Lens.verify(accessToken).then((res: any) => {
+      console.log(res);
+    });
   };
 
   const getNewToken = () => {
@@ -83,6 +91,12 @@ const LensLogin = () => {
         className="bg-blue-500 hover:bg-blue-700 text-black font-bold m-2 py-2 px-4 rounded-lg border-2"
         onClick={getNewToken}>
         Get new tokens
+      </button>
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-black font-bold m-2 py-2 px-4 rounded-lg border-2"
+        onClick={verifyToken}
+      >
+        Verify Token
       </button>
     </div>
   );
