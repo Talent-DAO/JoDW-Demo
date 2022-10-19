@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getLatestArticles } from "../../helpers/graphql/articles";
+import { getLatestArticles, TLensPublicationContent } from "../../helpers/graphql/articles";
 import { LensUser } from "../user/userSlice";
 
 export enum Status {
@@ -18,18 +18,19 @@ export type TPublication = {
   id: number;
   pubId: number | undefined;
   author: LensUser | undefined;
+  content: TLensPublicationContent;
   comments: TComment[] | undefined;
   contentURI: string | undefined;
   timestamp: number | undefined;
 }
 
-export interface PublicationState {
-  publications: TPublication[] | undefined;
+export interface IPublicationState {
+  publications: TPublication[];
   status: Status;
   error: string | undefined;
 }
 
-const initialState: PublicationState = {
+const initialState: IPublicationState = {
   publications: [],
   status: Status.Idle,
   error: undefined,
@@ -54,11 +55,22 @@ export const publicationSlice = createSlice({
     getPublicationsStart: state => {
       state.status = Status.Loading;
     },
-    getPublicationsSuccess: (state: PublicationState, action: PayloadAction<TPublication[]>) => {
+    getPublicationsSuccess: (state: IPublicationState, action: PayloadAction<TPublication[]>) => {
       state.publications = action.payload;
       state.status = Status.Success;
     },
     getPublicationsFailure: (state, action) => {
+      state.status = Status.Failed;
+      state.error = action.payload;
+    },
+    getPublicationDetailsStart: (state: IPublicationState) => {
+      state.status = Status.Loading;
+    },
+    getPublicationDetailsSuccess: (state: IPublicationState, action: PayloadAction<TLensPublicationContent>) => {
+      state.publications[0].content = action.payload;
+      state.status = Status.Success;
+    },
+    getPublicationDetailsFailure: (state, action) => {
       state.status = Status.Failed;
       state.error = action.payload;
     },
@@ -68,7 +80,7 @@ export const publicationSlice = createSlice({
       .addCase(getPublicationsForUser.pending, state => {
         state.status = Status.Loading;
       })
-      .addCase(getPublicationsForUser.fulfilled, (state, action: PayloadAction<PublicationState | any>) => {
+      .addCase(getPublicationsForUser.fulfilled, (state, action: PayloadAction<IPublicationState | any>) => {
         state.status = Status.Success;
         state.publications?.push(action.payload);
       })
@@ -95,5 +107,8 @@ export const {
   getPublicationsStart,
   getPublicationsSuccess,
   getPublicationsFailure,
+  getPublicationDetailsStart,
+  getPublicationDetailsSuccess,
+  getPublicationDetailsFailure,
 } = actions;
 export default reducer;

@@ -1,63 +1,65 @@
 import { useQuery } from "@apollo/client";
 import { Dispatch } from "@reduxjs/toolkit";
 import axios from "axios";
-import { getPublicationsFailure, getPublicationsSuccess, TPublication } from "../../features/publication/publicationSlice";
+import { AppDispatch } from "../../app/store";
+import { getPublicationDetailsStart, getPublicationsFailure, getPublicationsSuccess, TPublication } from "../../features/publication/publicationSlice";
 import { LensUser, Status } from "../../features/user/userSlice";
 import { GET_LATEST_ARTICLES } from "../../graphql/queries/lens";
 
-export type Tags = {
+export type TTags = {
   [key: string]: string;
 }
 
-export type Media = {
+export type TMedia = {
   [key: number]: {
     item: string | undefined,
     type: string | undefined,
     altTag: string | undefined,
   };
-  attributes?: Attribute | undefined;
+  attributes?: TAttribute | undefined;
   appId?: string | undefined;
 }
 
-export type Attribute = {
+export type TAttribute = {
   [key: number]: {
     value: string,
     traitType: string,
     displayType: string,
   };
-  media: Media | undefined;
+  media: TMedia | undefined;
   createdOn: string | undefined;
   appId: string | undefined;
 }
 
-export type LensPublicationContent = {
+export type TLensPublicationContent = {
   version?: string | undefined;
   animation_url?: string | undefined;
   metadata_id?: string | undefined;
   description?: string | undefined;
   locale?: string | undefined;
-  tags?: Tags | undefined;
+  tags?: TTags | undefined;
   mainContentFocus?: string | undefined;
   content?: string | undefined;
   external_url?: string | undefined;
   image?: string | undefined;
   imageMimeType?: string | undefined;
   name?: string | undefined;
-  media?: Media | undefined;
-  attributes?: Attribute[] | undefined;
+  media?: TMedia | undefined;
+  attributes?: TAttribute[] | undefined;
   createdOn?: string | undefined;
   appId?: string | undefined;
 }
 
-export type LensPublicationDetails = {
+export type TLensPublicationDetails = {
   id: string | undefined;
   contentURI: string | undefined;
-  content?: LensPublicationContent | undefined;
+  content?: TLensPublicationContent | undefined;
   author: LensUser;
-  timestamp: number | undefined;
+  timestamp: number;
 }
 
 export const getLatestArticles = async () => (dispatch: Dispatch) => {
+  dispatch(getPublicationDetailsStart());
   useQuery(GET_LATEST_ARTICLES, {
     onError: error => {
       dispatch(getPublicationsFailure(error));
@@ -65,6 +67,7 @@ export const getLatestArticles = async () => (dispatch: Dispatch) => {
     onCompleted: data => {
       let unresolvedArticleData = data.posts.map(async (post: TPublication) => {
         try {
+          
           const artdata = await getLensArticleData(post);
           return artdata;
         } catch (err) {
@@ -80,6 +83,7 @@ export const getLatestArticles = async () => (dispatch: Dispatch) => {
 };
 
 export const getLensArticleData = async (post: any) => {
+  
   // console.log("Loading article data: %s", post.contentURI);
   // todo: check all possible contentURI formats
   let uri = post.contentURI;
@@ -91,7 +95,7 @@ export const getLensArticleData = async (post: any) => {
     uri = "https://superfun.infura-ipfs.io/ipfs/" + post.contentURI;
   }
 
-  const response: LensPublicationDetails = {
+  const response: TLensPublicationDetails = {
     id: post.id,
     contentURI: uri,
     content: {},
