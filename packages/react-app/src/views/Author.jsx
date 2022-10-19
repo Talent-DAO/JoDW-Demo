@@ -165,7 +165,7 @@ const Author = () => {
           <div className="mx-auto pt-4 max-w-xl md:max-w-4xl xl:max-w-7xl overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10">
               <div className="col-span-2 space-y-8">
-                <div className="rounded-2xl flex flex-col bg-white border border-lightgrey">
+                <div className="rounded-2xl flex flex-col bg-white border border-bordergrey">
                   <img src={coverImage} alt="publication cover" className="rounded-2xl w-full h-80 bg-gray"></img>
                   <div className="flex flex-col px-12 pb-12 space-y-8">
                     <div className="flex flex-col md:flex-row items-center md:justify-between">
@@ -202,7 +202,7 @@ const Author = () => {
                                   <input
                                     type="text"
                                     value={tipAmount}
-                                    className="my-1 px-4 py-2 bg-transparent rounded-xl block w-full focus:outline-none text-lg border border-lightgray"
+                                    className="my-1 px-4 py-2 bg-transparent rounded-xl block w-full focus:outline-none text-lg border border-bordergrey"
                                     onChange={event => {
                                       setTipAmount(event.target.value);
                                       console.log("Tip Amount", tipAmount);
@@ -307,7 +307,7 @@ const Author = () => {
                   </div>
                 </div>
 
-                <div className="rounded-2xl flex flex-col bg-white border border-lightgrey p-12 space-y-6">
+                <div className="rounded-2xl flex flex-col bg-white border border-bordergrey p-12 space-y-6">
                   <div className="flex flex-row justify-between items-center">
                     <div className="text-2xl font-bold font-mont">Publifications</div>
                     {publications.length > 5 && (
@@ -328,21 +328,21 @@ const Author = () => {
                 </div>
               </div>
               <div className="col-span-1">
-                <div className="flex flex-col bg-white rounded-2xl px-8 py-10 border border-lightgrey space-y-4 font-mont">
+                <div className="flex flex-col bg-white rounded-2xl px-8 py-10 border border-bordergrey space-y-4 font-mont">
                   <div className="flex justify-between">
-                    <div className="text-darkgrey">Member Since</div>
+                    <div className="text-textgrey">Member Since</div>
                     <div className="text-darkgray">{memberSince > 0 ? `${memberSince} days` : "Today"}</div>
                   </div>
                   <div className="flex justify-between">
-                    <div className="text-darkgrey">Publifications</div>
+                    <div className="text-textgrey">Publifications</div>
                     <div className="text-darkgray">{publications.length}</div>
                   </div>
                   <div className="flex justify-between">
-                    <div className="text-darkgrey">Subscribed Readers</div>
+                    <div className="text-textgrey">Subscribed Readers</div>
                     <div className="text-darkgray">{readers.length}</div>
                   </div>
                   <div className="flex justify-between">
-                    <div className="text-darkgrey">Times Cited</div>
+                    <div className="text-textgrey">Times Cited</div>
                     <div className="text-darkgray">{timesCited}</div>
                   </div>
                 </div>

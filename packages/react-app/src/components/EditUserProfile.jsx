@@ -251,7 +251,7 @@ const EditUserProfile = ({ address }) => {
                 />
               </label>
             </div>
-            <div className="pl-4 flex flex-col text-lightgray text-left space-y-2">
+            <div className="pl-4 flex flex-col text-textgrey text-left space-y-2">
               <div className="text-4xl font-bold">{name}</div>
               <div className="text-sm">{bio}</div>
             </div>
@@ -284,7 +284,7 @@ const EditUserProfile = ({ address }) => {
           <input
             type="text"
             value={name === "Edit Name" ? "" : name}
-            className="my-1 p-4 bg-transparent rounded-xl block w-full focus:outline-none text-lg border border-lightgray"
+            className="my-1 p-4 bg-transparent rounded-xl block w-full focus:outline-none text-lg border border-bordergrey"
             onChange={event => setName(event.target.value)}
           />
         </div>
@@ -295,7 +295,7 @@ const EditUserProfile = ({ address }) => {
           <input
             type="text"
             value={bio === "Edit Bio" ? "" : bio}
-            className="my-1 p-4 bg-transparent rounded-xl block w-full focus:outline-none text-lg border border-lightgray"
+            className="my-1 p-4 bg-transparent rounded-xl block w-full focus:outline-none text-lg border border-bordergrey"
             onChange={event => setBio(event.target.value)}
           />
         </div>
@@ -306,7 +306,7 @@ const EditUserProfile = ({ address }) => {
           <textarea
             rows={4}
             value={aboutMe}
-            className="p-4 block w-full bg-transparent text-lg rounded-xl focus:outline-none border border-lightgray"
+            className="p-4 block w-full bg-transparent text-lg rounded-xl focus:outline-none border border-bordergrey"
             onChange={event => setAboutMe(event.target.value)}
           />
         </div>
@@ -461,7 +461,7 @@ const EditUserProfile = ({ address }) => {
         <label htmlFor="publication-title" className="pl-4 block text-left text-lg font-bold">
           On The Web
         </label>
-        <div className="rounded-2xl border border-lightgray p-4 flex flex-col">
+        <div className="rounded-2xl border border-bordergrey p-4 flex flex-col">
           <div className="flex flex-row items-center">
             <div className="w-56  flex flex-row items-center">
               <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -478,7 +478,7 @@ const EditUserProfile = ({ address }) => {
             <input
               type="text"
               value={twitter}
-              className="my-1 p-4 bg-transparent rounded-xl block w-full focus:outline-none text-lg border border-lightgray"
+              className="my-1 p-4 bg-transparent rounded-xl block w-full focus:outline-none text-lg border border-bordergrey"
               onChange={event => setTwitter(event.target.value)}
             />
           </div>
@@ -496,7 +496,7 @@ const EditUserProfile = ({ address }) => {
             <input
               type="text"
               value={linkedin}
-              className="my-1 p-4 bg-transparent rounded-xl block w-full focus:outline-none text-lg border border-lightgray"
+              className="my-1 p-4 bg-transparent rounded-xl block w-full focus:outline-none text-lg border border-bordergrey"
               onChange={event => setLinkedin(event.target.value)}
             />
           </div>
@@ -509,7 +509,7 @@ const EditUserProfile = ({ address }) => {
         <input
           type="text"
           value={tipAddress}
-          className="my-1 p-4 bg-transparent rounded-xl block w-full focus:outline-none text-lg border border-lightgray"
+          className="my-1 p-4 bg-transparent rounded-xl block w-full focus:outline-none text-lg border border-bordergrey"
           onChange={event => setTipAddress(event.target.value)}
         />
       </div>

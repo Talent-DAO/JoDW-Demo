@@ -13,7 +13,7 @@ function Newsletter() {
         <img className="md:w-1/2 md:h-1/2" src={stepImage} alt="step"></img>
         <div className="flex flex-col justify-center text-right">
           <div className="text-4xl text-white font-bold pt-4">Sign up for the updates</div>
-          <div className="pt-4 text-lg text-lightgray">
+          <div className="pt-4 text-lg text-textgrey">
             We’ll keep you up to date with our latest news, announcements, and development plans
           </div>
           <span className="pt-2 text-white text-lg font-bold">No-spam policy!</span>

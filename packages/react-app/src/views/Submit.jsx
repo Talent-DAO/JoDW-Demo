@@ -202,9 +202,9 @@ const Submit = () => {
                     <label className="block text-left text-lg font-bold text-gray-700">Article Manuscript</label>
                     <div className="mt-1 h-full flex flex-col justify-center items-center px-6 pt-5 pb-6 border border-gray-300 rounded-md">
                       {selectedManuscriptFile ? (
-                        <div className="py-5 text-lg text-lightgray">{selectedManuscriptFile.name}</div>
+                        <div className="py-5 text-lg text-textgrey">{selectedManuscriptFile.name}</div>
                       ) : (
-                        <div className="py-5 text-lg text-lightgray">File formats: pdf, md, doc, docx, txt.</div>
+                        <div className="py-5 text-lg text-textgrey">File formats: pdf, md, doc, docx, txt.</div>
                       )}
                       <label
                         htmlFor="manuscript-upload"
@@ -224,9 +224,9 @@ const Submit = () => {
                     </div>
                     <div className="mt-1 h-full flex flex-col justify-center items-center px-6 pt-5 pb-6 border border-gray-300 rounded-md">
                       {selectedArticleCover ? (
-                        <div className="py-5 text-lg text-lightgray">{selectedArticleCover.name}</div>
+                        <div className="py-5 text-lg text-textgrey">{selectedArticleCover.name}</div>
                       ) : (
-                        <div className="py-5 text-lg text-lightgray">Cover Image formats: jpg, jpeg, png.</div>
+                        <div className="py-5 text-lg text-textgrey">Cover Image formats: jpg, jpeg, png.</div>
                       )}
                       <label
                         htmlFor="articlecover-upload"
@@ -255,7 +255,7 @@ const Submit = () => {
                           value={talentPrice}
                           onChange={changeTalentPrice}
                         />
-                        <div className="pb-2 text-lightgray text-lg">$TALENT</div>
+                        <div className="pb-2 text-textgrey text-lg">$TALENT</div>
                       </div>
                     </div>
                   </div>

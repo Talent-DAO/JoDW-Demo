@@ -136,13 +136,13 @@ function Navbar({ userMenuOpen, handleUserMenuOpen }) {
                 >
                   <div className="py-1" role="none">
                     <div
-                      className="text-gray-700 block px-4 py-2 text-sm hover:bg-lightgray"
+                      className="text-gray-700 block px-4 py-2 text-sm hover:bg-bggrey"
                       onClick={handleBrowseByAuthor}
                     >
                       Browse by Author
                     </div>
                     <div
-                      className="text-gray-700 block px-4 py-2 text-sm hover:bg-lightgray whitespace-nowrap"
+                      className="text-gray-700 block px-4 py-2 text-sm hover:bg-bggrey whitespace-nowrap"
                       onClick={handleBrowseBySubject}
                     >
                       Browse by Subject

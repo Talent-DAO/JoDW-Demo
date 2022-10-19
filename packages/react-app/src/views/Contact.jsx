@@ -265,7 +265,7 @@ const Contact = () => {
             </div>
 
             <div className="flex flex-col items-center space-y-4">
-              <div className="text-left text-lg text-lightgray">
+              <div className="text-left text-lg text-textgrey">
                 By submitting this form you consent to us emailing you occasionally about our product and community. You
                 can unsubscribe from emails at any time, and we will never pass your email onto third parties.
                 <br />
