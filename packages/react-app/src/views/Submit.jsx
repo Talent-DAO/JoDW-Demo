@@ -3,9 +3,11 @@ import axios from "axios";
 import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useAccount } from "wagmi";
 import { sendTransacton } from "../utils/arweave";
 
 const Submit = () => {
+  const { address } = useAccount();
   const [selectedManuscriptFile, setSelectedManuscriptFile] = useState(null);
   const [authors, setAuthors] = useState([]);
   const [selectedArticleCover, setSelectedArticleCover] = useState();

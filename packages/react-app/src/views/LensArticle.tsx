@@ -11,7 +11,7 @@ import ethereum from "../assets/ethereum.png";
 import matic from "../assets/matic.png";
 import { SimilarPublicationCard } from "../components";
 import { GET_ARTICLE_DETAILS } from "../graphql/queries/lens";
-import { getLensArticleData } from "../helpers/articles";
+import { getLensArticleData } from "../helpers/graphql/articles";
 import { useAccount } from "wagmi";
 pdfjs.GlobalWorkerOptions.workerSrc = "pdf.worker.min.js";
 
