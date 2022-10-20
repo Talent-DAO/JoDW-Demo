@@ -5,7 +5,7 @@ import { infuraProvider } from "wagmi/providers/infura";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { publicProvider } from "wagmi/providers/public";
 
-const alchemyId = process.env.ALCHEMY_ID;
+const alchemyId = process.env.REACT_APP_ALCHEMY_ID;
 const infuraId = process.env.INFURA_ID;
 const useLocalHardhatFork = process.env.REACT_APP_USE_LOCAL_HARDHAT_FORK;
 

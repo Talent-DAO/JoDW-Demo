@@ -5,6 +5,7 @@ import { AppDispatch } from "../../app/store";
 import { getPublicationDetailsStart, getPublicationsFailure, getPublicationsSuccess, TPublication } from "../../features/publication/publicationSlice";
 import { LensUser, Status } from "../../features/user/userSlice";
 import { GET_LATEST_ARTICLES } from "../../graphql/queries/lens";
+import { convertToHttpUrl } from "../../utils/utils";
 
 export type TTags = {
   [key: string]: string;
@@ -86,14 +87,7 @@ export const getLensArticleData = async (post: any) => {
   
   // console.log("Loading article data: %s", post.contentURI);
   // todo: check all possible contentURI formats
-  let uri = post.contentURI;
-  if (post.contentURI.startsWith("ipfs://")) {
-    uri = "https://superfun.infura-ipfs.io/ipfs/" + post.contentURI.substring(7);
-  } else if (post.contentURI.startsWith("https://arweave.net/")) {
-    uri = post.contentURI;
-  } else if (!post.contentURI.includes("://")) {
-    uri = "https://superfun.infura-ipfs.io/ipfs/" + post.contentURI;
-  }
+  const uri = convertToHttpUrl(post.contentURI);
 
   const response: TLensPublicationDetails = {
     id: post.id,
@@ -119,7 +113,7 @@ export const getLensArticleData = async (post: any) => {
     response.author.status = Status.Success;
     console.log("response", response);
   } catch (error) {
-    console.error("Error loading post content: %s", post);
+    console.error(["Error loading post content: ", post]);
   }
 
   return response;

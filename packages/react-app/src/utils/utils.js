@@ -110,3 +110,15 @@ export const getBgColorForCategory = category => {
   }
   return color;
 };
+
+export const convertToHttpUrl = url => {
+  if (url.startsWith("ipfs://")) {
+    return "https://superfun.infura-ipfs.io/ipfs/" + url.substring(7);
+  } else if (url.startsWith("https://arweave.net/")) {
+    return url;
+  } else if (!url.includes("://")) {
+    return "https://superfun.infura-ipfs.io/ipfs/" + url;
+  } else {
+    return url;
+  }
+};
