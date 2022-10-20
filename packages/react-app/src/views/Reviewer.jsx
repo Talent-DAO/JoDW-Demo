@@ -14,8 +14,8 @@ import { dataURLtoFile, getAuthorData } from "../utils/utils";
 import MessageModal from "../components/MessageModal";
 import { Disclosure } from "@headlessui/react";
 import { ChevronUpIcon } from "@heroicons/react/20/solid";
+import { JODW_BACKEND as server } from "../constants";
 
-const server = "https://tdao-api.herokuapp.com";
 
 const Reviewer = () => {
   const navigate = useNavigate();

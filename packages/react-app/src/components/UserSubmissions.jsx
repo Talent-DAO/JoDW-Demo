@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import illustrationImage from "../assets/illustration.png";
 import { SubmissionCard } from "../components";
-
-const server = "https://talentdao-api.herokuapp.com";
+import { JODW_BACKEND as server } from "../constants"; 
 
 const UserSubmissions = ({ address }) => {
   // const [toArticles, goToArticles] = useState(false);

@@ -1,6 +1,5 @@
 import axios from "axios";
-
-const server = "https://tdao-api.herokuapp.com";
+import { JODW_BACKEND as server } from "../constants"; 
 
 export function dataURLtoFile(dataurl, filename) {
   var arr = dataurl.split(","),

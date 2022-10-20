@@ -7,8 +7,7 @@ import twitter from "../assets/twitter.png";
 import arrowRightImage from "../assets/arrow.png";
 import { PublicationMintCard, Footer } from "../components";
 import { dataURLtoFile, getAuthorData } from "../utils/utils";
-
-const server = "https://tdao-api.herokuapp.com";
+import { JODW_BACKEND as server } from "../constants"; 
 
 const Author = () => {
   const navigate = useNavigate();

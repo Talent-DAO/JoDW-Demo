@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAccount } from "wagmi";
 import { RootState } from "../app/store";
+import { JODW_BACKEND as server } from "../constants";
 import arrowRightImage from "../assets/ArrowRight.png";
 import authorImage from "../assets/author.png";
 import lineImage from "../assets/line.png";
@@ -17,7 +18,6 @@ import { GET_LATEST_ARTICLES } from "../graphql/queries/lens";
 import { getLensArticleData } from "../helpers/graphql/articles";
 import { dataURLtoFile, getBgColorForCategory, getTextColorForCategory } from "../utils/utils";
 
-const server = "https://tdao-api.herokuapp.com";
 
 function Home() {
   const { address } = useAccount();

@@ -11,8 +11,7 @@ import verifiedImage from "../assets/verified.png";
 import { PublicationMintCard, Footer } from "../components";
 import { dataURLtoFile, getAuthorData } from "../utils/utils";
 import MessageModal from "../components/MessageModal";
-
-const server = "https://tdao-api.herokuapp.com";
+import { JODW_BACKEND as server } from "../constants"; 
 
 const Publisher = () => {
   const navigate = useNavigate();

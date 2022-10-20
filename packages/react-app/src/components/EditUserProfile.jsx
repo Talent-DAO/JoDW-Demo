@@ -1,11 +1,12 @@
 import { Spin } from "antd";
 import axios from "axios";
+import { useAccount } from "wagmi";
 import { useEffect, useState } from "react";
+import { JODW_BACKEND as server } from "../constants"; 
 import { dataURLtoFile, toBase64 } from "../utils/utils";
 
-const server = "https://talentdao-api.herokuapp.com";
-
-const EditUserProfile = ({ address }) => {
+const EditUserProfile = () => {
+  const { address, isConnected } = useAccount();
   const [name, setName] = useState("Edit Name");
   const [bio, setBio] = useState("Edit Bio");
   const [aboutMe, setAboutMe] = useState("");
@@ -61,7 +62,10 @@ const EditUserProfile = ({ address }) => {
       }
     };
 
-    if (address === "" || address === undefined) return;
+    if (address === "" || address === undefined) {
+      console.log("Returning early as address is %s", address);
+      return;
+    }
     getAuthorData();
   }, [address]);
 
@@ -167,7 +171,7 @@ const EditUserProfile = ({ address }) => {
 
     try {
       const data = {
-        // id: id,
+        id: author?._id,
         username: name,
         bio: bio,
         aboutme: aboutMe,
