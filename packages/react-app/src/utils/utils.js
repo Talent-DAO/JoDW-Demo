@@ -29,7 +29,7 @@ export function readTextFile(file) {
   rawFile.open("GET", file, false);
   rawFile.onreadystatechange = function () {
     if (rawFile.readyState === 4) {
-      if (rawFile.status === 200 || rawFile.status == 0) {
+      if (rawFile.status === 200 || rawFile.status === 0) {
         allText = rawFile.responseText;
       }
     }
@@ -38,6 +38,7 @@ export function readTextFile(file) {
   return allText;
 }
 
+// todo: move this to a separate file
 export async function getAuthorData(params) {
   try {
     const res = await axios.get(server + "/api/authors", { params });

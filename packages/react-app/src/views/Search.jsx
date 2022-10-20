@@ -5,7 +5,7 @@ import arrow from "../assets/arrowWhite.svg";
 import clear from "../assets/clear.svg";
 import info from "../assets/info.svg";
 import search from "../assets/search.svg";
-import { AuthorCard, Footer, ArticleCard } from "../components";
+import { AuthorCard, Footer, PublicationCard } from "../components";
 import { strcmp } from "../utils/utils";
 
 const server = "https://tdao-api.herokuapp.com";
@@ -35,7 +35,7 @@ const Search = () => {
   }, [sortField]);
 
   const sortSearchResult = result => {
-    console.log("sortField == ", sortField);
+    console.log("sortField === ", sortField);
     if (result !== []) {
       let isSorted = false;
       result.sort((a, b) => {
@@ -43,7 +43,7 @@ const Search = () => {
         if (swapped < 0) isSorted = true;
         return swapped;
       });
-      console.log("isSorted == ", isSorted);
+      console.log("isSorted === ", isSorted);
       if (isSorted) setSearchResult([...result]);
       else setSearchResult(result);
     }
@@ -74,7 +74,7 @@ const Search = () => {
     setValue("");
     setSearchResult([]);
     setCategory(event.target.value);
-    if (event.target.value == "author") {
+    if (event.target.value === "author") {
       setField("username");
       setSortField("username");
     } else {
@@ -202,7 +202,7 @@ const Search = () => {
         <div className="py-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {category === "author"
             ? searchResult.map(item => <AuthorCard key={Math.random()} author={item}></AuthorCard>)
-            : searchResult.map(item => <ArticleCard key={Math.random()} article={item}></ArticleCard>)}
+            : searchResult.map(item => <PublicationCard key={Math.random()} publication={item}></PublicationCard>)}
         </div>
       </div>
     </div>

@@ -1,38 +1,53 @@
+/* eslint-disable no-console */
+/* eslint-disable no-undef */
 import { useQuery } from "@apollo/client";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useAccount } from "wagmi";
+import { RootState } from "../app/store";
 import arrowRightImage from "../assets/ArrowRight.png";
 import authorImage from "../assets/author.png";
 import lineImage from "../assets/line.png";
 import partnershipImage from "../assets/partnership.png";
-import { Footer, LatestArticles, Newsletter, Splash } from "../components";
+import { LatestPublications, Newsletter, Splash } from "../components";
+import { getPublicationsFailure, getPublicationsSuccess } from "../features/publication/publicationSlice";
 import { GET_LATEST_ARTICLES } from "../graphql/queries/lens";
+import { getLensArticleData } from "../helpers/graphql/articles";
 import { dataURLtoFile, getBgColorForCategory, getTextColorForCategory } from "../utils/utils";
 
 const server = "https://tdao-api.herokuapp.com";
 
-/**
- * web3 props can be passed from '../App.jsx' into your local view component for use
- * @returns react component
- */
-function Home({ address }) {
-  const [articles, setArticles] = useState(null);
+function Home() {
+  const { address } = useAccount();
+  const dispatch = useDispatch();
 
-  const { loadingArticles, loadArticlesError } = useQuery(GET_LATEST_ARTICLES, {
+  const props = useSelector((state: RootState) => {
+    const publications = state.publication.publications;
+    const addr = state.user.user.walletId;
+
+    return {
+      publications,
+      addr
+    };
+  });
+
+  console.log("Publications => ", props.publications);
+
+  const { loading: loadingPublications } = useQuery<any>(GET_LATEST_ARTICLES, {
+    onError: error => {
+      dispatch(getPublicationsFailure(error));
+    },
     onCompleted: data => {
-      let articleData = data.posts.map(post => {
-        return {
-          id: post.id,
-          author: {
-            handle: post.profileId.handle,
-            image: post.profileId.imageURI,
-            walletId: post.profileId.owner,
-          },
-          timestamp: post.timestamp,
-        };
+      let unresolvedPublicationData = data.posts.map(async (post: any) => {
+        const artdata = await getLensArticleData(post);
+        return artdata;
       });
-      setArticles(articleData);
+      Promise.all(unresolvedPublicationData).then(publicationData => {
+        // setPublications(publicationData);
+        dispatch(getPublicationsSuccess(publicationData));
+      });
     },
   });
 
@@ -97,8 +112,8 @@ function Home({ address }) {
           </div>
         </div>
 
-        {/* Latest Articles Component Section */}
-        {!loadingArticles && articles ? <LatestArticles articles={articles} /> : <div>Loading...</div>}
+        {/* Latest Publications Component Section */}
+        {!loadingPublications && props.publications ? <LatestPublications publications={props.publications} /> : <div>Loading...</div>}
         {/* Featured Author & Updates Section  */}
         <div className="pt-16 grid grid-cols-1 xl:grid-cols-2">
           <div className="mx-4 flex flex-col">

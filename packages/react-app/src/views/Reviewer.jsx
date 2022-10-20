@@ -9,7 +9,7 @@ import emailImage from "../assets/email.png";
 import arrowRightImage from "../assets/arrow.png";
 import verifiedImage from "../assets/verified.png";
 import infoImage from "../assets/info.png";
-import { ArticleMintCard, Footer } from "../components";
+import { PublicationMintCard, Footer } from "../components";
 import { dataURLtoFile, getAuthorData } from "../utils/utils";
 import MessageModal from "../components/MessageModal";
 import { Disclosure } from "@headlessui/react";
@@ -17,11 +17,11 @@ import { ChevronUpIcon } from "@heroicons/react/20/solid";
 
 const server = "https://tdao-api.herokuapp.com";
 
-const Reviewer = ({ tx, readContracts, writeContracts, address }) => {
+const Reviewer = () => {
   const navigate = useNavigate();
   const { walletId } = useParams();
   const [author, setAuthor] = useState(null);
-  const [articles, setArticles] = useState([]);
+  const [publications, setPublications] = useState([]);
   const [coverImage, setCoverImage] = useState(null);
   const [authorImage, setAuthorImage] = useState(null);
   const [memberSince, setMemberSince] = useState(0);
@@ -53,12 +53,12 @@ const Reviewer = ({ tx, readContracts, writeContracts, address }) => {
     scrollTop();
   }, []);
 
-  const getArticles = async () => {
+  const getPublications = async () => {
     try {
       const params = new URLSearchParams([["walletId", walletId]]);
-      const articleResponse = await axios.get(server + "/api/articles", { params });
-      if (articleResponse.data.success) {
-        setArticles(articleResponse.data.data);
+      const publicationResponse = await axios.get(server + "/api/articles", { params });
+      if (publicationResponse.data.success) {
+        setPublications(publicationResponse.data.data);
       }
     } catch (e) {
       console.error(e);
@@ -85,7 +85,7 @@ const Reviewer = ({ tx, readContracts, writeContracts, address }) => {
     const params = new URLSearchParams([["walletId", walletId]]);
     const data = await getAuthorData(params);
     setAuthor(data);
-    getArticles();
+    getPublications();
   }, [walletId]);
 
   useEffect(async () => {
@@ -165,13 +165,13 @@ const Reviewer = ({ tx, readContracts, writeContracts, address }) => {
 
   return (
     <>
-      {author && articles && (
+      {author && publications && (
         <div style={{ backgroundColor: "#FAFAFA" }}>
           <div className="mx-auto pt-4 max-w-xl md:max-w-4xl xl:max-w-7xl overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10">
               <div className="col-span-2 space-y-8">
                 <div className="rounded-2xl flex flex-col bg-white border border-lightgrey">
-                  <img src={coverImage} alt="article cover" className="rounded-2xl w-full h-80 bg-gray"></img>
+                  <img src={coverImage} alt="publication cover" className="rounded-2xl w-full h-80 bg-gray"></img>
                   <div className="flex flex-col px-12 pb-12 space-y-8">
                     <div className="flex flex-col md:flex-row items-center md:justify-between">
                       <img
@@ -265,7 +265,7 @@ const Reviewer = ({ tx, readContracts, writeContracts, address }) => {
                 <div className="rounded-2xl flex flex-col bg-white border border-lightgrey p-12 space-y-6">
                   <div className="flex flex-row justify-between items-center">
                     <div className="text-2xl font-bold font-mont">Reviewed Publification</div>
-                    {articles.length > 5 && (
+                    {publications.length > 5 && (
                       <div className="flex flex-row rounded-2xl text-lg items-center text-primary font-semibold cursor-pointer space-x-2">
                         <span>See all</span>
                         <img src={arrowRightImage} alt="right arrow"></img>
@@ -273,15 +273,11 @@ const Reviewer = ({ tx, readContracts, writeContracts, address }) => {
                     )}
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 gap-y-8">
-                    {articles.map((article, index) => (
-                      <ArticleMintCard
+                    {publications.map((publication, index) => (
+                      <PublicationMintCard
                         key={index}
-                        article={article}
-                        tx={tx}
-                        writeContracts={writeContracts}
-                        readContracts={readContracts}
-                        address={address}
-                      ></ArticleMintCard>
+                        publication={publication}
+                      ></PublicationMintCard>
                     ))}
                   </div>
                 </div>

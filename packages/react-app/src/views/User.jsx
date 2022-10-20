@@ -7,7 +7,7 @@ import {
   PublisherPage,
   ReputationPage,
   RewardsPage,
-  UserArticles,
+  UserPublications,
   UserConnect,
   UserSubmissions,
 } from "../components";
@@ -40,17 +40,17 @@ export default function User({ userMenuOpen, handleUserMenuOpen }) {
   const handleConfigTypeChanged = type => {
     if (type === configUserType.submission) {
       navigate("/user/submissions");
-    } else if (type == configUserType.article) {
+    } else if (type === configUserType.article) {
       navigate("/user/articles");
-    } else if (type == configUserType.edit_profile) {
+    } else if (type === configUserType.edit_profile) {
       navigate("/user/author");
-    } else if (type == configUserType.notifications) {
+    } else if (type === configUserType.notifications) {
       navigate("/user/notifications");
-    } else if (type == configUserType.publisher) {
+    } else if (type === configUserType.publisher) {
       navigate("/user/publisher");
-    } else if (type == configUserType.reputation) {
+    } else if (type === configUserType.reputation) {
       navigate("/user/reputation");
-    } else if (type == configUserType.rewards) {
+    } else if (type === configUserType.rewards) {
       navigate("/user/rewards");
     }
 
@@ -224,21 +224,21 @@ export default function User({ userMenuOpen, handleUserMenuOpen }) {
           <div className="w-full ">
             {userConfig === configUserType.none ? (
               <div className="flex justify-center">
-                <UserConnect></UserConnect>
+                <UserConnect />
               </div>
             ) : userConfig === configUserType.submission ? (
               <div className="flex flex-col">
-                <UserSubmissions address={address}></UserSubmissions>
+                <UserSubmissions />
               </div>
             ) : userConfig === configUserType.article ? (
               <div className="flex flex-col">
                 <p className="py-4 text-left text-lg text-darkgray font-bold">Articles</p>
-                <UserArticles address={address}></UserArticles>
+                <UserPublications />
               </div>
             ) : userConfig === configUserType.edit_profile ? (
               <div className="flex flex-col">
                 <p className="py-4 text-left text-lg text-darkgray font-bold">Edit Profile</p>
-                <EditUserProfile address={address}></EditUserProfile>
+                <EditUserProfile />
               </div>
             ) : userConfig === configUserType.notifications ? (
               <div className="flex flex-col">

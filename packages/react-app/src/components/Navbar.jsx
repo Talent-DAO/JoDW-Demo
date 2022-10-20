@@ -180,7 +180,7 @@ function Navbar({ userMenuOpen, handleUserMenuOpen }) {
 
       {navPanelOpen && (
         <div className="absolute top-25 w-full h-screen bg-white flex flex-col py-4 px-4 sm:px-8">
-          <div className="flex flex-col space-y-4 text-left">
+          <div className="flex flex-col space-y-4 items-center text-center">
             <div
               onClick={() => goToPage("/")}
               className={
@@ -223,23 +223,23 @@ function Navbar({ userMenuOpen, handleUserMenuOpen }) {
             </div>
             {/* <div onClick={() => goToPage("/author")} className={location.pathname === '/author' ? 'text-lg text-primary font-semibold cursor-pointer' : 'text-lg cursor-pointer'}>Author</div>
               <div onClick={() => goToPage("/article")} className={location.pathname === '/article' ? 'text-lg text-primary font-semibold cursor-pointer' : 'text-lg cursor-pointer'}>Article</div> */}
+            <div className="flex flex-row items-center space-x-4">
+              <a href={twitter}>
+                <img src={twitterImg} alt="twitter logo" width={40} height={40} layout="fixed" />
+              </a>
+              <img className="cursor-pointer" src={discord} alt="discord logo" width={40} height={40} layout="fixed" />
+              <img
+                onClick={() => goToPage("/user/author")}
+                className="cursor-pointer"
+                src={profile}
+                alt="profile icon"
+                width={40}
+                height={40}
+                layout="fixed"
+              />
+            </div>
+            <CustomConnectButton />
           </div>
-          <div className="pt-4 flex flex-row items-center space-x-4">
-            <a href={twitter}>
-              <img src={twitterImg} alt="twitter logo" width={40} height={40} layout="fixed" />
-            </a>
-            <img className="cursor-pointer" src={discord} alt="discord logo" width={40} height={40} layout="fixed" />
-            <img
-              onClick={() => goToPage("/user/author")}
-              className="cursor-pointer"
-              src={profile}
-              alt="profile icon"
-              width={40}
-              height={40}
-              layout="fixed"
-            />
-          </div>
-          <CustomConnectButton />
         </div>
       )}
     </div>

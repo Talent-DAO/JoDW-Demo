@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import illustrationImage from "../assets/illustration.png";
-import { LatestArticleCard } from "../components";
+import { LatestPublicationCard } from ".";
 
-const UserArticles = ({ address }) => {
+const UserPublications = ({ address }) => {
   const [articles, setArticles] = useState([]);
   const [articleNfts, setArticleNfts] = useState([]);
 
@@ -35,7 +35,7 @@ const UserArticles = ({ address }) => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {articles.map((item, index) => {
-            return <LatestArticleCard article={item}></LatestArticleCard>;
+            return <LatestPublicationCard publication={item}></LatestPublicationCard>;
           })}
         </div>
       )}
@@ -43,4 +43,4 @@ const UserArticles = ({ address }) => {
   );
 };
 
-export default UserArticles;
+export default UserPublications;
