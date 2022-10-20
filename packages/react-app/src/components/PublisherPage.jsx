@@ -40,7 +40,7 @@ const PublisherPage = ({ address }) => {
               })}
             </select>
           </div>
-          <div className="flex flex-row space-x-1 rounded-full p-px bg-grey">
+          <div className="flex flex-row space-x-1 rounded-full p-px bg-gray">
             <Switch
               onChange={e => {
                 setChecked(e);
