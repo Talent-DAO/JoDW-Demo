@@ -1,0 +1,18 @@
+#!/bin/sh
+exec 1>&2
+exec < /dev/tty
+
+consoleregexp='^\+.*console\.log('
+
+if test $(git diff --cached -U0 | grep $consoleregexp | wc -l) != 0
+then
+  exec git diff --cached | grep -ne $consoleregexp
+  read -p "It looks like you have left some console.log statements in your code. Are you sure want to continue? (y/n)" yn
+  echo $yn | grep ^[Yy]$
+  if [ $? -eq 0 ]
+  then
+    exit 0;
+  else
+    exit 1;
+  fi
+fi
