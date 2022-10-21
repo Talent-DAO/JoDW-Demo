@@ -299,10 +299,6 @@ const EditUserProfile = () => {
                 />
               </label>
             </div>
-            <div className="pl-4 flex flex-col text-textgrey text-left space-y-2">
-              <div className="text-4xl font-bold">{name}</div>
-              <div className="text-sm">{bio}</div>
-            </div>
           </div>
           <div className="rounded-b-2xl flex flex-col pr-8 pl-12">
             <div className="flex flex-row items-end">
@@ -329,6 +325,10 @@ const EditUserProfile = () => {
                     onChange={changeSelectedAuthorImage}
                   />
                 </label>
+              </div>
+              <div className="pl-4 flex flex-col text-textgrey text-left space-y-2">
+                <div className="text-4xl font-bold">{name}</div>
+                <div className="text-sm">{bio}</div>
               </div>
             </div>
             <div className="flex flex-row">
