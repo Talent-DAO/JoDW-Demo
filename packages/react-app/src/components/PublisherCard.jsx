@@ -48,7 +48,7 @@ const PublisherCard = ({ article }) => {
         </svg>
       </div>
       <div className="text-lg font-bold text-center leading-5">James Andrew</div>
-      <div className="mx-1 text-base text-center text-lightgray leading-5">
+      <div className="mx-1 text-base text-center text-textgrey leading-5">
         Oxford Author, Harvard Scholar Best Selling Author, New York Times
       </div>
       <div

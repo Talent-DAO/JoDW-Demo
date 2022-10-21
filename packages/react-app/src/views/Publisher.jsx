@@ -166,7 +166,7 @@ const Publisher = () => {
           <div className="mx-auto pt-4 max-w-xl md:max-w-4xl xl:max-w-7xl overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10">
               <div className="col-span-2 space-y-8">
-                <div className="rounded-2xl flex flex-col bg-white border border-lightgrey">
+                <div className="rounded-2xl flex flex-col bg-white border border-bordergrey">
                   <img src={coverImage} alt="publication cover" className="rounded-2xl w-full h-80 bg-gray"></img>
                   <div className="flex flex-col px-12 pb-12 space-y-8">
                     <div className="flex flex-col md:flex-row items-center md:justify-between">
@@ -258,7 +258,7 @@ const Publisher = () => {
                   </div>
                 </div>
 
-                <div className="rounded-2xl flex flex-col bg-white border border-lightgrey p-12 space-y-6">
+                <div className="rounded-2xl flex flex-col bg-white border border-bordergrey p-12 space-y-6">
                   <div className="flex flex-row justify-between items-center">
                     <div className="text-2xl font-bold font-mont">Published</div>
                     {articles.length > 5 && (
@@ -279,17 +279,17 @@ const Publisher = () => {
                 </div>
               </div>
               <div className="col-span-1">
-                <div className="flex flex-col bg-white rounded-2xl px-8 py-10 border border-lightgrey space-y-4 font-mont">
+                <div className="flex flex-col bg-white rounded-2xl px-8 py-10 border border-bordergrey space-y-4 font-mont">
                   <div className="flex justify-between">
-                    <div className="text-darkgrey">Total Reviewed</div>
+                    <div className="text-textgrey">Total Reviewed</div>
                     <div className="text-darkgray">24</div>
                   </div>
                   <div className="flex justify-between">
-                    <div className="text-darkgrey">Published</div>
+                    <div className="text-textgrey">Published</div>
                     <div className="text-darkgray">20</div>
                   </div>
                   <div className="flex justify-between">
-                    <div className="text-darkgrey">Followers</div>
+                    <div className="text-textgrey">Followers</div>
                     <div className="text-darkgray">11</div>
                   </div>
                 </div>

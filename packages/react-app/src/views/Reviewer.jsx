@@ -170,7 +170,7 @@ const Reviewer = () => {
           <div className="mx-auto pt-4 max-w-xl md:max-w-4xl xl:max-w-7xl overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10">
               <div className="col-span-2 space-y-8">
-                <div className="rounded-2xl flex flex-col bg-white border border-lightgrey">
+                <div className="rounded-2xl flex flex-col bg-white border border-bordergrey">
                   <img src={coverImage} alt="publication cover" className="rounded-2xl w-full h-80 bg-gray"></img>
                   <div className="flex flex-col px-12 pb-12 space-y-8">
                     <div className="flex flex-col md:flex-row items-center md:justify-between">
@@ -262,7 +262,7 @@ const Reviewer = () => {
                   </div>
                 </div>
 
-                <div className="rounded-2xl flex flex-col bg-white border border-lightgrey p-12 space-y-6">
+                <div className="rounded-2xl flex flex-col bg-white border border-bordergrey p-12 space-y-6">
                   <div className="flex flex-row justify-between items-center">
                     <div className="text-2xl font-bold font-mont">Reviewed Publification</div>
                     {publications.length > 5 && (
@@ -284,34 +284,34 @@ const Reviewer = () => {
               </div>
               <div className="col-span-1">
                 <div className="flex flex-col space-y-4">
-                  <div className="flex flex-col bg-white rounded-2xl px-8 py-10 border border-lavender space-y-4 font-mont">
+                  <div className="flex flex-col bg-white rounded-2xl px-8 py-10 border border-bordergrey space-y-4 font-mont">
                     <div className="flex justify-between">
-                      <div className="text-darkgrey">Total Reviewed</div>
+                      <div className="text-textgrey">Total Reviewed</div>
                       <div className="text-darkgray">24</div>
                     </div>
                     <div className="flex justify-between">
-                      <div className="text-darkgrey">Approved</div>
+                      <div className="text-textgrey">Approved</div>
                       <div className="text-darkgray">20</div>
                     </div>
                     <div className="flex justify-between">
-                      <div className="text-darkgrey">Revised</div>
+                      <div className="text-textgrey">Revised</div>
                       <div className="text-darkgray">20</div>
                     </div>
                     <div className="flex justify-between">
-                      <div className="text-darkgrey">Followers</div>
+                      <div className="text-textgrey">Followers</div>
                       <div className="text-darkgray">11</div>
                     </div>
                   </div>
                   <Disclosure>
                     {({ open }) => (
                       <>
-                        <Disclosure.Button className="flex w-full justify-between rounded-2xl bg-white px-8 py-3 text-left text-lg font-medium focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75 border border-lavender items-center">
+                        <Disclosure.Button className="flex w-full justify-between rounded-2xl bg-white px-8 py-3 text-left text-lg font-medium focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75 border border-bordergrey items-center">
                           <span className="font-mont font-bold">Rewards</span>
                           <ChevronUpIcon className={`${open ? "rotate-180 transform" : ""} h-5 w-5 text-purple-500`} />
                         </Disclosure.Button>
-                        <Disclosure.Panel className="flex flex-col bg-white border border-lavender rounded-b-2xl px-8 py-10 text-sm text-darkgrey space-y-6">
+                        <Disclosure.Panel className="flex flex-col bg-white border border-bordergrey rounded-b-2xl px-8 py-10 text-sm text-textgrey space-y-6">
                           <div className="flex flex-row justify-between">
-                            <div className="flex flex-row text-darkgrey font-mont items-center space-x-1">
+                            <div className="flex flex-row text-textgrey font-mont items-center space-x-1">
                               <span>Staking Rewards</span>
                               <div className="cursor-pointer">
                                 <img src={infoImage} />
@@ -320,7 +320,7 @@ const Reviewer = () => {
                             <div className="text-darkgray font-bold font-mont">40,000 TALENT</div>
                           </div>
                           <div className="flex flex-row justify-between">
-                            <div className="flex flex-row text-darkgrey font-mont items-center space-x-1">
+                            <div className="flex flex-row text-textgrey font-mont items-center space-x-1">
                               <span>Delegate rewards</span>
                               <div className="cursor-pointer">
                                 <img src={infoImage} />
@@ -329,7 +329,7 @@ const Reviewer = () => {
                             <div className="text-darkgray font-bold font-mont">10,000 TALENT</div>
                           </div>
                           <div className="flex flex-row justify-between">
-                            <div className="flex flex-row text-darkgrey font-mont items-center space-x-1">
+                            <div className="flex flex-row text-textgrey font-mont items-center space-x-1">
                               <span>TALENT Earnings</span>
                               <div className="cursor-pointer">
                                 <img src={infoImage} />
@@ -338,7 +338,7 @@ const Reviewer = () => {
                             <div className="text-darkgray font-bold font-mont">42,000 TALENT</div>
                           </div>
                           <div className="flex flex-row justify-between">
-                            <div className="flex flex-row text-darkgrey font-mont items-center space-x-1">
+                            <div className="flex flex-row text-textgrey font-mont items-center space-x-1">
                               <span>Estimated rewards</span>
                               <div className="cursor-pointer">
                                 <img src={infoImage} />
@@ -353,13 +353,13 @@ const Reviewer = () => {
                   <Disclosure>
                     {({ open }) => (
                       <>
-                        <Disclosure.Button className="flex w-full justify-between rounded-2xl bg-white px-8 py-3 text-left text-lg font-medium focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75 border border-lavender items-center">
+                        <Disclosure.Button className="flex w-full justify-between rounded-2xl bg-white px-8 py-3 text-left text-lg font-medium focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75 border border-bordergrey items-center">
                           <span className="font-mont font-bold">Reputation</span>
                           <ChevronUpIcon className={`${open ? "rotate-180 transform" : ""} h-5 w-5 text-purple-500`} />
                         </Disclosure.Button>
-                        <Disclosure.Panel className="flex flex-col bg-white border border-lavender rounded-b-2xl px-8 py-10 text-sm text-darkgrey space-y-6">
+                        <Disclosure.Panel className="flex flex-col bg-white border border-bordergrey rounded-b-2xl px-8 py-10 text-sm text-textgrey space-y-6">
                           <div className="flex flex-row justify-between">
-                            <div className="flex flex-row text-darkgrey font-mont items-center space-x-1">
+                            <div className="flex flex-row text-textgrey font-mont items-center space-x-1">
                               <span>Reputation Score</span>
                               <div className="cursor-pointer">
                                 <img src={infoImage} />

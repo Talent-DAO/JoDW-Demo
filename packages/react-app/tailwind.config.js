@@ -6,28 +6,27 @@ module.exports = {
       transparent: "transparent",
       primary: "#B41C2E",
       white: "#ffffff",
-      grey: "#E6E6E6",
-      lightgrey: "#F7F7F7",
-      darkgrey: "#909090",
-      lightgray: "#A7A7A7",
-      gray: "#e4e4e4",
-      darkgray: "#424242",
+      black: "#000",
+      bgdisabled: "#FFEEEE",
+      textdisabled: '#B41C2E',
       green: "#3CBC00",
       purple: "#8501ff",
       cyan: "#008272",
       red: "#ff0101",
-      black: "#000",
-      lavender: "#f0f0f1",
+      gray: "#e4e4e4",
+      darkgray: "#424242",
       guyabano: "#f8f8f8",
-      gray91: "#e8e8e8",
-      darkblack: "#090909"
+      darkblack: "#090909",
+      bordergrey: "#f0f0f1",
+      textgrey: "#909090",
+      bggrey: "#FAFAFA"
     },
     fontFamily: {
       'mont': ["Montserrat", "ui-sans-serif", "system-ui"],
     },
   },
   plugins: [
-    // require("@tailwindcss/forms"),
+    require('@tailwindcss/forms')
     // require("tw-elements/dist/plugin")
   ],
 };

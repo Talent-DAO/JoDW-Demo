@@ -32,11 +32,11 @@ const PublicationMintCard = ({ publication }) => {
 
   return (
     <div
-      className="rounded-2xl bg-white flex flex-col space-y-4 border-2 border-lightgrey" >
+      className="rounded-2xl bg-white flex flex-col space-y-4 border-2 border-bordergrey" >
       <img className="rounded-t-2xl w-full h-60" src={coverImage} alt="cover"></img>
       <div className="flex flex-col px-4">
 
-        <div className="text-xl font-bold text-left pb-2 font-mont">{publication?.title}</div>
+        <div className="text-xl font-bold text-left pb-2 font-mont text-darkblack">{publication?.title}</div>
         <div className="grid grid-rows-2 gap-2 text-left">
           <div className="row-span-1 flex flex-row justify-between items-center ">
             <div className="flex flex-row items-center cursor-pointer " onClick={() => navigate("/author")}>
@@ -45,12 +45,12 @@ const PublicationMintCard = ({ publication }) => {
               ) : (
                 <img alt="author" src={authorimg} width={30} height={30}></img>
               )}
-              <div className="pl-2 text-lg text-darkgray">{author?.username}</div>
+              <div className="pl-2 text-lg text-darkblack">{author?.username}</div>
             </div>
-            <p className="font-mont">Dan Eke. 2 weeks ago</p>
+            <p className="font-mont text-darkblack">Dan Eke - 2 weeks ago</p>
           </div>
           <div className="row-span-1">
-            <p className="font-mont">12:20 AM . June 22, 2022</p>
+            <p className="font-mont text-darkblack">12:20 AM . June 22, 2022</p>
           </div>
           {/* <div
           className="bg-primary text-white px-4 py-2 rounded-xl cursor-pointer"

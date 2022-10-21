@@ -221,7 +221,7 @@ const Article = () => {
                 <div className="flex flex-col text-left">
                   <div className="py-4 flex flex-row items-center text-gray space-x-4">
                     <img className="rounded-full" src={author_pro} alt="author pro" width={48} height={48}></img>
-                    <div className="flex flex-col text-lightgray">
+                    <div className="flex flex-col text-textgrey">
                       <div className="text-lg">Listed First edition</div>
                       <div className="text-lg">
                         by <span className="text-black">SaintLucas James Andrew</span>
@@ -230,7 +230,7 @@ const Article = () => {
                   </div>
                   <div className="py-4 flex flex-row items-center text-gray space-x-4">
                     <img className="rounded-full" src={author_pro} alt="author pro" width={48} height={48}></img>
-                    <div className="flex flex-col text-lightgray">
+                    <div className="flex flex-col text-textgrey">
                       <div className="text-lg">Listed First edition</div>
                       <div className="text-lg">
                         by <span className="text-black">SaintLucas James Andrew</span>
@@ -239,7 +239,7 @@ const Article = () => {
                   </div>
                   <div className="py-4 flex flex-row items-center text-gray space-x-4">
                     <img className="rounded-full" src={author_pro} alt="author pro" width={48} height={48}></img>
-                    <div className="flex flex-col text-lightgray">
+                    <div className="flex flex-col text-textgrey">
                       <div className="text-lg">Listed First edition</div>
                       <div className="text-lg">
                         by <span className="text-black">SaintLucas James Andrew</span>

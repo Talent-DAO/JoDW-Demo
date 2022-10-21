@@ -119,7 +119,7 @@ export default function User({ userMenuOpen, handleUserMenuOpen }) {
           className={
             userConfig === configUserType.submission || userConfig === configUserType.publisher
               ? "text-primary"
-              : "text-lightgray"
+              : "text-textgrey"
           }
         >
           Submissions
@@ -135,7 +135,7 @@ export default function User({ userMenuOpen, handleUserMenuOpen }) {
             fill={userConfig === configUserType.article ? "#B41C2E" : "#929292"}
           />
         </svg>
-        <div className={userConfig === configUserType.article ? "text-primary" : "text-lightgray"}>Papers</div>
+        <div className={userConfig === configUserType.article ? "text-primary" : "text-textgrey"}>Papers</div>
       </div>
       <div
         className="rounded-md bg-transparent hover:bg-gray px-8 py-2 flex flex-row items-center cursor-pointer text-lg"
@@ -148,7 +148,7 @@ export default function User({ userMenuOpen, handleUserMenuOpen }) {
           />
         </svg>
 
-        <div className={userConfig === configUserType.reputation ? "text-primary" : "text-lightgray"}>Reputation</div>
+        <div className={userConfig === configUserType.reputation ? "text-primary" : "text-textgrey"}>Reputation</div>
       </div>
       <div
         className="rounded-md bg-transparent hover:bg-gray px-8 py-2 flex flex-row items-center cursor-pointer text-lg"
@@ -161,7 +161,7 @@ export default function User({ userMenuOpen, handleUserMenuOpen }) {
           />
         </svg>
 
-        <div className={userConfig === configUserType.rewards ? "text-primary" : "text-lightgray"}>Rewards</div>
+        <div className={userConfig === configUserType.rewards ? "text-primary" : "text-textgrey"}>Rewards</div>
       </div>
       <div
         className="rounded-md bg-transparent hover:bg-gray px-8 py-2 flex flex-row items-center cursor-pointer text-lg"
@@ -173,7 +173,7 @@ export default function User({ userMenuOpen, handleUserMenuOpen }) {
             fill={userConfig === configUserType.notifications ? "#B41C2E" : "#929292"}
           />
         </svg>
-        <div className={userConfig === configUserType.notifications ? "text-primary" : "text-lightgray"}>
+        <div className={userConfig === configUserType.notifications ? "text-primary" : "text-textgrey"}>
           Notifications
         </div>
       </div>
@@ -187,7 +187,7 @@ export default function User({ userMenuOpen, handleUserMenuOpen }) {
             fill={userConfig === configUserType.edit_profile ? "#B41C2E" : "#929292"}
           />
         </svg>
-        <div className={userConfig === configUserType.edit_profile ? "text-primary" : "text-lightgray"}>Profile</div>
+        <div className={userConfig === configUserType.edit_profile ? "text-primary" : "text-textgrey"}>Profile</div>
       </div>
       <div
         className="rounded-md bg-transparent hover:bg-gray px-8 py-2 flex flex-row items-center cursor-pointer text-lg"
@@ -199,7 +199,7 @@ export default function User({ userMenuOpen, handleUserMenuOpen }) {
             fill={userConfig === configUserType.logout ? "#B41C2E" : "#929292"}
           />
         </svg>
-        <div className={userConfig === configUserType.logout ? "text-primary" : "text-lightgray"}>Log Out</div>
+        <div className={userConfig === configUserType.logout ? "text-primary" : "text-textgrey"}>Log Out</div>
       </div>
     </>
   );

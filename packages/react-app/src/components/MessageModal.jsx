@@ -50,7 +50,7 @@ const MessageModal = ({ open, withTitle = false, onSubmit, onClose }) => {
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                <Dialog.Title className="flex items-center text-lg font-medium leading-6 text-gray-900 p-4 border-b-2 border-lavender">
+                <Dialog.Title className="flex items-center text-lg font-medium leading-6 text-gray-900 p-4 border-b-2 border-bordergrey">
                   <div className="flex items-center justify-center mx-auto">
                     <img
                       className="inline-block h-6 w-6 mr-2 rounded-full"
@@ -67,7 +67,7 @@ const MessageModal = ({ open, withTitle = false, onSubmit, onClose }) => {
 
                 <div className="flex flex-col items-center p-8">
                   <h2 className="text-xl font-bold mb-4">Message</h2>
-                  <p className="text-center mb-6 px-6 text-base text-darkgrey">
+                  <p className="text-center mb-6 px-6 text-base text-textgrey">
                     Sharing a link to your article and why it sould be reviewed or published, will increase the chances
                   </p>
                   {withTitle && (
@@ -75,14 +75,14 @@ const MessageModal = ({ open, withTitle = false, onSubmit, onClose }) => {
                       type="text"
                       value={data.title}
                       name="title"
-                      className="block w-full rounded-md shadow-sm mb-4 p-4 border-2 border-lavender outline-none resize-none bg-guyabano sm:text-sm"
+                      className="block w-full rounded-md shadow-sm mb-4 p-4 border-2 border-bordergrey outline-none resize-none bg-guyabano opacity-50 sm:text-sm"
                       placeholder="Title"
                       onChange={handleChange}
                     />
                   )}
                   <textarea
                     name="message"
-                    className="block w-full rounded-md shadow-sm mb-4 p-4 h-40 border-2 border-lavender outline-none resize-none bg-guyabano sm:text-sm"
+                    className="block w-full rounded-md shadow-sm mb-4 p-4 h-40 border-2 border-bordergrey outline-none resize-none bg-guyabano opacity-50 sm:text-sm"
                     placeholder="Your Message"
                     onChange={handleChange}
                     value={data.message}
@@ -90,7 +90,7 @@ const MessageModal = ({ open, withTitle = false, onSubmit, onClose }) => {
                   <button
                     type="button"
                     className={clsx(
-                      !canSubmit ? "bg-gray91" : "",
+                      !canSubmit ? "bg-bgdisabled text-textdisabled opacity-50" : "",
                       "inline-flex items-center justify-center rounded-full border border-transparent bg-primary w-full py-3 text-base font-medium text-white shadow-sm",
                     )}
                     disabled={!canSubmit}
