@@ -31,8 +31,9 @@ We have partnered with the following protocols to buidl the next generation of d
 
 - [Arweave](https://www.arweave.org/)
 - [Orange Protocol](https://app.orangeprotocol.io/)
+- [Polygon DAO](https://polygon.community/#/)
 
-Currently working on a partnership with Radicle
+Currently working on partnerships with [Radicle](https://radicle.xyz/) 🌱 and [Lens](https://lens.xyz) Protocol 🌿
 
 ---
 
