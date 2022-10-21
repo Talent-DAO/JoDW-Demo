@@ -84,8 +84,6 @@ export const getLatestArticles = async () => (dispatch: Dispatch) => {
 };
 
 export const getLensArticleData = async (post: any) => {
-  
-  // console.log("Loading article data: %s", post.contentURI);
   // todo: check all possible contentURI formats
   const uri = convertToHttpUrl(post.contentURI);
 
@@ -111,8 +109,8 @@ export const getLensArticleData = async (post: any) => {
     }
     response.content = content.data;
     response.author.status = Status.Success;
-    console.log("response", response);
   } catch (error) {
+    // todo: handle error
     console.error(["Error loading post content: ", post]);
   }
 
