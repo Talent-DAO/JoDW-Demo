@@ -16,3 +16,4 @@ export { default as PublisherView } from "./Publisher";
 export { default as ReviewerView } from "./Reviewer";
 export { default as WalletConnectModalView} from "./WalletConnectModal";
 export { default as LensArticleView } from "./LensArticle";
+export { default as AuthorDashboard } from "./AuthorDashboard";
