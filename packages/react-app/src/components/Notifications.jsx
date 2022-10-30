@@ -1,8 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { NotificationCard } from "../components";
-
-const server = "https://talentdao-api.herokuapp.com";
+import { JODW_BACKEND as server } from "../constants"; 
 
 const Notifications = ({ address }) => {
   const [notifications, setNotifications] = useState([

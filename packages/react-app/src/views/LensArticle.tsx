@@ -13,6 +13,8 @@ import { SimilarPublicationCard } from "../components";
 import { GET_ARTICLE_DETAILS } from "../graphql/queries/lens";
 import { getLensArticleData } from "../helpers/graphql/articles";
 import { useAccount } from "wagmi";
+import { getPublicationDetailsFailure, getPublicationDetailsSuccess } from "../features/publication/publicationSlice";
+import { useDispatch } from "react-redux";
 pdfjs.GlobalWorkerOptions.workerSrc = "pdf.worker.min.js";
 
 type TTabType = {
@@ -40,13 +42,14 @@ const LensArticle = () => {
   const [author, setAuthor] = useState(null);
   const [coverImage, setCoverImage] = useState(null);
   const [authorImage, setAuthorImage] = useState(null);
+  const dispatch = useDispatch();
 
   const { id } = useParams();
 
   const { loadingArticle }: any = useQuery(GET_ARTICLE_DETAILS, {
     variables: { id },
     onError: error => {
-      // dispatch(getPublicationDetailsFailure(error));
+      dispatch(getPublicationDetailsFailure(error));
       console.log("error => ", error);
     },
     onCompleted: data => {
@@ -55,7 +58,7 @@ const LensArticle = () => {
           console.log(artdata);
           setArticle(artdata);
         });
-      // dispatch(getPublicationDetailsSuccess(data.post));
+      dispatch(getPublicationDetailsSuccess(data.post));
     },
   });
 

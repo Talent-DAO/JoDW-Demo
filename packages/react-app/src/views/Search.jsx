@@ -7,8 +7,8 @@ import info from "../assets/info.svg";
 import search from "../assets/search.svg";
 import { AuthorCard, Footer, PublicationCard } from "../components";
 import { strcmp } from "../utils/utils";
+import { JODW_BACKEND as server } from "../constants";
 
-const server = "https://tdao-api.herokuapp.com";
 
 const Search = () => {
   const [category, setCategory] = useState("author");

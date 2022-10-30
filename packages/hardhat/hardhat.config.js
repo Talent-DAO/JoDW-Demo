@@ -14,20 +14,13 @@ require("@nomiclabs/hardhat-etherscan");
 
 const { isAddress, getAddress, formatUnits, parseUnits } = utils;
 
-/*
-      📡 This is where you configure your deploy configuration for 🏗 scaffold-eth
+// If not set, it uses ours Alchemy's default API key.
+// You can get your own at https://dashboard.alchemyapi.io
+const providerApiKey = process.env.ALCHEMY_API_KEY;
+// If not set, it uses the hardhat account 0 private key.
+// const deployerPrivateKey = process.env.DEPLOYER_PRIVATE_KEY;
 
-      check out `packages/scripts/deploy.js` to customize your deployment
-
-      out of the box it will auto deploy anything in the `contracts` folder and named *.sol
-      plus it will use *.args for constructor args
-*/
-
-//
-// Select the network you want to deploy to here:
-//
 const defaultNetwork = "localhost";
-
 const mainnetGwei = 21;
 
 function mnemonic() {
@@ -80,15 +73,13 @@ module.exports = {
       },
     },
     polygon: {
-      url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXx/polygon/mainnet",
-      gasPrice: 1000000000,
+      url: `https://polygon-mainnet.g.alchemy.com/v2/${providerApiKey}`,
       accounts: {
         mnemonic: mnemonic(),
       },
     },
-    mumbai: {
-      url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXX/polygon/mumbai", // <---- YOUR MORALIS ID! (not limited to infura)
-      gasPrice: 1000000000,
+    polygonMumbai: {
+      url: `https://polygon-mumbai.g.alchemy.com/v2/${providerApiKey}`,
       accounts: {
         mnemonic: mnemonic(),
       },

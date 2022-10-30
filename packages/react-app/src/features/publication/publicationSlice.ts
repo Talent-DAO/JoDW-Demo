@@ -17,7 +17,7 @@ export type TComment = {
 export type TPublication = {
   id: number;
   pubId: number | undefined;
-  author: LensUser | undefined;
+  profileId: LensUser | undefined;
   content: TLensPublicationContent;
   comments: TComment[] | undefined;
   contentURI: string | undefined;
@@ -66,8 +66,9 @@ export const publicationSlice = createSlice({
     getPublicationDetailsStart: (state: IPublicationState) => {
       state.status = Status.Loading;
     },
-    getPublicationDetailsSuccess: (state: IPublicationState, action: PayloadAction<TLensPublicationContent>) => {
-      state.publications[0].content = action.payload;
+    getPublicationDetailsSuccess: (state: IPublicationState, action: PayloadAction<TPublication>) => {
+      console.log("getPublicationDetailsSuccess", action.payload);
+      state.publications[0] = action.payload;
       state.status = Status.Success;
     },
     getPublicationDetailsFailure: (state, action) => {

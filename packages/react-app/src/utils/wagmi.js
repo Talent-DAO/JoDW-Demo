@@ -2,10 +2,9 @@ import { getDefaultWallets } from "@rainbow-me/rainbowkit";
 import { chain, configureChains, createClient } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { infuraProvider } from "wagmi/providers/infura";
-import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { publicProvider } from "wagmi/providers/public";
 
-const alchemyId = process.env.ALCHEMY_ID;
+const alchemyId = process.env.REACT_APP_ALCHEMY_ID;
 const infuraId = process.env.INFURA_ID;
 const useLocalHardhatFork = process.env.REACT_APP_USE_LOCAL_HARDHAT_FORK;
 
@@ -20,11 +19,6 @@ if (process.env.REACT_APP_ENV === "production") {
 }
 
 export const { chains, provider, webSocketProvider } = configureChains(activeChains, [
-  // jsonRpcProvider({
-  //   rpc: () => ({
-  //     http: "http://localhost:8545",
-  //   }),
-  // }),
   alchemyProvider({ apiKey: alchemyId, priority: 1 }),
   infuraProvider({ apiKey: infuraId, priority: 2 }),
   publicProvider({ priority: 0 }),

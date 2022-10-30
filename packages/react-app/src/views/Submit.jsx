@@ -83,7 +83,7 @@ const Submit = () => {
 
     if (isError) return;
 
-    const server = "https://tdao-api.herokuapp.com/";
+    const server = "http://localhost:4001/";
 
     const articleFile = selectedManuscriptFile
       ? {
