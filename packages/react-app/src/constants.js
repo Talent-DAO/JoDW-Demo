@@ -1,5 +1,10 @@
 // MY INFURA_ID, SWAP IN YOURS FROM https://infura.io/dashboard/ethereum
-export const INFURA_ID = "7b0e75d38d424750b92791477924d133";
+export const INFURA_ID = process.env.REACT_APP_INFURA_ID || "7b0e75d38d424750b92791477924d133";
+export const INFURA_SECRET = process.env.REACT_APP_INFURA_SECRET || "";
+
+export const IPFS_URI = process.env.REACT_APP_IPFS_URI || "ipfs.infura.io";
+export const IPFS_PROTOCOL = process.env.REACT_APP_IPFS_PROTOCOL || "https";
+export const IPFS_AUTH_REQUIRED = process.env.REACT_APP_IPFS_AUTH_REQUIRED === "true";
 
 // MY ETHERSCAN_ID, SWAP IN YOURS FROM https://etherscan.io/myapikey
 export const ETHERSCAN_KEY = "DNXJA8RX2Q3VZ4URQIWP7Z68CJXQZSC6AW";

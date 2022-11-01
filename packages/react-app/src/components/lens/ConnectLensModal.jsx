@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MiniLensProfile from "./MiniLensProfile";
 import { fetchLensUserStart, fetchLensUserSuccess, Status } from "../../features/user/userSlice";
-import { useLensAuth } from "../../hooks/useLensAuth";
+import { useLensAuth } from "../../hooks";
 
 const ConnectLensModal = ({ isOpen, onConnectSuccess, onConnectError, onConnectCancel }) => {
   const dispatch = useDispatch();

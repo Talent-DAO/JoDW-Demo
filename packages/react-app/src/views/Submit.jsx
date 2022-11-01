@@ -1,16 +1,39 @@
 import { notification } from "antd";
+import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
+import { useApolloClient } from "@apollo/client";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { useAccount, useContractWrite, usePrepareContractWrite, useNetwork, useWaitForTransaction } from "wagmi";
 import { sendTransacton } from "../utils/arweave";
 import { JODW_BACKEND } from "../constants";
+import { PublicationMainFocus } from "../lib/lens/interfaces/publication";
 import TalentDaoContracts from "../contracts/hardhat_contracts.json";
+import { uploadIpfs } from "../utils/ipfs";
+import { MetadataDisplayType } from "../lib/lens/interfaces/generic";
+import { SubmitArticleModal } from "../components";
+import { CREATE_POST } from "../graphql/queries/lens";
 
 const server = JODW_BACKEND;
 
+const SubmitState = {
+  SUBMIT_REVIEW_PENDING: "SUBMIT_REVIEW_PENDING",
+  SUBMIT_UNDER_REVIEW: "SUBMIT_UNDER_REVIEW",
+  SUBMIT_REVIEW_COMPLETED: "SUBMIT_REVIEW_COMPLETED",
+  SUBMIT_REVIEW_ERROR: "SUBMIT_REVIEW_ERROR",
+
+  SUBMIT_CONTINUE_PENDING: "SUBMIT_CONTINUE_PENDING",
+  SUBMIT_CONTINUE_ERROR: "SUBMIT_CONTINUE_ERROR",
+  SUBMIT_CONTINUE_COMPLETED: "SUBMIT_CONTINUE_COMPLETED",
+};
+
 const Submit = () => {
+  const apolloClient = useApolloClient();
+  const lensAuthData = useSelector(state =>
+    state.user.lensAuth
+  );
   const { address } = useAccount();
   const { chain } = useNetwork();
   const [selectedManuscriptFile, setSelectedManuscriptFile] = useState(null);
@@ -27,13 +50,13 @@ const Submit = () => {
   const [optionComedy, setOptionComedy] = useState(false);
   const [optionPolitics, setOptionPolitics] = useState(false);
   const [arweaveHash, setArweaveHash] = useState("");
+  const [ipfsMetadataUri, setIpfsMetadataUri] = useState("");
   const { walletId } = useParams();
 
   const [titleError, setTitleError] = useState(false);
   const [authorError, setAuthorError] = useState(false);
   const [abstractError, setAbstractError] = useState(false);
-  const [isSubmitInProgress, setIsSubmitInProgress] = useState(false);
-  const [isOnChainTxInProgress, setIsOnChainTxInProgress] = useState(false);
+  const [submitState, setSubmitState] = useState(SubmitState.SUBMIT_REVIEW_PENDING);
 
   const clearForm = () => {
     setSelectedManuscriptFile(null);
@@ -49,7 +72,8 @@ const Submit = () => {
     setOptionRomance(false);
     setOptionComedy(false);
     setOptionPolitics(false);
-    setArweaveHash("");
+    setIpfsMetadataUri("");
+    setSubmitState(SubmitState.SUBMIT_REVIEW_PENDING);
   };
 
   const talentDaoManagerContract = Object.entries(TalentDaoContracts[chain?.id] || {}).find(([_key, _value]) => _value?.chainId === String(chain?.id))?.[1]?.contracts?.TalentDaoManager;
@@ -58,11 +82,10 @@ const Submit = () => {
     addressOrName: talentDaoManagerContract?.address,
     contractInterface: talentDaoManagerContract?.abi,
     functionName: "mintArticleNFT",
-    args: [address, arweaveHash, "ipfs meta data pointer", !Number.isNaN(talentPrice) ? ethers.utils.parseEther("0") : ethers.utils.parseEther(String(talentPrice))],
-    onSettled(_err) {
+    args: [address, arweaveHash, ipfsMetadataUri, !Number.isNaN(talentPrice) ? ethers.utils.parseEther("0") : ethers.utils.parseEther(String(talentPrice))],
+    onError(_err) {
       if (_err) {
-        setIsOnChainTxInProgress(false);
-        setIsSubmitInProgress(false);
+        setSubmitState(SubmitState.SUBMIT_CONTINUE_ERROR);
         console.error("On chain tx failed", _err);
       }
     },
@@ -76,18 +99,70 @@ const Submit = () => {
     hash: onChainSubmitData?.hash,
     timeout: 10_000,
     onSettled(_data, _error) {
-      setIsOnChainTxInProgress(false);
-      setIsSubmitInProgress(false);
       if (_data?.status === 1) {
         notification.open({
           message: "Article is now onchain",
           description: "You have submitted your article== 😍",
           icon: "🚀",
         });
+        setSubmitState(SubmitState.SUBMIT_CONTINUE_COMPLETED);
         clearForm();
+      } else {
+        setSubmitState(SubmitState.SUBMIT_CONTINUE_ERROR);
       }
     },
   });
+
+  const createArticleMetadata = async (articleArweave, coverImageArweave, onSuccess, onError) => {
+    const ipfsResult = await uploadIpfs({
+      version: "2.0.0",
+      mainContentFocus: PublicationMainFocus.IMAGE,
+      metadata_id: uuidv4(),
+      description: abstract,
+      locale: "en-US",
+      external_url: "https://arweave.net/" + articleArweave?.id,
+      image: null,
+      imageMimeType: null,
+      name: articleTitle,
+      media: [
+        {
+          item: "https://arweave.net/" + coverImageArweave?.id,
+          type: coverImageArweave?.contentType
+        }
+      ],
+      attributes: [
+        {
+          displayType: MetadataDisplayType.Number,
+          traitType: "price",
+          value: talentPrice
+        },
+        {
+          displayType: MetadataDisplayType.String,
+          traitType: "authors",
+          value: Array.isArray(authors) ? authors.join(",") : authors
+        },
+        {
+          displayType: MetadataDisplayType.String,
+          traitType: "chain",
+          value: blockchain
+        },
+        {
+          displayType: MetadataDisplayType.String,
+          traitType: "categories",
+          value: categories.join(",")
+        },
+        {
+          displayType: MetadataDisplayType.String,
+          traitType: "articleContentType",
+          value: articleArweave?.contentType
+        },
+      ],
+      tags: ["talentdao", "jodw"],
+      appId: "talentdao",
+    });
+    console.log("IPFS metadata upload result: ", ipfsResult);
+    onSuccess("ipfs://" + ipfsResult?.path);
+  };
 
   const changeSelectedManuscriptFile = event => {
     setSelectedManuscriptFile(event.target.files[0]);
@@ -117,18 +192,7 @@ const Submit = () => {
       reader.onerror = error => reject(error);
     });
 
-  const changeCategories = event => {
-    var options = event.target.options;
-    var categoriesSelected = [];
-    for (var i = 0, l = options.length; i < l; i++) {
-      if (options[i].selected) {
-        categoriesSelected.push(options[i].value);
-      }
-    }
-    setCategories(categoriesSelected);
-  };
-
-  const onSubmit = async () => {
+  const onSubmitReview = async () => {
     let isError = false;
     if (articleTitle === "") {
       setTitleError(true);
@@ -145,87 +209,100 @@ const Submit = () => {
 
     if (isError) return;
 
-    if (isSubmitInProgress) {
-      return;
+    if (submitState === SubmitState.SUBMIT_REVIEW_PENDING) {
+      setSubmitState(SubmitState.SUBMIT_UNDER_REVIEW);
     }
+  };
 
-    const articleFile = selectedManuscriptFile
+  const continueSubmissionAfterConfirmation = async ({ article: articleData, lensProfile }) => {
+
+    setSubmitState(SubmitState.SUBMIT_CONTINUE_PENDING);
+
+    const articleFile = articleData?.manuscriptFile
       ? {
-        filename: selectedManuscriptFile.name,
-        data: selectedManuscriptFile ? await toBase64(selectedManuscriptFile) : "",
+        filename: articleData?.manuscriptFile?.name,
+        data: articleData?.manuscriptFile ? await toBase64(articleData?.manuscriptFile?.data) : "",
       }
       : {
         filename: "",
         data: "",
       };
 
-    const articleCover = selectedArticleCover
+    const articleCover = articleData?.coverImage
       ? {
-        filename: selectedArticleCover.name,
-        data: selectedArticleCover ? await toBase64(selectedArticleCover) : "",
+        filename: articleData?.coverImage?.name,
+        data: articleData?.coverImage ? await toBase64(articleData?.coverImage?.data) : "",
       }
       : {
         filename: "",
         data: "",
       };
 
-    // add categories here
-    let articleCategories = [];
-    if (optionTech) articleCategories.push("Technology");
-    if (optionHistory) articleCategories.push("History");
-    if (optionRomance) articleCategories.push("Romance");
-    if (optionComedy) articleCategories.push("Comedy");
-    if (optionPolitics) articleCategories.push("Politics");
-
-    setIsSubmitInProgress(true);
     // set up Arweave tx
-    const arweaveTx = await submitToArweave(articleFile);
-    console.log(arweaveTx);
-    try {
-      const res = await axios.post(server + "/api/article", {
-        walletId: walletId,
-        body: articleFile,
-        cover: articleCover,
-        price: talentPrice,
-        title: articleTitle,
-        authors: authors,
-        abstract: abstract,
-        blockchain: blockchain,
-        categories: articleCategories,
-        arweaveHash: arweaveTx.id.toString(),
-      });
-      console.log(res);
-      if (res.status === 200) {
-        // clear the form and send to the creators/authors profile pag
-      }
-    } catch (e) {
-      console.log(e);
-    }
+    const { result: arweaveTx, contentType: articleContentType } = await submitToArweave(articleFile);
+    const { result: coverImageArweaveTx, contentType: coverImageContentType } = await submitToArweave(articleCover);
 
     // set up onchain tx
-    setArweaveHash(arweaveTx.id);
+    const articleArweave = { id: arweaveTx?.id, contentType: articleContentType };
+    const coverImageArweave = { id: coverImageArweaveTx?.id, contentType: coverImageContentType };
+    createArticleMetadata(articleArweave, coverImageArweave, async (ipfsUri) => {
+      try {
+        const res = await axios.post(server + "/api/article", {
+          ...articleData,
+          walletId: walletId,
+          body: articleFile,
+          cover: articleCover,
+          arweaveHash: arweaveTx.id.toString(),
+          lensCompatibleIpfsMetadata: ipfsUri,
+        });
+        console.log(res);
+        if (res.status === 200) {
+          setArweaveHash(articleArweave?.id);
+          setIpfsMetadataUri(ipfsUri);
+          publishToLensProfile(ipfsUri, lensProfile);
+        }
+      } catch (e) {
+        console.error("Save article to JoDW backend failed: ", e);
+      }
+    });
+  };
+
+  const publishToLensProfile = async (ipfsUri, lensProfile) => {
+    try {
+      const results = await apolloClient.mutate({
+        mutation: CREATE_POST,
+        variables: { profileId: lensProfile.id, ipfsUri: ipfsUri },
+        context: {
+          headers: {
+            "x-access-token": lensAuthData?.accessToken ? `Bearer ${lensAuthData?.accessToken}` : "",
+          },
+        }
+      });
+      console.log("LENS PUBLISH RESULTS ", results);
+    } catch (error) {
+      console.error("Unable to publish to lens: ", error);
+    }
   };
 
   useEffect(() => {
-    if (isOnChainTxInProgress) {
+    if (submitState !== SubmitState.SUBMIT_CONTINUE_PENDING) {
       return;
     }
 
-    if (arweaveHash !== "" && doSubmitOnChain) {
-      setIsOnChainTxInProgress(true);
+    if (arweaveHash !== "" && ipfsMetadataUri !== "" && doSubmitOnChain) {
       doSubmitOnChain?.();
     }
-  }, [arweaveHash, doSubmitOnChain]);
+  }, [ipfsMetadataUri, doSubmitOnChain]);
 
-  const submitToArweave = async articleFile => {
+  const submitToArweave = async file => {
     //
-    const fileData = articleFile.data;
+    const fileData = file.data;
     const contentType = fileData.substring(5, fileData.indexOf(";", 5));
-    const result = await sendTransacton(fileData, contentType, categories);
+    const result = await sendTransacton(fileData.substring(fileData.indexOf(",") + 1), contentType, categories);
     console.log("Result: ", result);
     console.log("Tx Id: ", result.id);
 
-    return result;
+    return { result, contentType };
   };
 
   useEffect(() => {
@@ -235,6 +312,44 @@ const Submit = () => {
     preview.src = src;
     preview.style.display = "block";
   }, [selectedArticleCover]);
+
+  const articleFormData = {
+    title: articleTitle,
+    abstract: abstract,
+    manuscriptFile: {
+      name: selectedManuscriptFile?.name,
+      data: selectedManuscriptFile
+    },
+    coverImage: {
+      name: selectedArticleCover?.name,
+      data: selectedArticleCover
+    },
+    price: talentPrice,
+    authors: authors,
+    blockchain: blockchain,
+    categories: [
+      optionTech && "Technology",
+      optionComedy && "Comedy",
+      optionHistory && "History",
+      optionPolitics && "Politics",
+      optionRomance && "Romance",
+    ].filter(_c => _c),
+  };
+
+  const onSubmitSuccess = (result) => {
+    console.log("SUBMIT success: ", result);
+    continueSubmissionAfterConfirmation(result);
+  };
+
+  const onSubmitError = (error) => {
+    console.error("Error submitting: ", error);
+    setSubmitState(SubmitState.SUBMIT_REVIEW_ERROR);
+  };
+
+  // For debugging:
+  // useEffect(() => {
+  //   console.log("SUBMIT STATE: ", submitState);
+  // }, [submitState]);
 
   return (
     <div className="" style={{ backgroundImage: "linear-gradient(#fff, #EEEE" }}>
@@ -625,15 +740,33 @@ const Submit = () => {
                 </div>
               </div>
 
-              <div className="flex justify-center">
-                <button
-                  type="button"
-                  onClick={onSubmit}
-                  disabled={isSubmitInProgress}
-                  className="bg-primary text-white py-2 px-6 rounded-full text-lg"
-                >
-                  SUBMIT
-                </button>
+              <div className="flex justify-center justify-items-center">
+                {(submitState === SubmitState.SUBMIT_REVIEW_PENDING || submitState === SubmitState.SUBMIT_REVIEW_ERROR) &&
+                  <button
+                    type="button"
+                    onClick={onSubmitReview}
+                    disabled={(() => submitState !== SubmitState.SUBMIT_REVIEW_PENDING)()}
+                    className="bg-primary text-white py-2 px-6 rounded-full text-lg"
+                  >
+                    SUBMIT
+                  </button>
+                }
+
+                {submitState === SubmitState.SUBMIT_CONTINUE_PENDING &&
+                  <button type="button" className="bg-primary text-white py-2 px-6 rounded-full text-lg" disabled>
+                    <svg className="animate-spin h-5 w-5 mr-3 text-center" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Submitting...
+                  </button>
+                }
+                <SubmitArticleModal
+                  article={articleFormData}
+                  isOpen={(() => submitState === SubmitState.SUBMIT_UNDER_REVIEW)()}
+                  onSuccess={onSubmitSuccess}
+                  onSubmitError={onSubmitError}
+                />
               </div>
             </div>
           </div>
