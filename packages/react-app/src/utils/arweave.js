@@ -26,7 +26,7 @@ export async function getTransactionOwner(transaction) {
 // @params data the file data
 // @params contentType the file type, txt, docx, pdf, etc.
 export async function sendTransacton(data, contentType, categories) {
-  // console.log(arJWK);
+  // console.log([data, contentType, categories, arJWK]);
   let transaction = await arweave.createTransaction(
     {
       data: data,

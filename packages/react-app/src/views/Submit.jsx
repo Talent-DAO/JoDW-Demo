@@ -3,11 +3,16 @@ import axios from "axios";
 import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useAccount } from "wagmi";
+import { useAccount, useContractWrite, usePrepareContractWrite, useNetwork, useWaitForTransaction } from "wagmi";
 import { sendTransacton } from "../utils/arweave";
+import { JODW_BACKEND } from "../constants";
+import TalentDaoContracts from "../contracts/hardhat_contracts.json";
+
+const server = JODW_BACKEND;
 
 const Submit = () => {
   const { address } = useAccount();
+  const { chain } = useNetwork();
   const [selectedManuscriptFile, setSelectedManuscriptFile] = useState(null);
   const [authors, setAuthors] = useState([]);
   const [selectedArticleCover, setSelectedArticleCover] = useState();
@@ -21,11 +26,68 @@ const Submit = () => {
   const [optionRomance, setOptionRomance] = useState(false);
   const [optionComedy, setOptionComedy] = useState(false);
   const [optionPolitics, setOptionPolitics] = useState(false);
+  const [arweaveHash, setArweaveHash] = useState("");
   const { walletId } = useParams();
 
   const [titleError, setTitleError] = useState(false);
   const [authorError, setAuthorError] = useState(false);
   const [abstractError, setAbstractError] = useState(false);
+  const [isSubmitInProgress, setIsSubmitInProgress] = useState(false);
+  const [isOnChainTxInProgress, setIsOnChainTxInProgress] = useState(false);
+
+  const clearForm = () => {
+    setSelectedManuscriptFile(null);
+    setAuthors([]);
+    setSelectedArticleCover(null);
+    setTalentPrice(0);
+    setArticleTitle("");
+    setAbstract("");
+    setBlockchain("Ethereum");
+    setCategories([]);
+    setOptionTech(false);
+    setOptionHistory(false);
+    setOptionRomance(false);
+    setOptionComedy(false);
+    setOptionPolitics(false);
+    setArweaveHash("");
+  };
+
+  const talentDaoManagerContract = Object.entries(TalentDaoContracts[chain?.id] || {}).find(([_key, _value]) => _value?.chainId === String(chain?.id))?.[1]?.contracts?.TalentDaoManager;
+
+  const { config: talentDaoManagerContractConfig } = usePrepareContractWrite({
+    addressOrName: talentDaoManagerContract?.address,
+    contractInterface: talentDaoManagerContract?.abi,
+    functionName: "mintArticleNFT",
+    args: [address, arweaveHash, "ipfs meta data pointer", !Number.isNaN(talentPrice) ? ethers.utils.parseEther("0") : ethers.utils.parseEther(String(talentPrice))],
+    onSettled(_err) {
+      if (_err) {
+        setIsOnChainTxInProgress(false);
+        setIsSubmitInProgress(false);
+        console.error("On chain tx failed", _err);
+      }
+    },
+  });
+  const {
+    data: onChainSubmitData,
+    write: doSubmitOnChain,
+  } = useContractWrite(talentDaoManagerContractConfig);
+
+  const waitForOnChainTransaction = useWaitForTransaction({
+    hash: onChainSubmitData?.hash,
+    timeout: 10_000,
+    onSettled(_data, _error) {
+      setIsOnChainTxInProgress(false);
+      setIsSubmitInProgress(false);
+      if (_data?.status === 1) {
+        notification.open({
+          message: "Article is now onchain",
+          description: "You have submitted your article== 😍",
+          icon: "🚀",
+        });
+        clearForm();
+      }
+    },
+  });
 
   const changeSelectedManuscriptFile = event => {
     setSelectedManuscriptFile(event.target.files[0]);
@@ -83,7 +145,9 @@ const Submit = () => {
 
     if (isError) return;
 
-    const server = "http://localhost:4001/";
+    if (isSubmitInProgress) {
+      return;
+    }
 
     const articleFile = selectedManuscriptFile
       ? {
@@ -113,6 +177,7 @@ const Submit = () => {
     if (optionComedy) articleCategories.push("Comedy");
     if (optionPolitics) articleCategories.push("Politics");
 
+    setIsSubmitInProgress(true);
     // set up Arweave tx
     const arweaveTx = await submitToArweave(articleFile);
     console.log(arweaveTx);
@@ -138,39 +203,29 @@ const Submit = () => {
     }
 
     // set up onchain tx
-    submitOnChain(arweaveTx.id);
+    setArweaveHash(arweaveTx.id);
   };
+
+  useEffect(() => {
+    if (isOnChainTxInProgress) {
+      return;
+    }
+
+    if (arweaveHash !== "" && doSubmitOnChain) {
+      setIsOnChainTxInProgress(true);
+      doSubmitOnChain?.();
+    }
+  }, [arweaveHash, doSubmitOnChain]);
 
   const submitToArweave = async articleFile => {
     //
-    const result = await sendTransacton(articleFile.toString(), "appllication/pdf", categories);
+    const fileData = articleFile.data;
+    const contentType = fileData.substring(5, fileData.indexOf(";", 5));
+    const result = await sendTransacton(fileData, contentType, categories);
     console.log("Result: ", result);
     console.log("Tx Id: ", result.id);
 
     return result;
-  };
-
-  const submitOnChain = async arweaveHash => {
-    await tx(
-      writeContracts &&
-        writeContracts.TalentDaoManager &&
-        writeContracts.TalentDaoManager.addArticle(
-          address,
-          arweaveHash,
-          "ipfs meta data pointer",
-          ethers.utils.parseEther("10"),
-        ),
-      async update => {
-        console.log("📡 Transaction Update:", update);
-        if (update.status === 1) {
-          notification.open({
-            message: "Article is now onchain",
-            description: "You have submitted your article== 😍",
-            icon: "🚀",
-          });
-        }
-      },
-    );
   };
 
   useEffect(() => {
@@ -180,10 +235,6 @@ const Submit = () => {
     preview.src = src;
     preview.style.display = "block";
   }, [selectedArticleCover]);
-
-  useEffect(() => {
-    console.log("ETH Address: ", address);
-  }, [address]);
 
   return (
     <div className="" style={{ backgroundImage: "linear-gradient(#fff, #EEEE" }}>
@@ -578,6 +629,7 @@ const Submit = () => {
                 <button
                   type="button"
                   onClick={onSubmit}
+                  disabled={isSubmitInProgress}
                   className="bg-primary text-white py-2 px-6 rounded-full text-lg"
                 >
                   SUBMIT
