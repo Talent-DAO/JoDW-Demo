@@ -68,12 +68,22 @@ const SubmitArticleModal = ({ article, isOpen, onError, onSuccess }: SubmitArtic
           <>
             <div className="p-3">
               <h2 className="text-l font-bold">Select Lens Profile</h2>
-              <div className="grid grid-cols-2 gap-4">
-                {lensProfiles?.profiles?.map(profile => <MiniLensProfile profile={profile} onProfileSelected={handleLensProfileSelected} />)}
-              </div>
+              {lensProfiles?.profiles?.length === 0 ?
+                <MiniLensProfile profile={undefined} /> :
+                <div className="grid grid-cols-2 gap-4">
+                  {lensProfiles?.profiles?.map(profile => <MiniLensProfile profile={profile} onProfileSelected={handleLensProfileSelected} />)}
+                </div>
+              }
             </div>
           </>}
-          <button onClick={() => onSuccess({ article: article, lensProfile: currentLensProfile })}>Publish!</button>
+          <div className="p-3 text-centered">
+            <button
+              className="bg-primary text-white py-2 px-6 rounded-full text-lg"
+              onClick={() => onSuccess({ article: article, lensProfile: currentLensProfile })}
+            >
+              Confirm &amp; Publish!
+            </button>
+          </div>
         </div>
       </div>
     </Modal>

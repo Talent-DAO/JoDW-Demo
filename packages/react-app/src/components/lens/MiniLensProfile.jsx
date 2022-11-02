@@ -8,6 +8,14 @@ const MiniLensProfile = ({profile, onProfileSelected = (profile) => {}}) => {
     onProfileSelected && onProfileSelected(profile);
   };
 
+  if (!profile) {
+    return (
+      <div className="mx-auto text-center">
+        No eligible lens profile to display.
+      </div>
+    );
+  }
+
   return (
     <>
       <a key={handle} onClick={handleClick} className="flex-col p-6 cursor-pointer group/item hover:bg-slate-100 justify-center">

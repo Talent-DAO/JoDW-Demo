@@ -1,4 +1,4 @@
-import create from "ipfs-http-client";
+import { create } from "ipfs-http-client";
 import { INFURA_PROJECT_ID, INFURA_SECRET, IPFS_URI, IPFS_PROTOCOL, IPFS_AUTH_REQUIRED } from "../constants";
 
 const projectId = INFURA_PROJECT_ID;

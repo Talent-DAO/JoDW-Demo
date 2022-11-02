@@ -271,6 +271,10 @@ const Submit = () => {
   };
 
   const publishToLensProfile = async (ipfsUri: string, lensProfile: { id: any; }) => {
+    if (!lensProfile?.id) {
+      console.warn("Lens profile not connected/available, skipping lens publish!");
+      return;
+    }
     try {
       const results = await apolloClient.mutate({
         mutation: CREATE_POST,
