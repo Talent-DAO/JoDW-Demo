@@ -78,7 +78,7 @@ const SubmitArticleModal = ({ article, isOpen, onError, onSuccess }: SubmitArtic
           </>}
           <div className="p-3 text-centered">
             <button
-              className="bg-primary text-white py-2 px-6 rounded-full text-lg"
+              className="bg-primary text-white py-2 px-6 rounded-full text-md"
               onClick={() => onSuccess({ article: article, lensProfile: currentLensProfile })}
             >
               Confirm &amp; Publish!
