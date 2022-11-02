@@ -1,20 +1,21 @@
+import { useApolloClient } from "@apollo/client";
 import { notification } from "antd";
-import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
-import { useApolloClient } from "@apollo/client";
-import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useAccount, useContractWrite, usePrepareContractWrite, useNetwork, useWaitForTransaction } from "wagmi";
-import { sendTransacton } from "../utils/arweave";
-import { JODW_BACKEND } from "../constants";
-import { PublicationMainFocus } from "../lib/lens/interfaces/publication";
-import TalentDaoContracts from "../contracts/hardhat_contracts.json";
-import { uploadIpfs } from "../utils/ipfs";
-import { MetadataDisplayType } from "../lib/lens/interfaces/generic";
+import { useParams } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+import { useAccount, useContractWrite, useNetwork, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
 import { SubmitArticleModal } from "../components";
+import { JODW_BACKEND } from "../constants";
+import TalentDaoContracts from "../contracts/hardhat_contracts.json";
+import { RootState } from "../app/store";
 import { CREATE_POST } from "../graphql/queries/lens";
+import { MetadataDisplayType } from "../lib/lens/interfaces/generic";
+import { PublicationMainFocus } from "../lib/lens/interfaces/publication";
+import { sendTransacton } from "../utils/arweave";
+import { uploadIpfs } from "../utils/ipfs";
 
 const server = JODW_BACKEND;
 
@@ -31,12 +32,12 @@ const SubmitState = {
 
 const Submit = () => {
   const apolloClient = useApolloClient();
-  const lensAuthData = useSelector(state =>
+  const lensAuthData = useSelector((state: RootState) =>
     state.user.lensAuth
   );
   const { address } = useAccount();
   const { chain } = useNetwork();
-  const [selectedManuscriptFile, setSelectedManuscriptFile] = useState(null);
+  const [selectedManuscriptFile, setSelectedManuscriptFile] = useState(undefined);
   const [authors, setAuthors] = useState([]);
   const [selectedArticleCover, setSelectedArticleCover] = useState();
   const [talentPrice, setTalentPrice] = useState(0);
@@ -59,13 +60,13 @@ const Submit = () => {
   const [submitState, setSubmitState] = useState(SubmitState.SUBMIT_REVIEW_PENDING);
 
   const clearForm = () => {
-    setSelectedManuscriptFile(null);
+    setSelectedManuscriptFile(undefined);
     setAuthors([]);
-    setSelectedArticleCover(null);
+    setSelectedArticleCover(undefined);
     setTalentPrice(0);
     setArticleTitle("");
     setAbstract("");
-    setBlockchain("Ethereum");
+    setBlockchain("Polygon");
     setCategories([]);
     setOptionTech(false);
     setOptionHistory(false);
@@ -76,6 +77,7 @@ const Submit = () => {
     setSubmitState(SubmitState.SUBMIT_REVIEW_PENDING);
   };
 
+  // todo: we are only using on polygon, so we can remove this
   const talentDaoManagerContract = Object.entries(TalentDaoContracts[chain?.id] || {}).find(([_key, _value]) => _value?.chainId === String(chain?.id))?.[1]?.contracts?.TalentDaoManager;
 
   const { config: talentDaoManagerContractConfig } = usePrepareContractWrite({
@@ -113,7 +115,7 @@ const Submit = () => {
     },
   });
 
-  const createArticleMetadata = async (articleArweave, coverImageArweave, onSuccess, onError) => {
+  const createArticleMetadata = async (articleArweave: { id: any; contentType: any; }, coverImageArweave: { id: any; contentType: any; }, onSuccess: { (ipfsUri: any): Promise<void>; (arg0: string): void; }, onError: () => void) => {
     const ipfsResult = await uploadIpfs({
       version: "2.0.0",
       mainContentFocus: PublicationMainFocus.IMAGE,
@@ -162,29 +164,30 @@ const Submit = () => {
     });
     console.log("IPFS metadata upload result: ", ipfsResult);
     onSuccess("ipfs://" + ipfsResult?.path);
+    // onError();
   };
 
-  const changeSelectedManuscriptFile = event => {
+  const changeSelectedManuscriptFile = (event: any) => {
     setSelectedManuscriptFile(event.target.files[0]);
   };
 
-  const changeTalentPrice = event => {
+  const changeTalentPrice = (event: any) => {
     setTalentPrice(event.target.value);
   };
 
-  const changeBlockchain = e => {
+  const changeBlockchain = (e: any) => {
     setBlockchain(e.target.value);
   };
 
-  const changeSelectedArticleCover = event => {
+  const changeSelectedArticleCover = (event: any) => {
     setSelectedArticleCover(event.target.files[0]);
   };
 
-  const changeArticleTitle = event => {
+  const changeArticleTitle = (event: any) => {
     setArticleTitle(event.target.value);
   };
 
-  const toBase64 = file =>
+  const toBase64 = (file: Blob) =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -214,7 +217,7 @@ const Submit = () => {
     }
   };
 
-  const continueSubmissionAfterConfirmation = async ({ article: articleData, lensProfile }) => {
+  const continueSubmissionAfterConfirmation = async ({ article: articleData, lensProfile }: any) => {
 
     setSubmitState(SubmitState.SUBMIT_CONTINUE_PENDING);
 
@@ -245,7 +248,7 @@ const Submit = () => {
     // set up onchain tx
     const articleArweave = { id: arweaveTx?.id, contentType: articleContentType };
     const coverImageArweave = { id: coverImageArweaveTx?.id, contentType: coverImageContentType };
-    createArticleMetadata(articleArweave, coverImageArweave, async (ipfsUri) => {
+    createArticleMetadata(articleArweave, coverImageArweave, async (ipfsUri: string) => {
       try {
         const res = await axios.post(server + "/api/article", {
           ...articleData,
@@ -264,10 +267,10 @@ const Submit = () => {
       } catch (e) {
         console.error("Save article to JoDW backend failed: ", e);
       }
-    });
+    }, () => {});
   };
 
-  const publishToLensProfile = async (ipfsUri, lensProfile) => {
+  const publishToLensProfile = async (ipfsUri: string, lensProfile: { id: any; }) => {
     try {
       const results = await apolloClient.mutate({
         mutation: CREATE_POST,
@@ -294,7 +297,7 @@ const Submit = () => {
     }
   }, [ipfsMetadataUri, doSubmitOnChain]);
 
-  const submitToArweave = async file => {
+  const submitToArweave = async (file: { filename?: any; data: any; }) => {
     //
     const fileData = file.data;
     const contentType = fileData.substring(5, fileData.indexOf(";", 5));
@@ -336,12 +339,12 @@ const Submit = () => {
     ].filter(_c => _c),
   };
 
-  const onSubmitSuccess = (result) => {
+  const onSubmitSuccess = (result: { article: any; lensProfile: any; }) => {
     console.log("SUBMIT success: ", result);
     continueSubmissionAfterConfirmation(result);
   };
 
-  const onSubmitError = (error) => {
+  const onSubmitError = (error: any) => {
     console.error("Error submitting: ", error);
     setSubmitState(SubmitState.SUBMIT_REVIEW_ERROR);
   };
@@ -483,7 +486,7 @@ const Submit = () => {
                     id="article-title"
                     placeholder="e.g John Doe"
                     value={authors}
-                    onChange={e => setAuthors(...[e.target.value])}
+                    onChange={e => setAuthors([e.target.value])}
                     className="my-1 p-4 bg-transparent rounded-xl block w-full focus:outline-none text-lg border border-black "
                   />
                   {authorError && (
