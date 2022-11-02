@@ -25,7 +25,7 @@ contract ArticleNft is Ownable, ERC721URIStorage, AuthorEntity {
     address public tDaoTokenAddress;
     IERC20 private tDaoToken;
 
-    constructor(address _owner, address _tDaoToken) public ERC721("Talent DAO IP NFT", "TDAO-IPNFT") {
+    constructor(address _owner, address _tDaoToken) ERC721("Talent DAO IP NFT", "TDAO-IPNFT") {
         tDaoToken = IERC20(_tDaoToken);
         tDaoTokenAddress = _tDaoToken;
         _transferOwnership(_owner);
