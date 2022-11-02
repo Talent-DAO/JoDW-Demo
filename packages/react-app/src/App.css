@@ -62,3 +62,17 @@
 .z-1 {
   z-index: 1;
 }
+
+.rounded-modal .ant-modal {
+  border-radius: 2em;
+  overflow: auto;
+  box-shadow: 1em rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+}
+
+.rounded-modal .ant-modal-content {
+  border-radius: 2em;
+}
+
+.border-red-tdao {
+  border-color: #B41C2E;
+}
