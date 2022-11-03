@@ -1,14 +1,43 @@
+import { useApolloClient } from "@apollo/client";
 import { notification } from "antd";
 import axios from "axios";
 import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { useAccount } from "wagmi";
+import { v4 as uuidv4 } from "uuid";
+import { useAccount, useContractWrite, useNetwork, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
+import { SubmitArticleModal } from "../components";
+import { JODW_BACKEND } from "../constants";
+import TalentDaoContracts from "../contracts/hardhat_contracts.json";
+import { RootState } from "../app/store";
+import { CREATE_POST } from "../graphql/queries/lens";
+import { MetadataDisplayType } from "../lib/lens/interfaces/generic";
+import { PublicationMainFocus } from "../lib/lens/interfaces/publication";
 import { sendTransacton } from "../utils/arweave";
+import { uploadIpfs } from "../utils/ipfs";
+
+const server = JODW_BACKEND;
+
+const SubmitState = {
+  SUBMIT_REVIEW_PENDING: "SUBMIT_REVIEW_PENDING",
+  SUBMIT_UNDER_REVIEW: "SUBMIT_UNDER_REVIEW",
+  SUBMIT_REVIEW_COMPLETED: "SUBMIT_REVIEW_COMPLETED",
+  SUBMIT_REVIEW_ERROR: "SUBMIT_REVIEW_ERROR",
+
+  SUBMIT_CONTINUE_PENDING: "SUBMIT_CONTINUE_PENDING",
+  SUBMIT_CONTINUE_ERROR: "SUBMIT_CONTINUE_ERROR",
+  SUBMIT_CONTINUE_COMPLETED: "SUBMIT_CONTINUE_COMPLETED",
+};
 
 const Submit = () => {
+  const apolloClient = useApolloClient();
+  const lensAuthData = useSelector((state: RootState) =>
+    state.user.lensAuth
+  );
   const { address } = useAccount();
-  const [selectedManuscriptFile, setSelectedManuscriptFile] = useState(null);
+  const { chain } = useNetwork();
+  const [selectedManuscriptFile, setSelectedManuscriptFile] = useState(undefined);
   const [authors, setAuthors] = useState([]);
   const [selectedArticleCover, setSelectedArticleCover] = useState();
   const [talentPrice, setTalentPrice] = useState(0);
@@ -21,33 +50,149 @@ const Submit = () => {
   const [optionRomance, setOptionRomance] = useState(false);
   const [optionComedy, setOptionComedy] = useState(false);
   const [optionPolitics, setOptionPolitics] = useState(false);
+  const [arweaveHash, setArweaveHash] = useState("");
+  const [ipfsMetadataUri, setIpfsMetadataUri] = useState("");
   const { walletId } = useParams();
 
   const [titleError, setTitleError] = useState(false);
   const [authorError, setAuthorError] = useState(false);
   const [abstractError, setAbstractError] = useState(false);
+  const [submitState, setSubmitState] = useState(SubmitState.SUBMIT_REVIEW_PENDING);
 
-  const changeSelectedManuscriptFile = event => {
+  const clearForm = () => {
+    setSelectedManuscriptFile(undefined);
+    setAuthors([]);
+    setSelectedArticleCover(undefined);
+    setTalentPrice(0);
+    setArticleTitle("");
+    setAbstract("");
+    setBlockchain("Polygon");
+    setCategories([]);
+    setOptionTech(false);
+    setOptionHistory(false);
+    setOptionRomance(false);
+    setOptionComedy(false);
+    setOptionPolitics(false);
+    setIpfsMetadataUri("");
+    setSubmitState(SubmitState.SUBMIT_REVIEW_PENDING);
+  };
+
+  // todo: we are only using on polygon, so we can remove this
+  const talentDaoManagerContract = Object.entries(TalentDaoContracts[chain?.id] || {}).find(([_key, _value]) => _value?.chainId === String(chain?.id))?.[1]?.contracts?.TalentDaoManager;
+
+  const { config: talentDaoManagerContractConfig } = usePrepareContractWrite({
+    addressOrName: talentDaoManagerContract?.address,
+    contractInterface: talentDaoManagerContract?.abi,
+    functionName: "mintArticleNFT",
+    args: [address, arweaveHash, ipfsMetadataUri, !Number.isNaN(talentPrice) ? ethers.utils.parseEther("0") : ethers.utils.parseEther(String(talentPrice))],
+    onError(_err) {
+      if (_err) {
+        setSubmitState(SubmitState.SUBMIT_CONTINUE_ERROR);
+        console.error("On chain tx failed", _err);
+        notification.open({
+          message: "Submit failed!",
+          description: "Something went wrong while submitting the article, please try again.",
+          icon: "⚠️",
+        });
+      }
+    },
+  });
+  const {
+    data: onChainSubmitData,
+    write: doSubmitOnChain,
+  } = useContractWrite(talentDaoManagerContractConfig);
+
+  const waitForOnChainTransaction = useWaitForTransaction({
+    hash: onChainSubmitData?.hash,
+    timeout: 10_000,
+    onSettled(_data, _error) {
+      if (_data?.status === 1) {
+        notification.open({
+          message: "Article is now onchain",
+          description: "You have submitted your article== 😍",
+          icon: "🚀",
+        });
+        setSubmitState(SubmitState.SUBMIT_CONTINUE_COMPLETED);
+        clearForm();
+      } else {
+        setSubmitState(SubmitState.SUBMIT_CONTINUE_ERROR);
+      }
+    },
+  });
+
+  const createArticleMetadata = async (articleArweave: { id: any; contentType: any; }, coverImageArweave: { id: any; contentType: any; }, onSuccess: { (ipfsUri: any): Promise<void>; (arg0: string): void; }, onError: () => void) => {
+    const ipfsResult = await uploadIpfs({
+      version: "2.0.0",
+      mainContentFocus: PublicationMainFocus.IMAGE,
+      metadata_id: uuidv4(),
+      description: abstract,
+      locale: "en-US",
+      external_url: "https://arweave.net/" + articleArweave?.id,
+      image: null,
+      imageMimeType: null,
+      name: articleTitle,
+      media: [
+        {
+          item: "https://arweave.net/" + coverImageArweave?.id,
+          type: coverImageArweave?.contentType
+        }
+      ],
+      attributes: [
+        {
+          displayType: MetadataDisplayType.Number,
+          traitType: "price",
+          value: talentPrice
+        },
+        {
+          displayType: MetadataDisplayType.String,
+          traitType: "authors",
+          value: Array.isArray(authors) ? authors.join(",") : authors
+        },
+        {
+          displayType: MetadataDisplayType.String,
+          traitType: "chain",
+          value: blockchain
+        },
+        {
+          displayType: MetadataDisplayType.String,
+          traitType: "categories",
+          value: categories.join(",")
+        },
+        {
+          displayType: MetadataDisplayType.String,
+          traitType: "articleContentType",
+          value: articleArweave?.contentType
+        },
+      ],
+      tags: ["talentdao", "jodw"],
+      appId: "talentdao",
+    });
+    console.log("IPFS metadata upload result: ", ipfsResult);
+    onSuccess("ipfs://" + ipfsResult?.path);
+    // onError();
+  };
+
+  const changeSelectedManuscriptFile = (event: any) => {
     setSelectedManuscriptFile(event.target.files[0]);
   };
 
-  const changeTalentPrice = event => {
+  const changeTalentPrice = (event: any) => {
     setTalentPrice(event.target.value);
   };
 
-  const changeBlockchain = e => {
+  const changeBlockchain = (e: any) => {
     setBlockchain(e.target.value);
   };
 
-  const changeSelectedArticleCover = event => {
+  const changeSelectedArticleCover = (event: any) => {
     setSelectedArticleCover(event.target.files[0]);
   };
 
-  const changeArticleTitle = event => {
+  const changeArticleTitle = (event: any) => {
     setArticleTitle(event.target.value);
   };
 
-  const toBase64 = file =>
+  const toBase64 = (file: Blob) =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -55,18 +200,7 @@ const Submit = () => {
       reader.onerror = error => reject(error);
     });
 
-  const changeCategories = event => {
-    var options = event.target.options;
-    var categoriesSelected = [];
-    for (var i = 0, l = options.length; i < l; i++) {
-      if (options[i].selected) {
-        categoriesSelected.push(options[i].value);
-      }
-    }
-    setCategories(categoriesSelected);
-  };
-
-  const onSubmit = async () => {
+  const onSubmitReview = async () => {
     let isError = false;
     if (articleTitle === "") {
       setTitleError(true);
@@ -83,94 +217,104 @@ const Submit = () => {
 
     if (isError) return;
 
-    const server = "http://localhost:4001/";
-
-    const articleFile = selectedManuscriptFile
-      ? {
-        filename: selectedManuscriptFile.name,
-        data: selectedManuscriptFile ? await toBase64(selectedManuscriptFile) : "",
-      }
-      : {
-        filename: "",
-        data: "",
-      };
-
-    const articleCover = selectedArticleCover
-      ? {
-        filename: selectedArticleCover.name,
-        data: selectedArticleCover ? await toBase64(selectedArticleCover) : "",
-      }
-      : {
-        filename: "",
-        data: "",
-      };
-
-    // add categories here
-    let articleCategories = [];
-    if (optionTech) articleCategories.push("Technology");
-    if (optionHistory) articleCategories.push("History");
-    if (optionRomance) articleCategories.push("Romance");
-    if (optionComedy) articleCategories.push("Comedy");
-    if (optionPolitics) articleCategories.push("Politics");
-
-    // set up Arweave tx
-    const arweaveTx = await submitToArweave(articleFile);
-    console.log(arweaveTx);
-    try {
-      const res = await axios.post(server + "/api/article", {
-        walletId: walletId,
-        body: articleFile,
-        cover: articleCover,
-        price: talentPrice,
-        title: articleTitle,
-        authors: authors,
-        abstract: abstract,
-        blockchain: blockchain,
-        categories: articleCategories,
-        arweaveHash: arweaveTx.id.toString(),
-      });
-      console.log(res);
-      if (res.status === 200) {
-        // clear the form and send to the creators/authors profile pag
-      }
-    } catch (e) {
-      console.log(e);
+    if (submitState === SubmitState.SUBMIT_REVIEW_PENDING) {
+      setSubmitState(SubmitState.SUBMIT_UNDER_REVIEW);
     }
-
-    // set up onchain tx
-    submitOnChain(arweaveTx.id);
   };
 
-  const submitToArweave = async articleFile => {
+  const continueSubmissionAfterConfirmation = async ({ article: articleData, lensProfile }: any) => {
+
+    setSubmitState(SubmitState.SUBMIT_CONTINUE_PENDING);
+
+    const articleFile = articleData?.manuscriptFile
+      ? {
+        filename: articleData?.manuscriptFile?.name,
+        data: articleData?.manuscriptFile ? await toBase64(articleData?.manuscriptFile?.data) : "",
+      }
+      : {
+        filename: "",
+        data: "",
+      };
+
+    const articleCover = articleData?.coverImage
+      ? {
+        filename: articleData?.coverImage?.name,
+        data: articleData?.coverImage ? await toBase64(articleData?.coverImage?.data) : "",
+      }
+      : {
+        filename: "",
+        data: "",
+      };
+
+    // set up Arweave tx
+    const { result: arweaveTx, contentType: articleContentType } = await submitToArweave(articleFile);
+    const { result: coverImageArweaveTx, contentType: coverImageContentType } = await submitToArweave(articleCover);
+
+    // set up onchain tx
+    const articleArweave = { id: arweaveTx?.id, contentType: articleContentType };
+    const coverImageArweave = { id: coverImageArweaveTx?.id, contentType: coverImageContentType };
+    createArticleMetadata(articleArweave, coverImageArweave, async (ipfsUri: string) => {
+      try {
+        const res = await axios.post(server + "/api/article", {
+          ...articleData,
+          walletId: walletId,
+          body: articleFile,
+          cover: articleCover,
+          arweaveHash: arweaveTx.id.toString(),
+          lensCompatibleIpfsMetadata: ipfsUri,
+        });
+        console.log(res);
+        if (res.status === 200) {
+          setArweaveHash(articleArweave?.id);
+          setIpfsMetadataUri(ipfsUri);
+          publishToLensProfile(ipfsUri, lensProfile);
+        }
+      } catch (e) {
+        console.error("Save article to JoDW backend failed: ", e);
+      }
+    }, () => {});
+  };
+
+  const publishToLensProfile = async (ipfsUri: string, lensProfile: { id: any; }) => {
+    if (!lensProfile?.id) {
+      console.warn("Lens profile not connected/available, skipping lens publish!");
+      return;
+    }
+    try {
+      const results = await apolloClient.mutate({
+        mutation: CREATE_POST,
+        variables: { profileId: lensProfile.id, ipfsUri: ipfsUri },
+        context: {
+          headers: {
+            "x-access-token": lensAuthData?.accessToken ? `Bearer ${lensAuthData?.accessToken}` : "",
+          },
+        }
+      });
+      console.log("LENS PUBLISH RESULTS ", results);
+    } catch (error) {
+      console.error("Unable to publish to lens: ", error);
+    }
+  };
+
+  useEffect(() => {
+    if (submitState !== SubmitState.SUBMIT_CONTINUE_PENDING) {
+      return;
+    }
+
+    if (arweaveHash !== "" && ipfsMetadataUri !== "" && doSubmitOnChain) {
+      doSubmitOnChain?.();
+    }
+  }, [ipfsMetadataUri, doSubmitOnChain]);
+
+  const submitToArweave = async (file: { filename?: any; data: any; }) => {
     //
-    const result = await sendTransacton(articleFile.toString(), "appllication/pdf", categories);
+    const fileData = file.data;
+    const contentType = fileData.substring(5, fileData.indexOf(";", 5));
+    const result = await sendTransacton(fileData.substring(fileData.indexOf(",") + 1), contentType, categories);
     console.log("Result: ", result);
     console.log("Tx Id: ", result.id);
 
-    return result;
-  };
-
-  const submitOnChain = async arweaveHash => {
-    await tx(
-      writeContracts &&
-        writeContracts.TalentDaoManager &&
-        writeContracts.TalentDaoManager.addArticle(
-          address,
-          arweaveHash,
-          "ipfs meta data pointer",
-          ethers.utils.parseEther("10"),
-        ),
-      async update => {
-        console.log("📡 Transaction Update:", update);
-        if (update.status === 1) {
-          notification.open({
-            message: "Article is now onchain",
-            description: "You have submitted your article== 😍",
-            icon: "🚀",
-          });
-        }
-      },
-    );
+    return { result, contentType };
   };
 
   useEffect(() => {
@@ -181,9 +325,43 @@ const Submit = () => {
     preview.style.display = "block";
   }, [selectedArticleCover]);
 
-  useEffect(() => {
-    console.log("ETH Address: ", address);
-  }, [address]);
+  const articleFormData = {
+    title: articleTitle,
+    abstract: abstract,
+    manuscriptFile: {
+      name: selectedManuscriptFile?.name,
+      data: selectedManuscriptFile
+    },
+    coverImage: {
+      name: selectedArticleCover?.name,
+      data: selectedArticleCover
+    },
+    price: talentPrice,
+    authors: authors,
+    blockchain: blockchain,
+    categories: [
+      optionTech && "Technology",
+      optionComedy && "Comedy",
+      optionHistory && "History",
+      optionPolitics && "Politics",
+      optionRomance && "Romance",
+    ].filter(_c => _c),
+  };
+
+  const onSubmitSuccess = (result: { article: any; lensProfile: any; }) => {
+    console.log("SUBMIT success: ", result);
+    continueSubmissionAfterConfirmation(result);
+  };
+
+  const onSubmitError = (error: any) => {
+    console.error("Error submitting: ", error);
+    setSubmitState(SubmitState.SUBMIT_REVIEW_ERROR);
+  };
+
+  // For debugging:
+  // useEffect(() => {
+  //   console.log("SUBMIT STATE: ", submitState);
+  // }, [submitState]);
 
   return (
     <div className="" style={{ backgroundImage: "linear-gradient(#fff, #EEEE" }}>
@@ -317,7 +495,7 @@ const Submit = () => {
                     id="article-title"
                     placeholder="e.g John Doe"
                     value={authors}
-                    onChange={e => setAuthors(...[e.target.value])}
+                    onChange={e => setAuthors([e.target.value])}
                     className="my-1 p-4 bg-transparent rounded-xl block w-full focus:outline-none text-lg border border-black "
                   />
                   {authorError && (
@@ -574,14 +752,33 @@ const Submit = () => {
                 </div>
               </div>
 
-              <div className="flex justify-center">
-                <button
-                  type="button"
-                  onClick={onSubmit}
-                  className="bg-primary text-white py-2 px-6 rounded-full text-lg"
-                >
-                  SUBMIT
-                </button>
+              <div className="flex justify-center justify-items-center">
+                {(submitState === SubmitState.SUBMIT_REVIEW_PENDING || submitState === SubmitState.SUBMIT_REVIEW_ERROR) &&
+                  <button
+                    type="button"
+                    onClick={onSubmitReview}
+                    disabled={(() => submitState !== SubmitState.SUBMIT_REVIEW_PENDING)()}
+                    className="bg-primary text-white py-2 px-6 rounded-full text-lg"
+                  >
+                    SUBMIT
+                  </button>
+                }
+
+                {submitState === SubmitState.SUBMIT_CONTINUE_PENDING &&
+                  <button type="button" className="bg-primary text-white py-2 px-6 rounded-full text-lg" disabled>
+                    <svg className="inline animate-spin h-5 w-5 mr-3 text-center" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Submitting...
+                  </button>
+                }
+                <SubmitArticleModal
+                  article={articleFormData}
+                  isOpen={(() => submitState === SubmitState.SUBMIT_UNDER_REVIEW)()}
+                  onSuccess={onSubmitSuccess}
+                  onSubmitError={onSubmitError}
+                />
               </div>
             </div>
           </div>

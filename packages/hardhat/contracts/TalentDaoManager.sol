@@ -86,11 +86,13 @@ contract TalentDaoManager is Ownable, AuthorEntity, AccessControl, TokenRecover 
     }
 
 
-    function mintArticleNFT(address owner, string memory metadataPtr, uint256 amount)
+    function mintArticleNFT(address owner, string memory arweaveHash, string memory metadataPtr, uint256 amount)
         public
         returns (uint256)
     {
-        (uint256 newItemId) = articleNft.mintNFTForArticle(owner, metadataPtr, amount);
+        console.log("Reached here");
+        (uint256 newItemId) = articleNft.mintNFTForArticle(owner, arweaveHash, metadataPtr, amount);
+        console.log("TalentDaoManager: newItemId=", newItemId);
 
         return (newItemId);
     }
@@ -105,6 +107,27 @@ contract TalentDaoManager is Ownable, AuthorEntity, AccessControl, TokenRecover 
     function tipAuthorEth() public payable {
         (bool success, ) = msg.sender.call{ value: msg.value }("");
         if(!success) revert FailedTransfer();
+    }
+
+    
+    function symbol() public pure returns (string memory) {
+        return "TDAO";
+    }
+
+
+    function decimals() public pure returns (uint8) {
+        return 18;
+    }
+
+
+    fallback() external payable {
+        console.log("FALLBACK triggered");
+        console.logBytes4(msg.sig);
+    }
+
+
+    receive() external payable {
+        console.log("RECIEVE triggered");
     }
     
 }

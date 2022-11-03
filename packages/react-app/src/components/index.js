@@ -29,3 +29,5 @@ export { default as UserPublications } from "./UserPublications";
 export { default as UserConnect } from "./UserConnect";
 export { default as UserSubmissions } from "./UserSubmissions";
 export { default as PublicationCard } from "./PublicationCard";
+export { default as SubmitArticleModal } from "./SubmitArticleModal";
+export { default as ArticlePreview } from "./ArticlePreview";

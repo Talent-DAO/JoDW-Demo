@@ -12,10 +12,10 @@ const activeChains = [];
 if (process.env.REACT_APP_ENV === "production") {
   activeChains.push(chain.polygon);
 } else {
-  activeChains.push(chain.goerli, chain.polygonMumbai);
   if (useLocalHardhatFork) {
     activeChains.push(chain.hardhat);
   }
+  activeChains.push(chain.goerli, chain.polygonMumbai);
 }
 
 export const { chains, provider, webSocketProvider } = configureChains(activeChains, [
