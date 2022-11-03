@@ -1,11 +1,35 @@
 import { Fragment, useState } from "react";
 import notificationImage from "../../assets/notification.png";
 import { Dialog, Menu, Transition } from "@headlessui/react";
+import NavNotificationItem from "./NavNotificationItem";
 
-const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
+const notifications = [
+  { 
+    title: "on Metaverse, NFT & DEFI, the new wave",
+    state: "Comment",
+    date: "18 MAR, 2022. 10:43",
+    content: "Lorem ipsum dolor sit amet, consectetur adipis elit, sed do eiusmod tempor incidid"
+  },{ 
+    title: "on Metaverse, NFT & DEFI, the new wave",
+    state: "Published",
+    date: "18 MAR, 2022. 10:43",
+    content: "Lorem ipsum dolor sit amet, consectetur adipis elit, sed do eiusmod tempor incidid"
+  },{ 
+    title: "on Metaverse, NFT & DEFI, the new wave",
+    state: "Revised",
+    date: "18 MAR, 2022. 10:43",
+    content: "Lorem ipsum dolor sit amet, consectetur adipis elit, sed do eiusmod tempor incidid"
+  },{ 
+    title: "on Metaverse, NFT & DEFI, the new wave",
+    state: "Comment",
+    date: "18 MAR, 2022. 10:43",
+    content: "Lorem ipsum dolor sit amet, consectetur adipis elit, sed do eiusmod tempor incidid"
+  },{ 
+    title: "on Metaverse, NFT & DEFI, the new wave",
+    state: "Comment",
+    date: "18 MAR, 2022. 10:43",
+    content: "Lorem ipsum dolor sit amet, consectetur adipis elit, sed do eiusmod tempor incidid"
+  }
 ];
 
 function classNames(...classes) {
@@ -13,6 +37,7 @@ function classNames(...classes) {
 }
 
 const NavNotification = () => {
+
   return (
     <Menu as="div" className="relative ml-3">
       <div>
@@ -30,23 +55,18 @@ const NavNotification = () => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-          <div className="flex flex-row">
-            <span>Notifications</span>
-            <></>
+        <Menu.Items className="absolute right-0 z-10 mt-2 w-80 origin-top-right rounded-xl bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none bg-guyabano overflow-hidden">
+          <div className="flex flex-row justify-between items-center p-2">
+            <span className="text-darkblack font-bold text-lg">Notifications</span>
+            <a className="text-sm cursor-pointer text-textgrey">Mark all as read</a>
           </div>
-          {userNavigation.map(item => (
-            <Menu.Item key={item.name}>
-              {({ active }) => (
-                <a
-                  href={item.href}
-                  className={classNames(active ? "bg-gray-100" : "", "block px-4 py-2 text-sm text-gray-700")}
-                >
-                  {item.name}
-                </a>
-              )}
-            </Menu.Item>
-          ))}
+          <div className="divide-y bg-white p-2 divide-bordergrey">
+            {notifications.map((notification, index) => (
+              <Menu.Item key={index} className="">
+                <NavNotificationItem notification={notification} />
+              </Menu.Item>
+            ))}
+          </div>
         </Menu.Items>
       </Transition>
     </Menu>
