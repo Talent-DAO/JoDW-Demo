@@ -33,9 +33,13 @@ export async function sendTransacton(data, contentType, categories) {
     },
     arJWK,
   );
-  // Examples
-  transaction.addTag("Content-Type", `${contentType}`);
-  transaction.addTag("Category", `${categories[0] && categories[0]}`);
+  // tags
+  if(contentType) transaction.addTag("Content-Type", `${contentType}`);
+  if (categories) {
+    categories.forEach((category) => {
+      transaction.addTag("Category", `${category}`);
+    });
+  }
   transaction.addTag("Publisher", "JoDW");
   console.log(transaction);
 

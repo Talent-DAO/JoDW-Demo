@@ -21,6 +21,7 @@ import {
   SearchView,
   SubgraphView,
   SubmitView,
+  SubmitLensView,
   TermsOfServiceView,
   TokenView,
   UserView,
@@ -114,6 +115,7 @@ const App = ({ ...props }) => {
             </Route>
             <Route path="/debug" />
             <Route path="/submit/:walletId" element={<SubmitView />} />
+            <Route path="/submit-lens" element={<SubmitLensView />} />
             <Route path="/termsofservice" element={<TermsOfServiceView />} />
             <Route path="/privacypolicy" element={<PrivacyPolicyView />} />
             <Route path="/subgraph" element={<SubgraphView subgraphUri={props.subgraphUri} />} />
