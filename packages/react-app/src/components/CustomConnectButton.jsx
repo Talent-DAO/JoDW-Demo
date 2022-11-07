@@ -1,4 +1,24 @@
+import { Fragment } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import walletImage from "../assets/wallet.png";
+import visitImage from "../assets/icon_visit.png";
+import editImage from "../assets/icon_edit.png";
+import copyImage from "../assets/icon_copy.png";
+import logoutImage from "../assets/icon_logout.png";
+import { Menu, Transition } from "@headlessui/react";
+import { ChevronUpIcon } from "@heroicons/react/20/solid";
+
+const CustomItem = ({image, text, func, hasChild}) => {
+  return (
+    <div className="flex flex-row space-x-2 p-2 rounded-xl border border-bordergrey items-center cursor-pointer" onClick={func}>
+      <img src={image} className="w-4 h-4"/>
+      <span className="font-semibold font-mont" onClick={func}>{text}</span>
+      {
+        hasChild ? <ChevronUpIcon className="rotate-90 transform h-5 w-5 text-primary focus:outline-none" /> : null
+      }
+    </div>
+  );
+};
 
 const CustomConnectButton = () => {
   return (
@@ -25,11 +45,12 @@ const CustomConnectButton = () => {
               if (!connected) {
                 return (
                   <button
-                    className="w-full rounded-full bg-primary text-white text-md px-8 py-3 cursor-pointer whitespace-nowrap font-mont font-medium"
+                    className="w-full flex text-center flex-row items-center space-x-2 rounded-full bg-bgred text-primary border border-primary text-md px-2 py-2 cursor-pointer whitespace-nowrap font-mont font-medium"
                     onClick={openConnectModal}
                     type="button"
                   >
-                    Connect Wallet
+                    <img className="w-6 h-6 rounded-full" src={walletImage} />
+                    <span className="font-bold">Connect Wallet</span>
                   </button>
                 );
               }
@@ -37,25 +58,54 @@ const CustomConnectButton = () => {
               if (chain.unsupported) {
                 return (
                   <button
-                    className="w-full rounded-full bg-primary text-white text-md px-8 py-3 cursor-pointer whitespace-nowrap font-mont font-medium"
+                    className="w-full flex flex-row items-center space-x-2 rounded-full bg-bgred text-primary border border-primary text-md px-2 py-2 cursor-pointer whitespace-nowrap font-mont font-medium"
                     onClick={openChainModal}
                     type="button"
                   >
-                    Wrong Network
+                    <img className="w-6 h-6 rounded-full" src={walletImage} />
+                    <span className="font-bold">Wrong Network</span>
                   </button>
                 );
               }
 
               return (
                 <div style={{ display: "flex", gap: 12 }}>
-                  <button
-                    className="w-full rounded-full bg-primary text-white text-md px-8 py-2 cursor-pointer whitespace-nowrap"
-                    onClick={openAccountModal}
-                    type="button"
-                  >
-                    {account.displayName}
-                    {account.displayBalance ? ` (${account.displayBalance})` : ""}
-                  </button>
+                  <Menu as="div" className="relative ml-3">
+                    <div>
+                      <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm">
+                        <span className="sr-only">Open login menu</span>
+                        <button
+                          className="w-full flex flex-row items-center space-x-2 rounded-full bg-bgred text-primary border border-primary text-md px-2 py-2 cursor-pointer whitespace-nowrap font-mont font-medium"
+                          // onClick={openAccountModal}
+                          type="button"
+                        >
+                          <img className="w-6 h-6 rounded-full" src={walletImage} />
+                          <span className="font-bold">
+                            {account.displayName}
+                            {/* {account.displayBalance ? ` (${account.displayBalance})` : ""} */}
+                          </span>
+                          <ChevronUpIcon className="rotate-180 transform h-5 w-5 text-primary bg-bgred focus:outline-none" />
+                        </button>
+                      </Menu.Button>
+                    </div>
+                    <Transition
+                      as={Fragment}
+                      enter="transition ease-out duration-100"
+                      enterFrom="transform opacity-0 scale-95"
+                      enterTo="transform opacity-100 scale-100"
+                      leave="transition ease-in duration-75"
+                      leaveFrom="transform opacity-100 scale-100"
+                      leaveTo="transform opacity-0 scale-95"
+                    >
+                      <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-xl bg-white p-2 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none space-y-2">
+                        <CustomItem image={walletImage} text="View Dashboard" hasChild />
+                        <CustomItem image={visitImage} text="Visit Public Profile" />
+                        <CustomItem image={editImage} text="Edit Profile" />
+                        <CustomItem image={copyImage} text={account.displayName} />
+                        <CustomItem image={logoutImage} text="Log Out" func={openAccountModal} />
+                      </Menu.Items>
+                    </Transition>
+                  </Menu>
                 </div>
               );
             })()}
@@ -65,46 +115,5 @@ const CustomConnectButton = () => {
     </ConnectButton.Custom>
   );
 };
-
-// {/* Profile dropdown */}
-// <Menu as="div" className="relative ml-3">
-// <div>
-//   <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-//     <span className="sr-only">Open user menu</span>
-//     <img
-//       className="h-8 w-8 rounded-full"
-//       src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-//       alt=""
-//     />
-//   </Menu.Button>
-// </div>
-// <Transition
-//   as={Fragment}
-//   enter="transition ease-out duration-100"
-//   enterFrom="transform opacity-0 scale-95"
-//   enterTo="transform opacity-100 scale-100"
-//   leave="transition ease-in duration-75"
-//   leaveFrom="transform opacity-100 scale-100"
-//   leaveTo="transform opacity-0 scale-95"
-// >
-//   <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-//     {userNavigation.map(item => (
-//       <Menu.Item key={item.name}>
-//         {({ active }) => (
-//           <a
-//             href={item.href}
-//             className={classNames(
-//               active ? "bg-gray-100" : "",
-//               "block px-4 py-2 text-sm text-gray-700",
-//             )}
-//           >
-//             {item.name}
-//           </a>
-//         )}
-//       </Menu.Item>
-//     ))}
-//   </Menu.Items>
-// </Transition>
-// </Menu>
 
 export default CustomConnectButton;

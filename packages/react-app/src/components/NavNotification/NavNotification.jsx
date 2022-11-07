@@ -1,6 +1,6 @@
 import { Fragment, useState } from "react";
 import notificationImage from "../../assets/notification.png";
-import { Dialog, Menu, Transition } from "@headlessui/react";
+import { Menu, Transition } from "@headlessui/react";
 import NavNotificationItem from "./NavNotificationItem";
 
 const notifications = [
