@@ -11,7 +11,7 @@ export { default as Footer } from "./Footer";
 export { default as InputWithButton } from "./InputWithButton";
 export { default as LatestPublications } from "./LatestPublications";
 export { default as Navbar } from "./Navbar";
-export { default as NavNotification } from "./NavNotification/NavNotification";
+export { default as NavNotification } from "./dashboard/NavNotification";
 export { default as Newsletter } from "./Newsletter";
 export { default as NotificationCard } from "./NotificationCard";
 export { default as Notifications } from "./Notifications";

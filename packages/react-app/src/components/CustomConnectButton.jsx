@@ -7,11 +7,12 @@ import copyImage from "../assets/icon_copy.png";
 import logoutImage from "../assets/icon_logout.png";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronUpIcon } from "@heroicons/react/20/solid";
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 
-const CustomItem = ({image, text, func, hasChild}) => {
+const CustomItem = ({Icon, image, text, func, hasChild}) => {
   return (
-    <div className="flex flex-row space-x-2 p-2 rounded-xl border border-bordergrey items-center cursor-pointer" onClick={func}>
-      <img src={image} className="w-4 h-4"/>
+    <div className="flex flex-row space-x-2 p-2 rounded-lg border border-bordergrey items-center cursor-pointer hover:bg-bordergrey" onClick={func}>
+      { image ? <img src={image} className="w-5 h-5" /> : <Icon className="w-5 h-5 text-primary"/>}
       <span className="font-semibold font-mont" onClick={func}>{text}</span>
       {
         hasChild ? <ChevronUpIcon className="rotate-90 transform h-5 w-5 text-primary focus:outline-none" /> : null
@@ -97,7 +98,7 @@ const CustomConnectButton = () => {
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95"
                     >
-                      <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-xl bg-white p-2 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none space-y-2">
+                      <Menu.Items className="absolute right-0 z-10 mt-2 w-52 origin-top-right rounded-xl bg-white p-2 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none space-y-2">
                         <CustomItem image={walletImage} text="View Dashboard" hasChild />
                         <CustomItem image={visitImage} text="Visit Public Profile" />
                         <CustomItem image={editImage} text="Edit Profile" />

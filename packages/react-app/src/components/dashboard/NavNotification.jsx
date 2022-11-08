@@ -2,6 +2,7 @@ import { Fragment, useState } from "react";
 import notificationImage from "../../assets/notification.png";
 import { Menu, Transition } from "@headlessui/react";
 import NavNotificationItem from "./NavNotificationItem";
+import { BellIcon } from "@heroicons/react/24/outline";
 
 const notifications = [
   { 
@@ -32,10 +33,6 @@ const notifications = [
   }
 ];
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
-
 const NavNotification = () => {
 
   return (
@@ -43,7 +40,7 @@ const NavNotification = () => {
       <div>
         <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
           <span className="sr-only">View notifications</span>
-          <img className="h-9 w-9" aria-hidden="true" src={notificationImage} />
+          <BellIcon className="h-8 w-8 rounded-full text-primary bg-bgred p-1"/>
         </Menu.Button>
       </div>
       <Transition

@@ -41,9 +41,9 @@ const App = ({ ...props }) => {
 const DashboardApp = ({ ...props }) => {
   return (
     <Routes>
-      <Route path="/author" element={<AuthorDashboard />} />
-      <Route path="/reviewer" element={<AuthorDashboard />} />
-      <Route path="/publisher" element={<AuthorDashboard />} />
+      <Route path="/author/*" element={<AuthorDashboard />} />
+      <Route path="/reviewer/*" element={<AuthorDashboard />} />
+      <Route path="/publisher/*" element={<AuthorDashboard />} />
     </Routes>
   );
 };
