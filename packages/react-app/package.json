@@ -59,7 +59,7 @@
     "key-did-resolver": "^1.4.4",
     "lens-protocol": "^0.1.5",
     "mongodb": "^4.4.0",
-    "mongoose": "^6.2.3",
+    "mongoose": "^6.4.6",
     "node-watch": "^0.7.1",
     "openlaw": "0.2.47",
     "postcss": "^7",
