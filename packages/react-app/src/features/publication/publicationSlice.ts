@@ -48,6 +48,13 @@ const getLatestPublications = createAsyncThunk(
     getLatestArticles();
   });
 
+const postPublication = createAsyncThunk(
+  "publication/postPublication",
+  async (publication: TPublication) => {
+    // todo:
+  });
+
+
 export const publicationSlice = createSlice({
   name: "publication",
   initialState,
@@ -97,6 +104,17 @@ export const publicationSlice = createSlice({
         state.publications?.push(action.payload);
       })
       .addCase(getLatestPublications.rejected, (state, action: PayloadAction<string | any>) => {
+        state.status = Status.Failed;
+        state.error = action.payload;
+      })
+      .addCase(postPublication.pending, state => {
+        state.status = Status.Loading;
+      })
+      .addCase(postPublication.fulfilled, (state) => {
+        state.status = Status.Success;
+        state.error = undefined;
+      })
+      .addCase(postPublication.rejected, (state, action: PayloadAction<string | any>) => {
         state.status = Status.Failed;
         state.error = action.payload;
       });

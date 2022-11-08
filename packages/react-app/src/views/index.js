@@ -9,6 +9,7 @@ export { default as PrivacyPolicyView } from "./PrivacyPolicy";
 export { default as SearchView } from "./Search";
 export { default as SubgraphView } from "./Subgraph";
 export { default as SubmitView } from "./Submit";
+export { default as SubmitLensView } from "./SubmitLensPublication";
 export { default as TermsOfServiceView } from "./TermsOfService";
 export { default as TokenView } from "./Token";
 export { default as UserView } from "./User";
