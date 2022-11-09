@@ -46,7 +46,7 @@ const App = ({ ...props }) => {
   useEffect(() => {
     dispatch<any>(fetchUserStart());
     dispatch<any>(accountUpdated(address));
-    dispatch<any>(userWalletUpdated({ walletId: address }));
+    dispatch<any>(userWalletUpdated(address));
   }, [address, dispatch]);
 
   return (

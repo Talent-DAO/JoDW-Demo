@@ -22,7 +22,7 @@ export type LensUser = {
 }
 
 export type User = {
-  walletId: string | undefined;
+  walletId: string;
   lensProfile: LensUser;
   status: Status;
 }
@@ -96,9 +96,9 @@ export const userSlice = createSlice({
       state.lensAuth.status = Status.Failed;
     },
     // Update user profile reducers
-    userWalletUpdated: (state: UserRootState, action: PayloadAction<User>) => {
+    userWalletUpdated: (state: UserRootState, action: PayloadAction<string>) => {
       // this is only updating the user wallet id, not the lens profile which is fetched separately
-      state.user.walletId = action.payload.walletId;
+      state.user.walletId = action.payload;
       state.status = Status.Success;
     },
   },
