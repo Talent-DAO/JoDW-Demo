@@ -1,6 +1,21 @@
-const Tab = ({tabs}) => {
+import { NavLink } from "react-router-dom";
+
+const Tab = ({ tabs }) => {
   return (
-    <div></div>
+    <nav className="space-x-6 pb-3 font-mont">
+      {tabs.map(tab => {
+        return (
+          <NavLink
+            to={tab.href}
+            className={({ isActive }) => {
+              return isActive ? "text-black font-semibold" : "text-textgrey";
+            }}
+          >
+            {tab.name}
+          </NavLink>
+        );
+      })}
+    </nav>
   );
 };
 

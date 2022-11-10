@@ -17,8 +17,8 @@ const AuthorDashboard = () => {
     <DashboardLayout navigation={navigation}>
       <Routes>
         <Route index element={<HomeView />} />
-        <Route path="/home" element={<HomeView />} />
-        <Route path="/publification" element={<PublificationView />} />
+        <Route path="/home/*" element={<HomeView />} />
+        <Route path="/publification/*" element={<PublificationView />} />
         <Route path="/settings" element={<SettingsView />} />
       </Routes>
     </DashboardLayout>

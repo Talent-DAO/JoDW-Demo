@@ -6,6 +6,7 @@ import SidebarItem from "./SidebarItem";
 import CustomConnectButton from "../CustomConnectButton";
 import NavNotification from "./NavNotification";
 import { Bars3Icon, XCircleIcon, BellIcon } from "@heroicons/react/24/outline";
+import ImageButton from "./ImageButton";
 
 const DashboardLayout = ({ navigation, children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -54,9 +55,8 @@ const DashboardLayout = ({ navigation, children }) => {
                         <SidebarItem item={item} />
                       ))}
                     </div>
-                    <div className="mt-48 group flex items-center px-2 py-2 text-sm font-medium rounded-md hover:text-primary bg-bgred text-primary cursor-pointer">
-                      <img src={discordImage} className="mx-3 flex-shrink-0 h-3 w-4" />
-                      <span>Community</span>
+                    <div className="mt-48">
+                      <ImageButton text="Community" image={discordImage} />
                     </div>
                     <div className="absolute bottom-12 flex flex-col space-y-4 items-center">
                       <div className="mt-48 group flex items-center px-2 py-2 text-sm font-medium rounded-md hover:text-primary cursor-pointer">
@@ -83,18 +83,17 @@ const DashboardLayout = ({ navigation, children }) => {
           <div className="flex flex-shrink-0 items-center px-4">
             <img className="h-10 w-auto" src={logoImage} alt="TalentDAO" />
           </div>
-          <div className="mt-24 flex flex-grow flex-col">
+          <div className="mt-24 flex flex-col">
             <nav className="flex-1 px-2 pb-4">
               <div className="space-y-1">
                 {navigation.map(item => (
                   <SidebarItem item={item} />
                 ))}
               </div>
-              <div className="mt-48 group flex items-center px-2 py-2 text-sm font-medium rounded-md hover:text-primary bg-bgred text-primary cursor-pointer">
-                <img src={discordImage} className="mx-3 flex-shrink-0 h-3 w-4" />
-                <span>Community</span>
-              </div>
             </nav>
+            <div className="mt-48">
+              <ImageButton text="Community" image={discordImage} />
+            </div>
           </div>
         </div>
       </div>

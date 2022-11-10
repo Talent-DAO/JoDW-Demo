@@ -46,7 +46,7 @@ const CustomConnectButton = () => {
               if (!connected) {
                 return (
                   <button
-                    className="w-full flex text-center flex-row items-center space-x-2 rounded-full bg-bgred text-primary border border-primary text-md px-2 py-2 cursor-pointer whitespace-nowrap font-mont font-medium"
+                    className="w-full flex flex-row items-center space-x-2 rounded-full bg-bgred text-primary border border-primary text-md px-2 py-2 cursor-pointer whitespace-nowrap font-mont font-medium justify-center"
                     onClick={openConnectModal}
                     type="button"
                   >
@@ -59,7 +59,7 @@ const CustomConnectButton = () => {
               if (chain.unsupported) {
                 return (
                   <button
-                    className="w-full flex flex-row items-center space-x-2 rounded-full bg-bgred text-primary border border-primary text-md px-2 py-2 cursor-pointer whitespace-nowrap font-mont font-medium"
+                    className="w-full flex flex-row items-center space-x-2 rounded-full bg-bgred text-primary border border-primary text-md px-2 py-2 cursor-pointer whitespace-nowrap font-mont font-medium justify-center"
                     onClick={openChainModal}
                     type="button"
                   >

@@ -1,5 +1,4 @@
 import { Fragment, useState } from "react";
-import notificationImage from "../../assets/notification.png";
 import { Menu, Transition } from "@headlessui/react";
 import NavNotificationItem from "./NavNotificationItem";
 import { BellIcon } from "@heroicons/react/24/outline";
