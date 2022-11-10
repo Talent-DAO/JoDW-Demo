@@ -98,7 +98,7 @@ const DashboardLayout = ({ navigation, children }) => {
           </div>
         </div>
       </div>
-      <div className="flex flex-1 flex-col md:pl-64">
+      <div className="flex flex-1 flex-col md:pl-64 min-h-screen">
         <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white">
           <div className="flex flex-shrink-0 items-center px-4 md:hidden">
             <img className="h-10 w-auto" src={logoImage} alt="TalentDAO" />
@@ -120,7 +120,7 @@ const DashboardLayout = ({ navigation, children }) => {
           </div>
         </div>
 
-        <main className="flex-1 bg-guyabano">{children}</main>
+        <main className="flex-1 bg-guyabano grow">{children}</main>
       </div>
     </div>
   );

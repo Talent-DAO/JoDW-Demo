@@ -1,6 +1,9 @@
 import { FolderIcon, HomeIcon, AdjustmentsVerticalIcon, PowerIcon } from "@heroicons/react/24/outline";
-import DashboardLayout from "../components/dashboard/DashboardLayout";
+import DashboardLayout from "../../components/dashboard/DashboardLayout";
 import { Route, Routes } from "react-router-dom";
+import HomeView from "./author/HomeView";
+import PublificationView from "./author/PublificationView";
+import SettingsView from "./author/SettingsView";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard/author/home", icon: HomeIcon },
@@ -9,21 +12,14 @@ const navigation = [
   // { name: "Log Out", href: "#", icon: PowerIcon},
 ];
 
-const HomeView = () => {
-  return <div>HomeView</div>;
-};
-
-const MyPub = () => {
-  return <div>MyPub</div>;
-};
-
 const AuthorDashboard = () => {
   return (
     <DashboardLayout navigation={navigation}>
       <Routes>
         <Route index element={<HomeView />} />
         <Route path="/home" element={<HomeView />} />
-        <Route path="/publification" element={<MyPub />} />
+        <Route path="/publification" element={<PublificationView />} />
+        <Route path="/settings" element={<SettingsView />} />
       </Routes>
     </DashboardLayout>
   );
