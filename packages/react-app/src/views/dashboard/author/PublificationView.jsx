@@ -1,7 +1,5 @@
 const PublificationView = () => {
-  return (
-    
-  )
+  return <div></div>;
 };
 
 export default PublificationView;
