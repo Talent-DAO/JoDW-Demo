@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import HomeView from "./author/HomeView";
 import PublificationView from "./author/PublificationView";
 import SettingsView from "./author/SettingsView";
+import AuthorsView from "./author/AuthorsView";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard/author/home", icon: HomeIcon },
@@ -20,6 +21,7 @@ const AuthorDashboard = () => {
         <Route path="/home/*" element={<HomeView />} />
         <Route path="/publification/*" element={<PublificationView />} />
         <Route path="/settings" element={<SettingsView />} />
+        <Route path="/authors" element={<AuthorsView />} />
       </Routes>
     </DashboardLayout>
   );

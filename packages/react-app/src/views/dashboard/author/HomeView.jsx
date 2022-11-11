@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ActionBar from "../../../components/dashboard/ActionBar";
 import imageSubmit from "../../../assets/submit.png";
 import imageBrowse from "../../../assets/browse.png";
@@ -15,6 +16,8 @@ const publificationsTabs = [
 
 const HomeView = () => {
   const [showAlert, setShowAlert] = useState(true);
+  const navigate = useNavigate();
+
   return (
     <div className="p-6 flex flex-col space-y-6">
       {showAlert ? (
@@ -45,7 +48,7 @@ const HomeView = () => {
           desc="Authors"
           image={[imageBrowse, imageBrowse, imageBrowse]}
           onClick={() => {
-            console.log("TIGER");
+            navigate("/dashboard/author/authors");
           }}
         />
       </div>
@@ -75,7 +78,7 @@ const HomeView = () => {
             desc="Authors"
             image={[imageBrowse, imageBrowse, imageBrowse]}
             onClick={() => {
-              console.log("TIGER");
+              navigate("/dashboard/author/authors");
             }}
           />
         </div>
