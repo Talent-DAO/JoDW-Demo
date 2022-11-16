@@ -32,7 +32,7 @@ const HomeView = () => {
           desc="Make a Submission"
           image={imageSubmit}
           onClick={() => {
-            console.log("TIGER");
+            navigate("/dashboard/author/submit");
           }}
         />
         <ActionBar
@@ -62,7 +62,7 @@ const HomeView = () => {
             desc="Make a Submission"
             image={imageSubmit}
             onClick={() => {
-              console.log("TIGER");
+              navigate("/dashboard/author/submit");
             }}
           />
           <ActionBar

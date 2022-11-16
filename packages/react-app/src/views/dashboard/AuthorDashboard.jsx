@@ -5,6 +5,7 @@ import HomeView from "./author/HomeView";
 import PublificationView from "./author/PublificationView";
 import SettingsView from "./author/SettingsView";
 import AuthorsView from "./author/AuthorsView";
+import SubmitView from "./author/SubmitView";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard/author/home", icon: HomeIcon },
@@ -22,6 +23,7 @@ const AuthorDashboard = () => {
         <Route path="/publification/*" element={<PublificationView />} />
         <Route path="/settings" element={<SettingsView />} />
         <Route path="/authors" element={<AuthorsView />} />
+        <Route path="/submit" element={<SubmitView />} />
       </Routes>
     </DashboardLayout>
   );
