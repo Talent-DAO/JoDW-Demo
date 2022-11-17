@@ -40,7 +40,8 @@ contract ArticleNft is Ownable, ERC721URIStorage, AuthorEntity {
     /// @dev this is internal mint function
     /// @param ownerAddress the user that is minting the token address
     /// @param amount the amount of tdao tokens submitting
-    function mintNFTForArticle(address ownerAddress, string memory arweaveHash, string memory metadataPtr, uint256 amount)
+    /// @param metadataPtr the metadata uri for the nft
+    function mintNFTForArticle(address ownerAddress, string memory metadataPtr, uint256 amount)
         public
         returns (uint256)
     {
@@ -51,33 +52,17 @@ contract ArticleNft is Ownable, ERC721URIStorage, AuthorEntity {
         //tDaoToken.transferFrom(ownerAddress, treasury, amount);
 
         _tokenIds.increment();
-        uint256 authorId;
 
-        (uint256 articleId) = addArticle(ownerAddress, arweaveHash, metadataPtr, amount);
-        console.log("ArticleNft: addArticle");
-        Article storage article = articles[arweaveHash];
+        addArticle(ownerAddress, metadataPtr, amount);
+        Article storage article = articles[metadataPtr];
         article.author = ownerAddress;
         article.metadataPtr = metadataPtr;
         article.paid = amount;
 
-        console.log("ArticleNft: added article");
-        // check if author exists first
-        Author storage author = authors[ownerAddress];
-        if(author.authorAddress != ownerAddress){
-            (authorId) = addAuthor(ownerAddress, articleId, /*profileHash*/"profileHash");
-            console.log("ArticleNft: added author");
-        }
-        authorId = author.id;
-        console.log("ArticleNft: authorId: ", authorId);
-        // add the article to the author
-       
-        author.articles.push(article);
-
         // mint the nft to the author/owner
         uint256 newItemId = _tokenIds.current();
         _mint(ownerAddress, newItemId);
-        _setTokenURI(newItemId, arweaveHash);
-        console.log("ArticleNft: newItemId: ", newItemId);
+        _setTokenURI(newItemId, metadataPtr);
 
         // return the tokenId and the authorId it was minted to
         // the authorId will be 
