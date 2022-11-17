@@ -1,17 +1,14 @@
 import { useApolloClient } from "@apollo/client";
-import { notification } from "antd";
 import axios from "axios";
-import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import { useAccount, useContractWrite, useNetwork, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
+import { useAccount } from "wagmi";
 import { RootState } from "../app/store";
 import { SubmitArticleModal } from "../components";
 import Categories from "../components/Categories";
 import { JODW_BACKEND } from "../constants";
-import TalentDaoContracts from "../contracts/hardhat_contracts.json";
 import { CREATE_POST } from "../graphql/queries/lens";
 import { MetadataDisplayType } from "../lib/lens/interfaces/generic";
 import { PublicationMainFocus } from "../lib/lens/interfaces/publication";
@@ -39,7 +36,6 @@ const SubmitLensPublication = () => {
     };
   });
   const { address } = useAccount();
-  const { chain } = useNetwork();
   const [selectedManuscriptFile, setSelectedManuscriptFile] = useState(undefined);
   const [authors, setAuthors] = useState([]);
   const [selectedArticleCover, setSelectedArticleCover] = useState();
@@ -55,6 +51,7 @@ const SubmitLensPublication = () => {
   const [optionPolitics, setOptionPolitics] = useState(false);
   const [arweaveHash, setArweaveHash] = useState("");
   const [ipfsMetadataUri, setIpfsMetadataUri] = useState("");
+  const [showSubmitArticleModal, setShowSubmitArticleModal] = useState(false);
   const { walletId } = useParams();
 
   const [titleError, setTitleError] = useState(false);
@@ -79,49 +76,6 @@ const SubmitLensPublication = () => {
     setIpfsMetadataUri("");
     setSubmitState(SubmitState.SUBMIT_REVIEW_PENDING);
   };
-
-  // todo: we are only using on polygon, so we can remove this
-  const talentDaoManagerContract = Object.entries(TalentDaoContracts[chain?.id] || {}).find(([_key, _value]) => _value?.chainId === String(chain?.id))?.[1]?.contracts?.TalentDaoManager;
-
-  const { config: talentDaoManagerContractConfig } = usePrepareContractWrite({
-    addressOrName: talentDaoManagerContract?.address,
-    contractInterface: talentDaoManagerContract?.abi,
-    functionName: "mintArticleNFT",
-    args: [address, arweaveHash, ipfsMetadataUri, !Number.isNaN(talentPrice) ? ethers.utils.parseEther("0") : ethers.utils.parseEther(String(talentPrice))],
-    onError(_err) {
-      if (_err) {
-        setSubmitState(SubmitState.SUBMIT_CONTINUE_ERROR);
-        console.error("On chain tx failed", _err);
-        notification.open({
-          message: "Submit failed!",
-          description: "Something went wrong while submitting the article, please try again.",
-          icon: "⚠️",
-        });
-      }
-    },
-  });
-  const {
-    data: onChainSubmitData,
-    write: doSubmitOnChain,
-  } = useContractWrite(talentDaoManagerContractConfig);
-
-  const waitForOnChainTransaction = useWaitForTransaction({
-    hash: onChainSubmitData?.hash,
-    timeout: 10_000,
-    onSettled(_data, _error) {
-      if (_data?.status === 1) {
-        notification.open({
-          message: "Article is now onchain",
-          description: "You have submitted your article== 😍",
-          icon: "🚀",
-        });
-        setSubmitState(SubmitState.SUBMIT_CONTINUE_COMPLETED);
-        clearForm();
-      } else {
-        setSubmitState(SubmitState.SUBMIT_CONTINUE_ERROR);
-      }
-    },
-  });
 
   const createArticleMetadata = async (articleArweave: { id: any; contentType: any; }, coverImageArweave: { id: any; contentType: any; }, onSuccess: { (ipfsUri: any): Promise<void>; (arg0: string): void; }, onError: () => void) => {
     const ipfsResult = await uploadIpfs({
@@ -261,7 +215,7 @@ const SubmitLensPublication = () => {
       try {
         const res = await axios.post(server + "/api/article", {
           ...articleData,
-          walletId: walletId,
+          walletId: address,
           body: articleFile,
           cover: articleCover,
           arweaveHash: arweaveTx.id.toString(),
@@ -299,16 +253,6 @@ const SubmitLensPublication = () => {
       console.error("Unable to publish to lens: ", error);
     }
   };
-
-  useEffect(() => {
-    if (submitState !== SubmitState.SUBMIT_CONTINUE_PENDING) {
-      return;
-    }
-
-    if (arweaveHash !== "" && ipfsMetadataUri !== "" && doSubmitOnChain) {
-      doSubmitOnChain?.();
-    }
-  }, [ipfsMetadataUri, doSubmitOnChain]);
 
   // todo: move this out of the view and add to redux features
   const submitToArweave = async (file: { filename?: any; data: any; }) => {
@@ -588,29 +532,22 @@ const SubmitLensPublication = () => {
                   </select>
                 </div> */}
                 {/* todo: are we going to use these for mvp ?? */}
-                {/* <Categories /> */}
+                <Categories />
               </div>
               <div className="flex justify-center justify-items-center">
                 {(submitState === SubmitState.SUBMIT_REVIEW_PENDING || submitState === SubmitState.SUBMIT_REVIEW_ERROR) &&
                   <button
                     type="button"
-                    onClick={onSubmitReview}
+                    onClick={() => {
+                      setShowSubmitArticleModal(true);
+                      onSubmitReview();
+                    }}
                     disabled={(() => submitState !== SubmitState.SUBMIT_REVIEW_PENDING)()}
                     className="bg-primary text-white py-2 px-6 rounded-full text-lg"
                   >
                     SUBMIT
                   </button>
                 }
-                {/* for testing */}
-                <button
-                  type="button"
-                  onClick={onSubmitReview}
-                  disabled={(() => submitState !== SubmitState.SUBMIT_REVIEW_PENDING)()}
-                  className="bg-primary text-white py-2 px-6 rounded-full text-lg"
-                >
-                  SUBMIT
-                </button>
-
                 {submitState === SubmitState.SUBMIT_CONTINUE_PENDING &&
                   <button type="button" className="bg-primary text-white py-2 px-6 rounded-full text-lg" disabled>
                     <svg className="inline animate-spin h-5 w-5 mr-3 text-center" viewBox="0 0 24 24">
@@ -622,7 +559,7 @@ const SubmitLensPublication = () => {
                 }
                 <SubmitArticleModal
                   article={articleFormData}
-                  isOpen={(() => submitState === SubmitState.SUBMIT_UNDER_REVIEW)()}
+                  isOpen={showSubmitArticleModal}
                   onSuccess={onSubmitSuccess}
                   onSubmitError={onSubmitError}
                 />

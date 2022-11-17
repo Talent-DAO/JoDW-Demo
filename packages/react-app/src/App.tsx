@@ -2,31 +2,22 @@ import "antd/dist/antd.css";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Route, Routes } from "react-router-dom";
-import { Chain, chainId, useAccount, useNetwork } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 import "./App.css";
-import { Navbar, Footer } from "./components";
+import { Footer, Navbar } from "./components";
 import LensLogin from "./components/lens/LensLogin";
 import { fetchUserStart, userWalletUpdated } from "./features/user/userSlice";
 import { accountUpdated, chainUpdated } from "./features/web3/web3Slice";
 import {
   AboutView,
-  AdvancedSearchView,
-  LensArticleView,
-  AuthorView,
+  AdvancedSearchView, AuthorView,
   ContactView,
   GovernanceView,
-  HomeView,
-  PrivacyPolicyView,
-  PublisherView,
-  SearchView,
-  SubgraphView,
-  SubmitView,
-  SubmitLensView,
-  TermsOfServiceView,
+  HomeView, LensArticleView, PrivacyPolicyView,
+  PublisherView, ReviewerView, SearchView,
+  SubgraphView, SubmitLensView, SubmitView, TermsOfServiceView,
   TokenView,
-  UserView,
-  ReviewerView,
-  WalletConnectModalView
+  UserView, WalletConnectModalView
 } from "./views";
 
 const App = ({ ...props }) => {
@@ -40,13 +31,16 @@ const App = ({ ...props }) => {
   };
 
   useEffect(() => {
-    dispatch(chainUpdated(chain));
+    if (chain)
+      dispatch(chainUpdated(chain));
   }, [chain, dispatch]);
 
   useEffect(() => {
     dispatch<any>(fetchUserStart());
-    dispatch<any>(accountUpdated(address));
-    dispatch<any>(userWalletUpdated(address));
+    if (address) {
+      dispatch<any>(accountUpdated(address));
+      dispatch<any>(userWalletUpdated(address));
+    }
   }, [address, dispatch]);
 
   return (
