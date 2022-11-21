@@ -40,7 +40,7 @@ const HomeView = () => {
           desc="View publifications"
           image={imageBrowse}
           onClick={() => {
-            console.log("TIGER");
+            navigate("/dashboard/author/publification");
           }}
         />
         <ActionBar
@@ -70,7 +70,7 @@ const HomeView = () => {
             desc="View publifications"
             image={imageBrowse}
             onClick={() => {
-              console.log("TIGER");
+              navigate("/dashboard/author/publification");
             }}
           />
           <ActionBar
