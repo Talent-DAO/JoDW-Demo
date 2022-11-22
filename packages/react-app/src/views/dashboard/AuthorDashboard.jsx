@@ -21,7 +21,7 @@ const AuthorDashboard = () => {
         <Route index element={<HomeView />} />
         <Route path="/home/*" element={<HomeView />} />
         <Route path="/publification/*" element={<PublificationView />} />
-        <Route path="/settings" element={<SettingsView />} />
+        <Route path="/settings/*" element={<SettingsView />} />
         <Route path="/authors" element={<AuthorsView />} />
         <Route path="/submit" element={<SubmitView />} />
       </Routes>
