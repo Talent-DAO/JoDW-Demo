@@ -13,7 +13,7 @@
   "dependencies": {
     "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers",
     "@nomiclabs/hardhat-waffle": "^2.0.0",
-    "@openzeppelin/contracts": "^4.4.2",
+    "@openzeppelin/contracts": "^4.7.3",
     "@tenderly/hardhat-tenderly": "^1.0.10",
     "@nomiclabs/hardhat-etherscan": "^2.1.7",
     "chai": "^4.2.0",
@@ -30,7 +30,7 @@
   },
   "scripts": {
     "chain": "hardhat node --network hardhat --no-deploy",
-    "fork:mainnet": "hardhat node --no-deploy --network hardhat --fork https://mainnet.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad",
+    "fork:polygon": "hardhat node --no-deploy --network hardhat --fork https://polygon-mainnet.g.alchemy.com/v2/pC-CgOf1razK71G5nzy3xGXvkmKSKtaN",
     "test": "hardhat test --network hardhat",
     "compile": "hardhat compile",
     "deploy": "hardhat deploy --export-all ../react-app/src/contracts/hardhat_contracts.json",
@@ -42,6 +42,6 @@
     "generate": "hardhat generate",
     "account": "hardhat account",
     "verify": "hardhat etherscan-verify --api-key PSW8C433Q667DVEX5BCRMGNAH9FSGFZ7Q8",
-    "fork:goerli": "hardhat node --network hardhat"
+    "fork:mumbai": "hardhat node --network mumbai"
   }
 }

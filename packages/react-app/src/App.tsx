@@ -2,9 +2,9 @@ import "antd/dist/antd.css";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Route, Routes } from "react-router-dom";
-import { Chain, chainId, useAccount, useNetwork } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 import "./App.css";
-import { Navbar, Footer } from "./components";
+import { Footer, Navbar } from "./components";
 import LensLogin from "./components/lens/LensLogin";
 import { fetchUserStart, userWalletUpdated } from "./features/user/userSlice";
 import { accountUpdated, chainUpdated } from "./features/web3/web3Slice";
@@ -14,15 +14,12 @@ import {
   LensArticleView,
   AuthorDashboard,
   AuthorView,
+  AdvancedSearchView
   ContactView,
   GovernanceView,
-  HomeView,
-  PrivacyPolicyView,
-  PublisherView,
-  SearchView,
-  SubgraphView,
-  SubmitView,
-  TermsOfServiceView,
+  HomeView, LensArticleView, PrivacyPolicyView,
+  PublisherView, ReviewerView, SearchView,
+  SubgraphView, SubmitLensView, SubmitView, TermsOfServiceView,
   TokenView,
   UserView,
   ReviewerView,
@@ -59,13 +56,16 @@ const Website = ({ ...props }) => {
   };
 
   useEffect(() => {
-    dispatch(chainUpdated(chain));
+    if (chain)
+      dispatch(chainUpdated(chain));
   }, [chain, dispatch]);
 
   useEffect(() => {
     dispatch<any>(fetchUserStart());
-    dispatch<any>(accountUpdated(address));
-    dispatch<any>(userWalletUpdated({ walletId: address }));
+    if (address) {
+      dispatch<any>(accountUpdated(address));
+      dispatch<any>(userWalletUpdated(address));
+    }
   }, [address, dispatch]);
 
   return (
@@ -134,6 +134,7 @@ const Website = ({ ...props }) => {
             </Route>
             <Route path="/debug" />
             <Route path="/submit/:walletId" element={<SubmitView />} />
+            <Route path="/submit-lens" element={<SubmitLensView />} />
             <Route path="/termsofservice" element={<TermsOfServiceView />} />
             <Route path="/privacypolicy" element={<PrivacyPolicyView />} />
             <Route path="/subgraph" element={<SubgraphView subgraphUri={props.subgraphUri} />} />

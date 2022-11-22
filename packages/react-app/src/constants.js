@@ -1,13 +1,23 @@
 // MY INFURA_ID, SWAP IN YOURS FROM https://infura.io/dashboard/ethereum
-export const INFURA_ID = "7b0e75d38d424750b92791477924d133";
+export const INFURA_ID = process.env.REACT_APP_INFURA_ID;
+export const INFURA_PROJECT_ID = process.env.REACT_APP_INFURA_PROJECT_ID || "";
+export const INFURA_SECRET = process.env.REACT_APP_INFURA_SECRET || "";
+
+export const IPFS_URI = process.env.REACT_APP_IPFS_URI || "https://ipfs.infura.io:5001";
+export const IPFS_PROTOCOL = process.env.REACT_APP_IPFS_PROTOCOL || "https";
+export const IPFS_AUTH_REQUIRED = process.env.REACT_APP_IPFS_AUTH_REQUIRED === "true";
 
 // MY ETHERSCAN_ID, SWAP IN YOURS FROM https://etherscan.io/myapikey
-export const ETHERSCAN_KEY = "DNXJA8RX2Q3VZ4URQIWP7Z68CJXQZSC6AW";
+export const ETHERSCAN_KEY_ETHEREUM = process.env.REACT_APP_ETHERSCAN_KEY_ETHEREUM || "";
+export const ETHERSCAN_KEY_POLYGON = process.env.REACT_APP_ETHERSCAN_KEY_POLYGON || "";
 
 // BLOCKNATIVE ID FOR Notify.js:
-export const BLOCKNATIVE_DAPPID = "0b58206a-f3c0-4701-a62f-73c7243e8c77";
+export const BLOCKNATIVE_DAPPID = process.env.REACT_APP_BLOCKNATIVE_DAPPID || "";
 
-export const ALCHEMY_KEY = "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
+export const ALCHEMY_KEY = process.env.REACT_APP_ALCHEMY_KEY || "";
+
+
+export const JODW_BACKEND = process.env.REACT_APP_JODW_BACKEND_URL || "https://talentdao-api.herokuapp.com";
 
 export const NETWORKS = {
   localhost: {

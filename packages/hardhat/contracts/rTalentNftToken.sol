@@ -14,7 +14,7 @@ contract rTalentNftToken is Ownable, ERC1155 {
 
     Counters.Counter private _tokenIds;
 
-    constructor(address _owner, string memory tokenURI) ERC1155("") {
+    constructor(address _owner) ERC1155("TDAO Reputation") {
         _transferOwnership(_owner);
     }
 
@@ -37,7 +37,7 @@ contract rTalentNftToken is Ownable, ERC1155 {
         _mint(ownerAddress, newItemId, 1, data);
 
         // return the tokenId and the authorId it was minted to
-        // the authorId will be
+        // the authorId will be?
         return (newItemId);
     }
 }

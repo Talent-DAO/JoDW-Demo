@@ -12,21 +12,24 @@ contract AuthorEntity is ArticleEntity {
 
     struct Author {
         address authorAddress;
+        string[] lensNames;
         uint256 id;
         string arweaveProfileHash;
         Article[] articles;
     }
 
-    Author[] authorList;
-
     mapping(address => Author) public authors;
     mapping(uint256 => Author) public idToAuthor;
 
-    constructor() public {}
+    constructor() {}
 
     /// @dev add a new author on-chain
     /// @param authorAddress the address of the author
-    function addAuthor(address authorAddress, uint256 articleId, string memory profileHash)
+    function addAuthor(
+        address authorAddress,
+        string memory arweaveProfileHash,
+        string[] memory lensNames
+    )
         public
         returns (uint256)
     {
@@ -34,21 +37,30 @@ contract AuthorEntity is ArticleEntity {
         uint256 id = _authorIds.current();
         Author storage newAuthor = authors[authorAddress];
         newAuthor.id = id;
-        newAuthor.arweaveProfileHash = profileHash;
+        newAuthor.arweaveProfileHash = arweaveProfileHash;
+        newAuthor.lensNames = lensNames;
 
-        //Article storage articleRef = articleList[articleId];
-        //newAuthor.articles[articleId].author = authorAddress;
         return id;
     }
 
     /// @dev edit an author on-chain
     /// @param authorAddress the address of the author
-    function updateAuthor(address authorAddress)
+    function updateAuthorAddress(address authorAddress)
         public
     {
-        Author storage newAuthor = authors[authorAddress];
+        Author storage updatedAuthor = authors[authorAddress];
         // now edit...
+        updatedAuthor.authorAddress = authorAddress;
+    }
 
+    /// @dev edit an author on-chain
+    /// @param arweaveProfileHash profile hash for the author
+    function updateAuthorProfileHash(string memory arweaveProfileHash)
+        public
+    {
+        Author storage updatedAuthor = authors[msg.sender];
+        // now edit...
+        updatedAuthor.arweaveProfileHash = arweaveProfileHash;
     }
 
     function getAuthor(address authorAddress)
