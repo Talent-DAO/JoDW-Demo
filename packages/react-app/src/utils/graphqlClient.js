@@ -74,7 +74,8 @@ export const compositeClient = new ApolloClient({
       endpoints: {
         goerli: "https://api.thegraph.com/subgraphs/name/codenamejason/reputation-goerli",
         arweave: "https://arweave.net/graphql",
-        lens: "https://api.thegraph.com/subgraphs/name/supriyaamisshra/lens-tdao-test-1"
+        lens: "https://api.thegraph.com/subgraphs/name/supriyaamisshra/lens-tdao-test-1",
+        officiallens: "https://api.lens.dev",
       },
       createHttpLink: () => createHttpLink(),
       httpSuffix: ""

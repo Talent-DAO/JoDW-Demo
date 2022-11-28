@@ -10,11 +10,11 @@ const arweave = Arweave.init({
 });
 
 //! this is only needed to seed a new wallet !!
-export async function getWalletAddress(arJWL) {
-  const walletAddress = await arweave.wallets.jwkToAddress(arJWL);
+// export async function getWalletAddress(arJWL) {
+//   const walletAddress = await arweave.wallets.jwkToAddress(arJWL);
 
-  return walletAddress;
-}
+//   return walletAddress;
+// }
 
 export async function getTransactionOwner(transaction) {
   const ownerAddress = await arweave.wallets.ownerToAddress(transaction.owner);
@@ -26,16 +26,20 @@ export async function getTransactionOwner(transaction) {
 // @params data the file data
 // @params contentType the file type, txt, docx, pdf, etc.
 export async function sendTransacton(data, contentType, categories) {
-  // console.log(arJWK);
+  // console.log([data, contentType, categories, arJWK]);
   let transaction = await arweave.createTransaction(
     {
       data: data,
     },
     arJWK,
   );
-  // Examples
-  transaction.addTag("Content-Type", `${contentType}`);
-  transaction.addTag("Category", `${categories[0] && categories[0]}`);
+  // tags
+  if(contentType) transaction.addTag("Content-Type", `${contentType}`);
+  if (categories) {
+    categories.forEach((category) => {
+      transaction.addTag("Category", `${category}`);
+    });
+  }
   transaction.addTag("Publisher", "JoDW");
   console.log(transaction);
 

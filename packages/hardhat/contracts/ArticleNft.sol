@@ -10,6 +10,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "./entities/AuthorEntity.sol";
+import "./interfaces/IArticleNft.sol";
 
 /// @title Talent DAO NFT Contract
 /// @author Jaxcoder
@@ -24,7 +25,7 @@ contract ArticleNft is Ownable, ERC721URIStorage, AuthorEntity {
     address public tDaoTokenAddress;
     IERC20 private tDaoToken;
 
-    constructor(address _owner, address _tDaoToken) public ERC721("Talent DAO IP NFT", "TDAO-IPNFT") {
+    constructor(address _owner, address _tDaoToken) ERC721("Talent DAO IP NFT", "TDAO-IPNFT") {
         tDaoToken = IERC20(_tDaoToken);
         tDaoTokenAddress = _tDaoToken;
         _transferOwnership(_owner);
@@ -39,38 +40,29 @@ contract ArticleNft is Ownable, ERC721URIStorage, AuthorEntity {
     /// @dev this is internal mint function
     /// @param ownerAddress the user that is minting the token address
     /// @param amount the amount of tdao tokens submitting
-    function mintNFTForArticle(address ownerAddress, string memory tokenURI, uint256 amount)
+    /// @param metadataPtr the metadata uri for the nft
+    function mintNFTForArticle(address ownerAddress, string memory metadataPtr, uint256 amount)
         public
         returns (uint256)
     {
+        console.log("Reached here in ArticleNft");
         //require(tDaoToken.balanceOf(msg.sender) > amount, "You don't have enough TDAO tokens");
         // todo: How much TALENT token do we ask for?
         // take their money
         //tDaoToken.transferFrom(ownerAddress, treasury, amount);
 
         _tokenIds.increment();
-        uint256 authorId;
 
-        // (uint256 articleId) = addArticle(authorAddress, arweaveHash, metadataPtr, amount);
-        // Article storage article = articles[arweaveHash];
-        // article.author = authorAddress;
-        // article.metadataPtr = metadataPtr;
-        // article.paid = amount;
-
-        // // check if author exists first
-        // Author storage author = authors[authorAddress];
-        // if(author.authorAddress != authorAddress){
-        //     (authorId) = addAuthor(authorAddress, articleId, profileHash);
-        // }
-        // authorId = author.id;
-        // // add the article to the author
-       
-        // author.articles[articleId] = article;
+        addArticle(ownerAddress, metadataPtr, amount);
+        Article storage article = articles[metadataPtr];
+        article.author = ownerAddress;
+        article.metadataPtr = metadataPtr;
+        article.paid = amount;
 
         // mint the nft to the author/owner
         uint256 newItemId = _tokenIds.current();
         _mint(ownerAddress, newItemId);
-        _setTokenURI(newItemId, tokenURI);
+        _setTokenURI(newItemId, metadataPtr);
 
         // return the tokenId and the authorId it was minted to
         // the authorId will be 

@@ -3,3 +3,5 @@ export { default as useGasPrice } from "./useGasPrice";
 export { default as useLocalStorage } from "./useLocalStorage";
 export { default as useStaticJsonRPC } from "./useStaticJsonRPC";
 export { default as useTokenList } from "./useTokenList";
+export { default as useLensAuth } from "./useLensAuth";
+export { default as useLensProfiles } from "./useLensProfiles";

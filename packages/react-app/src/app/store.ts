@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
 import loggerMiddleware from "redux-logger";
 import publicationReducer from "../features/publication/publicationSlice";

@@ -38,14 +38,28 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     log: true,
   });
 
+  await deploy("ArticleNft", {
+    from: deployer,
+    args: [
+      "0x3f15B8c6F9939879Cb030D6dd935348E57109637",
+      talentDaoTokenContract.address,
+    ],
+    log: true,
+  });
+
   // Getting a previously deployed contract
   const TalentDAOTokenContract = await ethers.getContract(
     "TalentDaoToken",
     deployer
   );
 
-  const TalentDAONFTTokenContract = await ethers.getContract(
-    "TalentDaoNftToken",
+  // const TalentDAONFTTokenContract = await ethers.getContract(
+  //   "TalentDaoNftToken",
+  //   deployer
+  // );
+
+  const TalentDaoArticleNFTTokenContract = await ethers.getContract(
+    "ArticleNft",
     deployer
   );
 
@@ -55,7 +69,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
       "0x3f15B8c6F9939879Cb030D6dd935348E57109637", // contract manager
       "0x3f15B8c6F9939879Cb030D6dd935348E57109637", // contract owner
       TalentDAOTokenContract.address, // TDAO token address
-      TalentDAONFTTokenContract.address, // TDAO NFT token address
+      TalentDaoArticleNFTTokenContract.address, // TDAO NFT token address
     ],
     log: true,
     waitConfirmations: 5,
@@ -83,8 +97,8 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
         constructorArguments: ["0x3f15B8c6F9939879Cb030D6dd935348E57109637"],
       });
       await run("verify:verify", {
-        address: TalentDAONFTTokenContract.address,
-        contract: "contracts/TalentDaoNftToken.sol:TalentDaoNftToken",
+        address: TalentDaoArticleNFTTokenContract.address,
+        contract: "contracts/ArticleNft.sol:ArticleNft",
         constructorArguments: [
           "0x3f15B8c6F9939879Cb030D6dd935348E57109637",
           talentDaoTokenContract.address,
@@ -97,7 +111,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
           "0x3f15B8c6F9939879Cb030D6dd935348E57109637", // contract manager
           "0x3f15B8c6F9939879Cb030D6dd935348E57109637", // contract owner
           TalentDAOTokenContract.address, // TDAO token address
-          TalentDAONFTTokenContract.address, // TDAO IP NFT token address
+          TalentDaoArticleNFTTokenContract.address, // TDAO IP NFT token address
         ],
       });
     }
@@ -105,8 +119,4 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     console.error(error);
   }
 };
-module.exports.tags = [
-  "TalentDaoToken",
-  "veTalentToken",
-  "TalentDaoManager",
-];
+module.exports.tags = ["TalentDaoToken", "veTalentToken", "TalentDaoManager"];
