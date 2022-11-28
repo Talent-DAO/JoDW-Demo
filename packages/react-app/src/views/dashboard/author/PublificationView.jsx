@@ -10,9 +10,7 @@ const defaultTabs = [
 ];
 
 const PublificationView = ({ tabs }) => {
-  const handleSubmit = () => {
-    console.log("TIGER handleSubmit");
-  };
+  const handleSubmit = () => {};
 
   const noPubsInfo = {
     text: "Make a Submission",

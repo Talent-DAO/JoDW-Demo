@@ -23,7 +23,7 @@ const SubmissionCardModal = ({ open, article, onClose }) => {
         </Transition.Child>
 
         <div className="fixed inset-0 z-10 overflow-y-auto font-mont">
-          <div className="flex min-h-full items-end justify-center text-center sm:items-center">
+          <div className="flex min-h-full items-center justify-center text-center sm:items-center">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"

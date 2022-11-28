@@ -11,6 +11,7 @@ module.exports = {
       textdisabled: '#B41C2E',
       green: "#3CBC00",
       purple: "#8501ff",
+      bgpurple: "#F4F3FF",
       cyan: "#008272",
       red: "#ff0101",
       gray: "#e4e4e4",
@@ -24,7 +25,7 @@ module.exports = {
       bgblue: "#DCE2F6",
       green: "#01930F",
       bggreen: "#D8FCE4",
-      bgred: "#FFEEEE"
+      bgred: "#FFEEEE",
     },
     fontFamily: {
       'mont': ["Montserrat", "ui-sans-serif", "system-ui"],
