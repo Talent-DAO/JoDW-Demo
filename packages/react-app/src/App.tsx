@@ -10,17 +10,46 @@ import { fetchUserStart, userWalletUpdated } from "./features/user/userSlice";
 import { accountUpdated, chainUpdated } from "./features/web3/web3Slice";
 import {
   AboutView,
-  AdvancedSearchView, AuthorView,
+  AdvancedSearchView,
+  AuthorView,
+  AuthorDashboard,
   ContactView,
   GovernanceView,
-  HomeView, LensArticleView, PrivacyPolicyView,
-  PublisherView, ReviewerView, SearchView,
-  SubgraphView, SubmitLensView, SubmitView, TermsOfServiceView,
+  HomeView, 
+  LensArticleView,
+  PrivacyPolicyView,
+  PublisherView, 
+  ReviewerView,
+  SearchView,
+  SubgraphView, 
+  SubmitView, 
+  SubmitLensView, 
+  TermsOfServiceView,
   TokenView,
-  UserView, WalletConnectModalView
+  UserView,
+  WalletConnectModalView,
 } from "./views";
 
 const App = ({ ...props }) => {
+  return (
+    <Routes>
+      <Route path="/dashboard/*" element={<DashboardApp {...props} />} />
+      <Route path="/*" element={<Website {...props} />} />
+    </Routes>
+  );
+};
+
+const DashboardApp = ({ ...props }) => {
+  return (
+    <Routes>
+      <Route path="/author/*" element={<AuthorDashboard />} />
+      <Route path="/reviewer/*" element={<AuthorDashboard />} />
+      <Route path="/publisher/*" element={<AuthorDashboard />} />
+    </Routes>
+  );
+};
+
+const Website = ({ ...props }) => {
   const { address } = useAccount();
   const { chain } = useNetwork();
   const dispatch = useDispatch();

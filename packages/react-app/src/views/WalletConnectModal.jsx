@@ -1,6 +1,6 @@
 import React from "react";
 import rocketImage from "../assets/rocket.png";
-import { CustomConnectButton } from "../components/CustomConnectButton";
+import { CustomConnectButton } from "../components";
 
 const WalletConnectModal = () => {
   return (
