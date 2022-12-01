@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 export const arJWK = {
   d: process.env.ARWEAVE_d,
   dp: process.env.ARWEAVE_dp,

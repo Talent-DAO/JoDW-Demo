@@ -1,16 +1,15 @@
-const gulp = require("gulp");
-const gulpless = require("gulp-less");
-const postcss = require("gulp-postcss");
-const debug = require("gulp-debug");
-var csso = require("gulp-csso");
-const autoprefixer = require("autoprefixer");
-const NpmImportPlugin = require("less-plugin-npm-import");
+import { task, src, dest } from "gulp";
+import gulpless from "gulp-less";
+import postcss from "gulp-postcss";
+import debug from "gulp-debug";
+import csso from "gulp-csso";
+import autoprefixer from "autoprefixer";
+import NpmImportPlugin from "less-plugin-npm-import";
 
-gulp.task("less", function () {
+task("less", function () {
   const plugins = [autoprefixer()];
 
-  return gulp
-    .src("src/themes/*-theme.less")
+  return src("src/themes/*-theme.less")
     .pipe(debug({ title: "Less files:" }))
     .pipe(
       gulpless({
@@ -24,5 +23,5 @@ gulp.task("less", function () {
         debug: true,
       }),
     )
-    .pipe(gulp.dest("./public"));
+    .pipe(dest("./public"));
 });

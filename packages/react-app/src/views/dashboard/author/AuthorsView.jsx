@@ -34,13 +34,13 @@ const AuthorsView = () => {
           </div>
           <div className="flex flex-row space-x-2">
             <div
-              className={`${viewMode == "table" ? "text-bordergrey" : "text-textgrey"} cursor-pointer`}
+              className={`${viewMode === "table" ? "text-bordergrey" : "text-textgrey"} cursor-pointer`}
               onClick={() => setViewMode("list")}
             >
               <Squares2X2Icon className="w-10 h-10" />
             </div>
             <div
-              className={`${viewMode == "table" ? "text-textgrey" : "text-bordergrey"} cursor-pointer`}
+              className={`${viewMode === "table" ? "text-textgrey" : "text-bordergrey"} cursor-pointer`}
               onClick={() => setViewMode("table")}
             >
               <TableCellsIcon className="w-10 h-10" />

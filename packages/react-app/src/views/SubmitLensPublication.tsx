@@ -1,21 +1,21 @@
+/* eslint-disable no-console */
+/* eslint-disable no-undef */
 import { useApolloClient } from "@apollo/client";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { useAccount } from "wagmi";
 import { RootState } from "../app/store";
 import { SubmitArticleModal } from "../components";
 import Categories from "../components/Categories";
-import { JODW_BACKEND } from "../constants";
+import { JODW_BACKEND as server } from "../constants";
 import { CREATE_POST } from "../graphql/queries/lens";
 import { MetadataDisplayType } from "../lib/lens/interfaces/generic";
 import { PublicationMainFocus } from "../lib/lens/interfaces/publication";
 import { sendTransacton } from "../utils/arweave";
 import { uploadIpfs } from "../utils/ipfs";
-
-const server = JODW_BACKEND;
 
 const SubmitState = {
   SUBMIT_REVIEW_PENDING: "SUBMIT_REVIEW_PENDING",
@@ -52,30 +52,30 @@ const SubmitLensPublication = () => {
   const [arweaveHash, setArweaveHash] = useState("");
   const [ipfsMetadataUri, setIpfsMetadataUri] = useState("");
   const [showSubmitArticleModal, setShowSubmitArticleModal] = useState(false);
-  const { walletId } = useParams();
+  // const { walletId } = useParams();
 
   const [titleError, setTitleError] = useState(false);
   const [authorError, setAuthorError] = useState(false);
   const [abstractError, setAbstractError] = useState(false);
   const [submitState, setSubmitState] = useState(SubmitState.SUBMIT_REVIEW_PENDING);
 
-  const clearForm = () => {
-    setSelectedManuscriptFile(undefined);
-    setAuthors([]);
-    setSelectedArticleCover(undefined);
-    setTalentPrice(0);
-    setArticleTitle("");
-    setAbstract("");
-    setBlockchain("Polygon");
-    setCategories([]);
-    setOptionTech(false);
-    setOptionHistory(false);
-    setOptionRomance(false);
-    setOptionComedy(false);
-    setOptionPolitics(false);
-    setIpfsMetadataUri("");
-    setSubmitState(SubmitState.SUBMIT_REVIEW_PENDING);
-  };
+  // const clearForm = () => {
+  //   setSelectedManuscriptFile(undefined);
+  //   setAuthors([]);
+  //   setSelectedArticleCover(undefined);
+  //   setTalentPrice(0);
+  //   setArticleTitle("");
+  //   setAbstract("");
+  //   setBlockchain("Polygon");
+  //   setCategories([]);
+  //   setOptionTech(false);
+  //   setOptionHistory(false);
+  //   setOptionRomance(false);
+  //   setOptionComedy(false);
+  //   setOptionPolitics(false);
+  //   setIpfsMetadataUri("");
+  //   setSubmitState(SubmitState.SUBMIT_REVIEW_PENDING);
+  // };
 
   const createArticleMetadata = async (articleArweave: { id: any; contentType: any; }, coverImageArweave: { id: any; contentType: any; }, onSuccess: { (ipfsUri: any): Promise<void>; (arg0: string): void; }, onError: () => void) => {
     const ipfsResult = await uploadIpfs({
@@ -129,16 +129,8 @@ const SubmitLensPublication = () => {
     // onError();
   };
 
-  const changeSelectedManuscriptFile = (event: any) => {
-    setSelectedManuscriptFile(event.target.files[0]);
-  };
-
   const changeTalentPrice = (event: any) => {
     setTalentPrice(event.target.value);
-  };
-
-  const changeBlockchain = (e: any) => {
-    setBlockchain(e.target.value);
   };
 
   const changeSelectedArticleCover = (event: any) => {
