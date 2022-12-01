@@ -76,6 +76,7 @@ export const userSlice = createSlice({
       state.user.lensProfile.status = Status.Loading;
     },
     fetchLensUserSuccess: (state: UserRootState, action: PayloadAction<LensUser>) => {
+      console.log("fetchLensUserSuccess", action.payload);
       state.user.lensProfile = action.payload;
       state.status = Status.Success;
     },

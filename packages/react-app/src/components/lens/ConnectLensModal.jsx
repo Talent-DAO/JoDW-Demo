@@ -2,7 +2,7 @@
 import { Modal } from "antd";
 import { useApolloClient } from "@apollo/client";
 import { useAccount } from "wagmi";
-import { GET_PROFILES_BY_OWNER, CreateProfileDocument } from "../../graphql/queries/lens";
+import { GET_PROFILES_BY_OWNER } from "../../graphql/queries/lens";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MiniLensProfile from "./MiniLensProfile";
@@ -11,21 +11,21 @@ import { useLensAuth } from "../../hooks";
 
 const ConnectLensModal = ({ isOpen, onConnectSuccess, onConnectError, onConnectCancel }) => {
   const dispatch = useDispatch();
-  const { address, isConnected } = useAccount();
+  const { address } = useAccount();
   const [availableLensProfiles, setAvailableLensProfiles] = useState(null);
   const apolloClient = useApolloClient();
 
   // TODO: add support to create lens profile from here.
-  const createLensProfileRequest = async (request) => {
-    const result = await apolloClient.mutate({
-      mutation: CreateProfileDocument,
-      variables: {
-        request,
-      },
-    });
+  // const createLensProfileRequest = async (request) => {
+  //   const result = await apolloClient.mutate({
+  //     mutation: CreateProfileDocument,
+  //     variables: {
+  //       request,
+  //     },
+  //   });
 
-    return result.data?.createProfile;
-  };
+  //   return result.data?.createProfile;
+  // };
 
   useLensAuth(address, () => !isOpen);
 
@@ -37,7 +37,7 @@ const ConnectLensModal = ({ isOpen, onConnectSuccess, onConnectError, onConnectC
     dispatch(fetchLensUserStart());
     const results = await apolloClient.query({
       query: GET_PROFILES_BY_OWNER,
-      variables: { id: address }, // testing with: "0x3A5bd1E37b099aE3386D13947b6a90d97675e5e3"
+      variables: { id: address },
       context: {
         headers: {
           "x-access-token": lensAuthData?.accessToken ? `Bearer ${lensAuthData?.accessToken}` : "",
@@ -45,6 +45,9 @@ const ConnectLensModal = ({ isOpen, onConnectSuccess, onConnectError, onConnectC
       }
     });
     setAvailableLensProfiles(results?.data.profiles?.items); // not paginating
+    // default to the first profile
+    // todo: allow user to select profile
+    dispatch(fetchLensUserSuccess(results?.data.profiles?.items[0]));
   };
 
   const onProfileSelected = async (profile) => {
@@ -64,7 +67,7 @@ const ConnectLensModal = ({ isOpen, onConnectSuccess, onConnectError, onConnectC
 
   return (
     <Modal
-      title="Connect to Lens"
+      title="Connect your Lens profile 🌱"
       centered
       open={isOpen}
       onCancel={onConnectCancel}
