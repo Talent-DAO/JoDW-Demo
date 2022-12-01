@@ -74,6 +74,8 @@ const EditUserProfile = () => {
     state.user.lensAuth
   );
 
+  
+
   const loadLensProfile = async (id) => {
     if (!id || lensProfile?.handle) {
       return;
@@ -333,8 +335,7 @@ const EditUserProfile = () => {
             </div>
             <div className="flex flex-row">
               <div className="flex flex-col w-1/2 justify-center">
-                {lensProfileId === "" &&
-                <>
+                {lensProfileId === "" && (
                   <button
                     className="w-1/2 p-3 rounded-md"
                     style={{ backgroundColor: "#e5ffbe" }}
@@ -342,7 +343,7 @@ const EditUserProfile = () => {
                   >
                       Connect Lens Profile
                   </button>
-                </>}
+                )}
                 {lensProfileId !== "" &&
                 <>
                   <div

@@ -17,7 +17,7 @@ export const BLOCKNATIVE_DAPPID = process.env.REACT_APP_BLOCKNATIVE_DAPPID || ""
 export const ALCHEMY_KEY = process.env.REACT_APP_ALCHEMY_KEY || "";
 
 
-export const JODW_BACKEND = process.env.REACT_APP_JODW_BACKEND_URL || "https://talentdao-api.herokuapp.com";
+export const JODW_BACKEND = process.env.REACT_APP_JODW_BACKEND_URL || "https://tdao-api.herokuapp.com";
 
 export const NETWORKS = {
   localhost: {

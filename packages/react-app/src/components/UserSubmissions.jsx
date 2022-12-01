@@ -1,16 +1,20 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-console */
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAccount } from "wagmi";
 import illustrationImage from "../assets/illustration.png";
 import { SubmissionCard } from "../components";
 import { JODW_BACKEND as server } from "../constants"; 
 
-const UserSubmissions = ({ address }) => {
-  // const [toArticles, goToArticles] = useState(false);
+const UserSubmissions = () => {
   const [articles, setArticles] = useState([]);
+  const { address } = useAccount();
 
   const navigate = useNavigate();
 
+  // todo: get the pubs from lens
   useEffect(() => {
     const getArticles = async () => {
       try {

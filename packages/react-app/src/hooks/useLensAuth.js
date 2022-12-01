@@ -28,7 +28,6 @@ export const useLensAuth = (address, deferCondition = () => false) => {
 
   const connectWithLens = async () => {
     if (props.lensAuth.status === Status.Loading || props.lensAuth.status === Status.Success) {
-      //console.log("Already loading, hence skipping...");
       return;
     }
 
