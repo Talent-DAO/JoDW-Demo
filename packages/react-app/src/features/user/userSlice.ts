@@ -71,12 +71,11 @@ export const userSlice = createSlice({
       state.status = Status.Failed;
       state.error = action.payload;
     },
-    // Fetch user profile reducers
+    // Fetch lens user profile reducers
     fetchLensUserStart: (state: UserRootState) => {
       state.user.lensProfile.status = Status.Loading;
     },
     fetchLensUserSuccess: (state: UserRootState, action: PayloadAction<LensUser>) => {
-      console.log("fetchLensUserSuccess", action.payload);
       state.user.lensProfile = action.payload;
       state.status = Status.Success;
     },
