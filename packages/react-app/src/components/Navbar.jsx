@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAccount } from "wagmi";
 import discord from "../assets/discord.png";
-import menuImage from "../assets/menu.png";
 import menuIconImage from "../assets/menu_icon.png";
 import profile from "../assets/profile.png";
 import logo from "../assets/talent-logo.png";
@@ -20,7 +19,6 @@ function Navbar({ userMenuOpen, handleUserMenuOpen }) {
   const [navPanelOpen, setNavPanelOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(userMenuOpen);
   const [twitter, setTwitter] = useState("");
-  const [linkedin, setLinkedin] = useState("");
 
   const goToPage = locationPath => {
     setShow(false);
@@ -56,10 +54,6 @@ function Navbar({ userMenuOpen, handleUserMenuOpen }) {
       style={{ position: "sticky", top: "0", zIndex: "2", borderColor: "#c1c1c1" }}
     >
       <nav className="mx-4 sm:mx-8 md:mx-10 xl:mx-20 flex flex-row items-center justify-between">
-        {/* Navbar Left Items */}
-        {location.pathname.includes("/user") && (
-          <img className="xl:hidden" alt="menu" src={menuImage} onClick={handleMenuOpen}></img>
-        )}
         <div className="flex items-center py-5">
           <img
             className="cursor-pointer"
@@ -70,7 +64,6 @@ function Navbar({ userMenuOpen, handleUserMenuOpen }) {
           />
         </div>
         <div className="hidden xl:flex items-center justify-center font-mont">
-          {/* <img className="px-8" src={divideImage} alt="div"></img> */}
           <div className="flex items-center space-x-12">
             <div
               onClick={() => goToPage("/")}
@@ -112,19 +105,6 @@ function Navbar({ userMenuOpen, handleUserMenuOpen }) {
                 onClick={() => setShow(!show)}
               >
                 Browse
-                {/* <div>
-                  {
-                    show ? (
-                      <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5.00016 0.666664L9.66683 5.33333L0.333496 5.33333L5.00016 0.666664Z" fill="#1F2937" />
-                      </svg>
-                    ) : (
-                      <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5.00016 5.33333L0.333496 0.666664H9.66683L5.00016 5.33333Z" fill="#1F2937" />
-                      </svg>
-                    )
-                  }
-                </div> */}
               </div>
               {show && (
                 <div
@@ -136,13 +116,13 @@ function Navbar({ userMenuOpen, handleUserMenuOpen }) {
                 >
                   <div className="py-1" role="none">
                     <div
-                      className="text-gray-700 block px-4 py-2 text-sm hover:bg-bggrey"
+                      className="text-darkgray block px-4 py-2 text-sm hover:bg-bggrey"
                       onClick={handleBrowseByAuthor}
                     >
                       Browse by Author
                     </div>
                     <div
-                      className="text-gray-700 block px-4 py-2 text-sm hover:bg-bggrey whitespace-nowrap"
+                      className="text-darkgray block px-4 py-2 text-sm hover:bg-bggrey whitespace-nowrap"
                       onClick={handleBrowseBySubject}
                     >
                       Browse by Subject
@@ -151,16 +131,10 @@ function Navbar({ userMenuOpen, handleUserMenuOpen }) {
                 </div>
               )}
             </div>
-            {/* <div onClick={() => goToPage("/author")} className={location.pathname === '/author' ? 'text-lg text-primary font-semibold cursor-pointer' : 'text-lg cursor-pointer'}>Author</div>
-            <div onClick={() => goToPage("/article")} className={location.pathname === '/article' ? 'text-lg text-primary font-semibold cursor-pointer' : 'text-lg cursor-pointer'}>Article</div> */}
           </div>
         </div>
         <div className="hidden xl:flex items-center justify-end space-x-4">
           <div className="flex space-x-8">
-            {/* <a href={twitter}>
-              <img src={twitterImg} alt="twitter logo" width={40} height={40} layout="fixed" />
-            </a>
-            <img src={discord} alt="discord logo" width={40} height={40} layout="fixed" /> */}
             <img
               onClick={() => goToPage("/user/author")}
               className="cursor-pointer"
@@ -221,8 +195,6 @@ function Navbar({ userMenuOpen, handleUserMenuOpen }) {
             >
               BROWSE
             </div>
-            {/* <div onClick={() => goToPage("/author")} className={location.pathname === '/author' ? 'text-lg text-primary font-semibold cursor-pointer' : 'text-lg cursor-pointer'}>Author</div>
-              <div onClick={() => goToPage("/article")} className={location.pathname === '/article' ? 'text-lg text-primary font-semibold cursor-pointer' : 'text-lg cursor-pointer'}>Article</div> */}
             <div className="flex flex-row items-center space-x-4">
               <a href={twitter}>
                 <img src={twitterImg} alt="twitter logo" width={40} height={40} layout="fixed" />

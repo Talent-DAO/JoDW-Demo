@@ -16,7 +16,6 @@ export const BLOCKNATIVE_DAPPID = process.env.REACT_APP_BLOCKNATIVE_DAPPID || ""
 
 export const ALCHEMY_KEY = process.env.REACT_APP_ALCHEMY_KEY || "";
 
-
 export const JODW_BACKEND = process.env.REACT_APP_JODW_BACKEND_URL || "https://tdao-api.herokuapp.com";
 
 export const NETWORKS = {
@@ -61,27 +60,12 @@ export const NETWORKS = {
     faucet: "https://faucet.polygon.technology/",
     blockExplorer: "https://mumbai.polygonscan.com/",
   },
-  localOptimismL1: {
-    name: "localOptimismL1",
-    color: "#f01a37",
-    chainId: 31337,
-    blockExplorer: "",
-    rpcUrl: "http://" + (global.window ? window.location.hostname : "localhost") + ":9545",
-  },
-  localOptimism: {
-    name: "localOptimism",
+  goerliOptimism: {
+    name: "goerliOptimism",
     color: "#f01a37",
     chainId: 420,
     blockExplorer: "",
-    rpcUrl: "http://" + (global.window ? window.location.hostname : "localhost") + ":8545",
-    gasPrice: 0,
-  },
-  kovanOptimism: {
-    name: "kovanOptimism",
-    color: "#f01a37",
-    chainId: 69,
-    blockExplorer: "https://kovan-optimistic.etherscan.io/",
-    rpcUrl: "https://kovan.optimism.io",
+    rpcUrl: "",
     gasPrice: 0,
   },
   optimism: {
@@ -90,23 +74,6 @@ export const NETWORKS = {
     chainId: 10,
     blockExplorer: "https://optimistic.etherscan.io/",
     rpcUrl: "https://mainnet.optimism.io",
-  },
-  fantom: {
-    name: "fantom",
-    color: "#1969ff",
-    chainId: 250,
-    blockExplorer: "https://ftmscan.com/",
-    rpcUrl: "https://rpcapi.fantom.network",
-    gasPrice: 1000000000,
-  },
-  testnetFantom: {
-    name: "testnetFantom",
-    color: "#1969ff",
-    chainId: 4002,
-    blockExplorer: "https://testnet.ftmscan.com/",
-    rpcUrl: "https://rpc.testnet.fantom.network",
-    gasPrice: 1000000000,
-    faucet: "https://faucet.fantom.network/",
   },
 };
 
