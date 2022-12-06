@@ -1,4 +1,4 @@
-import { existsSync, writeFileSync } from "fs";
+const { existsSync, writeFileSync } = require("fs");
 
 if (!existsSync("./src/contracts/hardhat_contracts.json")) {
   try {
