@@ -1,0 +1,17 @@
+query CommentFeed(
+  $request: PublicationsQueryRequest!
+  $reactionRequest: ReactionFieldResolverRequest
+  $profileId: ProfileId
+) @api(name: officiallens) {
+  publications(request: $request) {
+    items {
+      ... on Comment {
+        ...CommentFields
+      }
+    }
+    pageInfo {
+      totalCount
+      next
+    }
+  }
+}

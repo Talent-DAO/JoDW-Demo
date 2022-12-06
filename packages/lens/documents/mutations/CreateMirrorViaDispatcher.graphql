@@ -1,0 +1,5 @@
+mutation CreateMirrorViaDispatcher($request: CreateMirrorRequest!) @api(name: officiallens) {
+  createMirrorViaDispatcher(request: $request) {
+    ...RelayerResultFields
+  }
+}

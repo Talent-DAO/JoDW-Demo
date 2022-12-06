@@ -1,0 +1,6 @@
+query RecommendedProfiles($options: RecommendedProfileOptions) @api(name: officiallens) {
+  recommendedProfiles(options: $options) {
+    ...ProfileFields
+    isFollowedByMe
+  }
+}
