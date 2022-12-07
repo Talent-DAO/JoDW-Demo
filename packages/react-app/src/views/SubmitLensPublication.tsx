@@ -11,7 +11,7 @@ import { RootState } from "../app/store";
 import { SubmitArticleModal } from "../components";
 import Categories from "../components/Categories";
 import { JODW_BACKEND as server } from "../constants";
-import { CREATE_POST } from "../graphql/queries/lens";
+import { CreatePostTypedDataDocument } from "@jodw/lens";
 import { MetadataDisplayType } from "../lib/lens/interfaces/generic";
 import { PublicationMainFocus } from "../lib/lens/interfaces/publication";
 import { sendTransacton } from "../utils/arweave";
@@ -232,8 +232,14 @@ const SubmitLensPublication = () => {
     }
     try {
       const results = await apolloClient.mutate({
-        mutation: CREATE_POST,
-        variables: { profileId: lensProfile.id, ipfsUri: ipfsUri },
+        mutation: CreatePostTypedDataDocument,
+        variables: {
+          request: {
+            profileId: lensProfile.id,
+            contentURI: ipfsUri,
+            collectModule: {}
+          }
+        },
         context: {
           headers: {
             "x-access-token": props.lensAuth?.accessToken ? `Bearer ${props.lensAuth?.accessToken}` : "",

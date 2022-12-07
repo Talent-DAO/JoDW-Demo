@@ -4,7 +4,7 @@ import axios from "axios";
 import { AppDispatch } from "../../app/store";
 import { getPublicationDetailsStart, getPublicationsFailure, getPublicationsSuccess, TPublication } from "../../features/publication/publicationSlice";
 import { LensUser, Status } from "../../features/user/userSlice";
-import { GET_LATEST_ARTICLES } from "../../graphql/queries/lens";
+import { GET_LATEST_ARTICLES  } from "../../graphql/queries/jodw-lens";
 import { convertToHttpUrl } from "../../utils/utils";
 
 export type TTags = {

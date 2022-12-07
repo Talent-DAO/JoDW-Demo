@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { JODW_BACKEND as server } from "../constants";
 import { dataURLtoFile, toBase64 } from "../utils/utils";
-import { GET_PROFILE } from "../graphql/queries/lens";
+import { ProfileDocument } from "@jodw/lens";
 import ConnectLensModal from "./lens/ConnectLensModal";
 import { useLensAuth } from "../hooks";
 import { fetchLensUserStart, fetchLensUserSuccess, Status } from "../features/user/userSlice";
@@ -88,8 +88,8 @@ const EditUserProfile = () => {
     
     dispatch(fetchLensUserStart());
     const result = await apolloClient.query({
-      query: GET_PROFILE,
-      variables: { id: id },
+      query: ProfileDocument,
+      variables: { request: { profileId: id } },
       context: {
         headers: {
           "x-access-token": lensAuthData?.accessToken ? `Bearer ${lensAuthData?.accessToken}` : "",

@@ -4,7 +4,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useAccount } from "wagmi";
 import { fetchLensUserSuccess, LensUser, Status, UserRootState } from "../features/user/userSlice";
-import { Profile } from "../graphql/queries/lens";
+import { Profile } from "../graphql/queries/jodw-lens";
 import { useLensAuth, useLensProfiles } from "../hooks";
 import { NewArticleFormData } from "../lib/shared/interfaces";
 import { ArticlePreview } from "./";

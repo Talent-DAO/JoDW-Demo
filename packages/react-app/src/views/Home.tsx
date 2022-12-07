@@ -14,7 +14,7 @@ import lineImage from "../assets/line.png";
 import partnershipImage from "../assets/partnership.png";
 import { LatestPublications, Newsletter, Splash } from "../components";
 import { getPublicationsFailure, getPublicationsSuccess } from "../features/publication/publicationSlice";
-import { GET_LATEST_ARTICLES } from "../graphql/queries/lens";
+import { GET_LATEST_ARTICLES } from "../graphql/queries/jodw-lens";
 import { getLensArticleData } from "../helpers/graphql/articles";
 import { dataURLtoFile, getBgColorForCategory, getTextColorForCategory } from "../utils/utils";
 

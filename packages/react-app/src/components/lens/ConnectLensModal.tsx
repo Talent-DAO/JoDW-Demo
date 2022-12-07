@@ -2,17 +2,18 @@
 import { Modal } from "antd";
 import { useApolloClient } from "@apollo/client";
 import { useAccount } from "wagmi";
-import { GET_PROFILES_BY_OWNER } from "../../graphql/queries/lens";
+import { ProfilesDocument, ProfileQueryRequest } from "@jodw/lens";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MiniLensProfile from "./MiniLensProfile";
 import { fetchLensUserStart, fetchLensUserSuccess, Status } from "../../features/user/userSlice";
 import { useLensAuth } from "../../hooks";
+import React from "react";
 
-const ConnectLensModal = ({ isOpen, onConnectSuccess, onConnectError, onConnectCancel }) => {
+const ConnectLensModal = ({ isOpen, onConnectSuccess, onConnectError, onConnectCancel }: any) => {
   const dispatch = useDispatch();
   const { address } = useAccount();
-  const [availableLensProfiles, setAvailableLensProfiles] = useState(null);
+  const [availableLensProfiles, setAvailableLensProfiles]: any = useState(null);
   const apolloClient = useApolloClient();
 
   // TODO: add support to create lens profile from here.
@@ -29,15 +30,15 @@ const ConnectLensModal = ({ isOpen, onConnectSuccess, onConnectError, onConnectC
 
   useLensAuth(address, () => !isOpen);
 
-  const lensAuthData = useSelector(state =>
+  const lensAuthData = useSelector((state: any) =>
     state.user.lensAuth
   );
 
   const findExistingLensProfiles = async () => {
     dispatch(fetchLensUserStart());
     const results = await apolloClient.query({
-      query: GET_PROFILES_BY_OWNER,
-      variables: { id: address },
+      query: ProfilesDocument,
+      variables: { request: { ownedBy: [address] } },
       context: {
         headers: {
           "x-access-token": lensAuthData?.accessToken ? `Bearer ${lensAuthData?.accessToken}` : "",
@@ -50,7 +51,7 @@ const ConnectLensModal = ({ isOpen, onConnectSuccess, onConnectError, onConnectC
     dispatch(fetchLensUserSuccess(results?.data.profiles?.items[0]));
   };
 
-  const onProfileSelected = async (profile) => {
+  const onProfileSelected = async (profile: any) => {
     onConnectSuccess(profile);
     dispatch(fetchLensUserSuccess({
       id: profile?.id,
@@ -82,7 +83,7 @@ const ConnectLensModal = ({ isOpen, onConnectSuccess, onConnectError, onConnectC
         <li key={"4"}>TODO: On create clicked, createProfile and return ID</li>
       </ol>
       <div className="flex">
-        {availableLensProfiles && availableLensProfiles.map(profile => <MiniLensProfile profile={profile} onProfileSelected={onProfileSelected} />)}
+        {availableLensProfiles && availableLensProfiles.map((profile: any) => <MiniLensProfile profile={profile} onProfileSelected={onProfileSelected} />)}
       </div>
     </Modal>
   );

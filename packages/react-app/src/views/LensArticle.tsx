@@ -10,7 +10,7 @@ import author_pro from "../assets/author_pro.png";
 import ethereum from "../assets/ethereum.png";
 import matic from "../assets/matic.png";
 import { SimilarPublicationCard } from "../components";
-import { GET_ARTICLE_DETAILS } from "../graphql/queries/lens";
+import { GET_ARTICLE_DETAILS } from "../graphql/queries/jodw-lens";
 import { getLensArticleData } from "../helpers/graphql/articles";
 import { useAccount } from "wagmi";
 import { getPublicationDetailsFailure, getPublicationDetailsSuccess } from "../features/publication/publicationSlice";

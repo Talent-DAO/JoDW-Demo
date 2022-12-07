@@ -129,9 +129,7 @@ export function useFetchedSubgraphStatus() {
   const { chain } = useNetwork();
 
   const { loading, error, data } =
-    useQuery <
-    HealthResponse >
-    (SUBGRAPH_HEALTH,
+    useQuery(SUBGRAPH_HEALTH,
       {
         client: healthClient,
         fetchPolicy: "no-cache",
