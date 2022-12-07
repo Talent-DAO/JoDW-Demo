@@ -11,7 +11,7 @@ import { SubmitArticleModal } from "../components";
 import { JODW_BACKEND } from "../constants";
 import TalentDaoContracts from "../contracts/hardhat_contracts.json";
 import { RootState } from "../app/store";
-import { CreatePostTypedDataDocument } from "@jodw/lens";
+import { CreatePostViaDispatcherDocument } from "@jodw/lens";
 import { MetadataDisplayType } from "../lib/lens/interfaces/generic";
 import { PublicationMainFocus } from "../lib/lens/interfaces/publication";
 import { sendTransacton } from "../utils/arweave";
@@ -255,20 +255,20 @@ const Submit = () => {
     const coverImageArweave = { id: coverImageArweaveTx?.id, contentType: coverImageContentType };
     createArticleMetadata(articleArweave, coverImageArweave, async (ipfsUri: string) => {
       try {
-        const res = await axios.post(server + "/api/article", {
-          ...articleData,
-          walletId: walletId,
-          body: articleFile,
-          cover: articleCover,
-          arweaveHash: arweaveTx.id.toString(),
-          lensCompatibleIpfsMetadata: ipfsUri,
-        });
-        console.log(res);
-        if (res.status === 200) {
-          setArweaveHash(articleArweave?.id);
-          setIpfsMetadataUri(ipfsUri);
-          publishToLensProfile(ipfsUri, lensProfile);
-        }
+        // const res = await axios.post(server + "/api/article", {
+        //   ...articleData,
+        //   walletId: walletId,
+        //   body: articleFile,
+        //   cover: articleCover,
+        //   arweaveHash: arweaveTx.id.toString(),
+        //   lensCompatibleIpfsMetadata: ipfsUri,
+        // });
+        // console.log(res);
+        // if (res.status === 200) {
+        setArweaveHash(articleArweave?.id);
+        setIpfsMetadataUri(ipfsUri);
+        publishToLensProfile(ipfsUri, lensProfile);
+        //}
       } catch (e) {
         console.error("Save article to JoDW backend failed: ", e);
       }
@@ -282,7 +282,7 @@ const Submit = () => {
     }
     try {
       const results = await apolloClient.mutate({
-        mutation: CreatePostTypedDataDocument,
+        mutation: CreatePostViaDispatcherDocument,
         variables: {
           request: {
             profileId: lensProfile.id,
@@ -297,6 +297,12 @@ const Submit = () => {
         }
       });
       console.log("LENS PUBLISH RESULTS ", results);
+      notification.open({
+        message: "Article submission successful!",
+        description: "You have submitted your article== 😍",
+        icon: "🚀",
+      });
+      setSubmitState(SubmitState.SUBMIT_CONTINUE_COMPLETED); // temporary, remove once onchain submit is reenabled
     } catch (error) {
       console.error("Unable to publish to lens: ", error);
     }
@@ -308,7 +314,7 @@ const Submit = () => {
     }
 
     if (arweaveHash !== "" && ipfsMetadataUri !== "" && doSubmitOnChain) {
-      doSubmitOnChain?.();
+      //doSubmitOnChain?.();
     }
   }, [ipfsMetadataUri, doSubmitOnChain]);
 

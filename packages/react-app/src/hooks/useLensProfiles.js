@@ -19,7 +19,7 @@ export const useLensProfiles = () => {
     }
     const results = await apolloClient.query({
       query: ProfilesDocument,
-      variables: { request: { ownedBy: [address] } }, // testing with: "0x3A5bd1E37b099aE3386D13947b6a90d97675e5e3"
+      variables: { request: { ownedBy: ["0x3A5bd1E37b099aE3386D13947b6a90d97675e5e3"] } }, // testing with: "0x3A5bd1E37b099aE3386D13947b6a90d97675e5e3"
       context: {
         headers: {
           "x-access-token": lensAuthData?.accessToken ? `Bearer ${lensAuthData?.accessToken}` : "",

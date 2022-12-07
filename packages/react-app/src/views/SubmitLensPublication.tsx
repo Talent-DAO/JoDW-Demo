@@ -205,20 +205,20 @@ const SubmitLensPublication = () => {
     const coverImageArweave = { id: coverImageArweaveTx?.id, contentType: coverImageContentType };
     createArticleMetadata(articleArweave, coverImageArweave, async (ipfsUri: string) => {
       try {
-        const res = await axios.post(server + "/api/article", {
-          ...articleData,
-          walletId: address,
-          body: articleFile,
-          cover: articleCover,
-          arweaveHash: arweaveTx.id.toString(),
-          lensCompatibleIpfsMetadata: ipfsUri,
-        });
-        console.log(res);
-        if (res.status === 200) {
-          setArweaveHash(articleArweave?.id);
-          setIpfsMetadataUri(ipfsUri);
-          publishToLensProfile(ipfsUri, lensProfile);
-        }
+        // const res = await axios.post(server + "/api/article", {
+        //   ...articleData,
+        //   walletId: address,
+        //   body: articleFile,
+        //   cover: articleCover,
+        //   arweaveHash: arweaveTx.id.toString(),
+        //   lensCompatibleIpfsMetadata: ipfsUri,
+        // });
+        // console.log(res);
+        // if (res.status === 200) {
+        setArweaveHash(articleArweave?.id);
+        setIpfsMetadataUri(ipfsUri);
+        publishToLensProfile(ipfsUri, lensProfile);
+        //}
       } catch (e) {
         console.error("Save article to JoDW backend failed: ", e);
       }
