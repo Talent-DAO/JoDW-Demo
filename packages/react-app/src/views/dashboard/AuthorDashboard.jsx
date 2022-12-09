@@ -4,8 +4,8 @@ import { Route, Routes } from "react-router-dom";
 import HomeView from "./author/HomeView";
 import PublificationView from "./author/PublificationView";
 import SettingsView from "./author/SettingsView";
-import AuthorsView from "./author/AuthorsView";
-import SubmitView from "./author/SubmitView";
+import AuthorsView from "./common/AuthorsView";
+import SubmitView from "./common/SubmitView";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard/author/home", icon: HomeIcon },

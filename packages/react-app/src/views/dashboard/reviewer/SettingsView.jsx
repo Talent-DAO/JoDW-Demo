@@ -5,8 +5,8 @@ import ProfileSettingsView from "../common/ProfileSettingsView";
 import NotificationSettingsView from "./NotificationSettingsView";
 
 const defaultTabs = [
-  { name: "Profile Page Settings", href: "/dashboard/author/settings/profile", Icon: UserCircleIcon },
-  { name: "Notification Settings", href: "/dashboard/author/settings/notification", Icon: BellIcon },
+  { name: "Profile Page Settings", href: "/dashboard/reviewer/settings/profile", Icon: UserCircleIcon },
+  { name: "Notification Settings", href: "/dashboard/reviewer/settings/notification", Icon: BellIcon },
 ];
 
 const SettingsView = () => {

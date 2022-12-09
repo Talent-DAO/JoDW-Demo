@@ -19,6 +19,7 @@ import {
   LensArticleView,
   PrivacyPolicyView,
   PublisherView, 
+  ReviewerDashboard,
   ReviewerView,
   SearchView,
   SubgraphView, 
@@ -43,7 +44,7 @@ const DashboardApp = ({ ...props }) => {
   return (
     <Routes>
       <Route path="/author/*" element={<AuthorDashboard />} />
-      <Route path="/reviewer/*" element={<AuthorDashboard />} />
+      <Route path="/reviewer/*" element={<ReviewerDashboard />} />
       <Route path="/publisher/*" element={<AuthorDashboard />} />
     </Routes>
   );

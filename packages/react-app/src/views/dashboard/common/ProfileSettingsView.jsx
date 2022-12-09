@@ -14,7 +14,7 @@ const UploadButton = () => {
   );
 };
 
-const ProfileSettingsView = () => {
+const ProfileSettingsView = ({ hasTips = false}) => {
   return (
     <div className="p-4 md:p-24 flex flex-col">
       <img className="w-full h-48 rounded-t-xl" src={authorBackImage} />
