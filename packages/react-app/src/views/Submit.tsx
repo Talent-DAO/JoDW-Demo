@@ -3,25 +3,29 @@ import { notification } from "antd";
 import axios from "axios";
 import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import {
   useAccount,
-  useContractWrite,
   useNetwork,
-  usePrepareContractWrite,
-  useWaitForTransaction,
+  useSignTypedData,
 } from "wagmi";
 import { SubmitArticleModal } from "../components";
 import { JODW_BACKEND } from "../constants";
 import TalentDaoContracts from "../contracts/hardhat_contracts.json";
 import { RootState } from "../app/store";
-import { CreatePostTypedDataDocument } from "@jodw/lens";
-import { MetadataDisplayType } from "../lib/lens/interfaces/generic";
-import { PublicationMainFocus } from "../lib/lens/interfaces/publication";
+import {
+  useCreatePostViaDispatcherMutation,
+  useCreatePostTypedDataMutation,
+} from "@jodw/lens";
+import { MetadataDisplayType } from "../lib";
+import { PublicationMainFocus } from "../lib";
 import { sendTransacton } from "../utils/arweave";
 import { uploadIpfs } from "../utils/ipfs";
+import onError from "../lib/shared/onError";
+import getSignature from "../lib/shared/getSignature";
+import useBroadcast from "../hooks/useBroadcast";
 
 const server = JODW_BACKEND;
 
@@ -37,6 +41,7 @@ const SubmitState = {
 };
 
 const Submit = () => {
+  const dispatch = useDispatch();
   const apolloClient = useApolloClient();
   const { address } = useAccount();
   const { chain } = useNetwork();
@@ -80,6 +85,67 @@ const Submit = () => {
     setSubmitState(SubmitState.SUBMIT_REVIEW_PENDING);
   };
 
+  const userSigNonce = useSelector((state: RootState) =>
+    state.user.user.sigNonce
+  );
+
+  const { broadcast } = useBroadcast({
+    onCompleted: (data) => {
+      clearForm();
+      notification.open({
+        message: "Article submission successful!",
+        description: "You have submitted your article== 😍",
+        icon: "🚀",
+      });
+      console.log(["Article published: ", data]);
+    }
+  });
+
+  const { signTypedDataAsync } = useSignTypedData({ onError });
+
+  const typedDataGenerator = async (generatedData: any) => {
+    const { id, typedData } = generatedData;
+    const signature = await signTypedDataAsync(getSignature(typedData));
+
+    const {
+      data: { broadcast: result }
+    } = await broadcast({ request: { id, signature } });
+  };
+
+  const [createPostTypedData] = useCreatePostTypedDataMutation({
+    onCompleted: ({ createPostTypedData }) => typedDataGenerator(createPostTypedData),
+    onError: (error) => {
+      onError({
+        message: "Submit failed!",
+        details: "Something went wrong while submitting the article, please try again. Details: " + error?.message
+      });
+      setSubmitState(SubmitState.SUBMIT_CONTINUE_ERROR);
+    }
+  });
+
+  const [createArticleViaDispatcher] = useCreatePostViaDispatcherMutation({
+    onCompleted: (data) => {
+      clearForm();
+      if (data.createPostViaDispatcher.__typename === "RelayerResult") {
+        notification.open({
+          message: "Article submission successful!",
+          description: "You have submitted your article== 😍",
+          icon: "🚀",
+        });
+        setSubmitState(SubmitState.SUBMIT_CONTINUE_COMPLETED); // temporary, remove once onchain submit is reenabled
+      }
+    },
+    onError
+  });
+
+  const createViaDispatcher = async (request: any) => {
+    const { data } = await createArticleViaDispatcher({ variables: { request } });
+    if (data?.createPostViaDispatcher?.__typename === "RelayError") {
+      createPostTypedData({ variables: { request } });
+    }
+  };
+
+
   // todo: we are only using on polygon, so we can remove this
   // const talentDaoManagerContract = Object.entries(TalentDaoContracts[chain?.id] || {}).find(([_key, _value]) => _value?.chainId === String(chain?.id))?.[1]?.contracts?.TalentDaoManager;
 
@@ -122,58 +188,6 @@ const Submit = () => {
   //     }
   //   },
   // });
-
-  const createArticleMetadata = async (articleArweave: { id: any; contentType: any; }, coverImageArweave: { id: any; contentType: any; }, onSuccess: { (ipfsUri: any): Promise<void>; (arg0: string): void; }, onError: () => void) => {
-    const ipfsResult = await uploadIpfs({
-      version: "2.0.0",
-      mainContentFocus: PublicationMainFocus.IMAGE,
-      metadata_id: uuidv4(),
-      description: abstract,
-      locale: "en-US",
-      external_url: "https://arweave.net/" + articleArweave?.id,
-      image: null,
-      imageMimeType: null,
-      name: articleTitle,
-      media: [
-        {
-          item: "https://arweave.net/" + coverImageArweave?.id,
-          type: coverImageArweave?.contentType
-        }
-      ],
-      attributes: [
-        {
-          displayType: MetadataDisplayType.Number,
-          traitType: "price",
-          value: talentPrice
-        },
-        {
-          displayType: MetadataDisplayType.String,
-          traitType: "authors",
-          value: Array.isArray(authors) ? authors.join(",") : authors
-        },
-        {
-          displayType: MetadataDisplayType.String,
-          traitType: "chain",
-          value: blockchain
-        },
-        {
-          displayType: MetadataDisplayType.String,
-          traitType: "categories",
-          value: categories.join(",")
-        },
-        {
-          displayType: MetadataDisplayType.String,
-          traitType: "articleContentType",
-          value: articleArweave?.contentType
-        },
-      ],
-      tags: ["talentdao", "jodw"],
-      appId: "talentdao",
-    });
-    console.log("IPFS metadata upload result: ", ipfsResult);
-    onSuccess("ipfs://" + ipfsResult?.path);
-    // onError();
-  };
 
   const changeSelectedManuscriptFile = (event: any) => {
     setSelectedManuscriptFile(event.target.files[0]);
@@ -284,23 +298,13 @@ const Submit = () => {
       return;
     }
     try {
-      const results = await apolloClient.mutate({
-        mutation: CreatePostTypedDataDocument,
-        variables: {
-          request: {
-            profileId: lensProfile.id,
-            contentURI: ipfsUri,
-            collectModule: {}
-          }
-        }
-      });
-      console.log("LENS PUBLISH RESULTS ", results);
-      notification.open({
-        message: "Article submission successful!",
-        description: "You have submitted your article== 😍",
-        icon: "🚀",
-      });
-      setSubmitState(SubmitState.SUBMIT_CONTINUE_COMPLETED); // temporary, remove once onchain submit is reenabled
+      const request = {
+        profileId: lensProfile?.id,
+        contentURI: ipfsUri,
+        collectModule: { freeCollectModule: { followerOnly: false } },
+        referenceModule: { followerOnlyReferenceModule: false },
+      };
+      await createViaDispatcher(request);
     } catch (error) {
       console.error("Unable to publish to lens: ", error);
     }
@@ -366,6 +370,58 @@ const Submit = () => {
   const onSubmitError = (error: any) => {
     console.error("Error submitting: ", error);
     setSubmitState(SubmitState.SUBMIT_REVIEW_ERROR);
+  };
+
+  const createArticleMetadata = async (articleArweave: { id: any; contentType: any; }, coverImageArweave: { id: any; contentType: any; }, onSuccess: { (ipfsUri: any): Promise<void>; (arg0: string): void; }, onError: () => void) => {
+    const ipfsResult = await uploadIpfs({
+      version: "2.0.0",
+      mainContentFocus: PublicationMainFocus.IMAGE,
+      metadata_id: uuidv4(),
+      description: abstract,
+      locale: "en-US",
+      external_url: "https://arweave.net/" + articleArweave?.id,
+      image: null,
+      imageMimeType: null,
+      name: articleTitle,
+      media: [
+        {
+          item: "https://arweave.net/" + coverImageArweave?.id,
+          type: coverImageArweave?.contentType
+        }
+      ],
+      attributes: [
+        {
+          displayType: MetadataDisplayType.Number,
+          traitType: "price",
+          value: talentPrice.toString()
+        },
+        {
+          displayType: MetadataDisplayType.String,
+          traitType: "authors",
+          value: Array.isArray(authors) ? authors.join(",") : authors
+        },
+        {
+          displayType: MetadataDisplayType.String,
+          traitType: "chain",
+          value: blockchain
+        },
+        {
+          displayType: MetadataDisplayType.String,
+          traitType: "categories",
+          value: articleFormData?.categories.join(",")
+        },
+        {
+          displayType: MetadataDisplayType.String,
+          traitType: "articleContentType",
+          value: articleArweave?.contentType
+        },
+      ],
+      tags: ["talentdao", "jodw"],
+      appId: "JoDW",
+    });
+    console.log("IPFS metadata upload result: ", ipfsResult);
+    onSuccess("ipfs://" + ipfsResult?.path);
+    // onError();
   };
 
   // For debugging:

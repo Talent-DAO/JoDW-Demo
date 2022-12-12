@@ -3,10 +3,16 @@ import { MultiAPILink } from "@habx/apollo-multi-endpoint-link";
 import { ApolloClient, ApolloLink, InMemoryCache, useQuery } from "@apollo/client";
 import gql from "graphql-tag";
 import { useNetwork } from "wagmi";
+import { LOCAL_STORAGE_LENS_AUTH_TOKENS } from "../constants";
 
 const getLensAuthToken = () => {
-  const token = window.localStorage.getItem("lens-auth-token");
-  return token ? `Bearer ${JSON.parse(token)}` : "";
+  const serializedData = window.localStorage.getItem(LOCAL_STORAGE_LENS_AUTH_TOKENS) || {};
+  if (serializedData && serializedData !== {}) {
+    const tokens = JSON.parse(serializedData)?.value;
+    return tokens?.accessToken ? `Bearer ${tokens?.accessToken}` : "";
+  } else {
+    return "";
+  }
 };
 
 export const healthClient = new ApolloClient({
@@ -86,7 +92,7 @@ export const compositeClient = new ApolloClient({
         if (endpoint === "officiallens") {
           return ({
             headers: {
-              "x-access-token": getLensAuthToken()
+              "x-access-token": getLensAuthToken(),
             }
           });
         }

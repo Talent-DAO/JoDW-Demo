@@ -18,6 +18,9 @@ export const ALCHEMY_KEY = process.env.REACT_APP_ALCHEMY_KEY || "";
 
 export const JODW_BACKEND = process.env.REACT_APP_JODW_BACKEND_URL || "https://tdao-api.herokuapp.com";
 
+// App Constants
+export const LOCAL_STORAGE_LENS_AUTH_TOKENS = "lens-auth-tokens";
+
 export const NETWORKS = {
   localhost: {
     name: "localhost",

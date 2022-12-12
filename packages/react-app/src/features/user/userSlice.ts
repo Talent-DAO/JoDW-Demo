@@ -18,6 +18,7 @@ export type LensUser = {
 export type User = {
   walletId: string;
   lensProfile: LensUser;
+  sigNonce: number,
   status: Status;
 }
 
@@ -37,6 +38,7 @@ const initialState: UserRootState = {
       walletId: "",
       status: Status.Idle,
     },
+    sigNonce: 0,
     status: Status.Idle,
   },
   status: Status.Idle,
@@ -77,6 +79,9 @@ export const userSlice = createSlice({
       state.user.walletId = action.payload;
       state.status = Status.Success;
     },
+    incrementNonce: (state: UserRootState, action: PayloadAction<void>) => {
+      state.user.sigNonce = state.user.sigNonce + 1;
+    }
   },
 });
 
@@ -89,5 +94,6 @@ export const {
   fetchLensUserSuccess,
   fetchLensUserFailure,
   userWalletUpdated,
+  incrementNonce,
 } = actions;
 export default reducer;
