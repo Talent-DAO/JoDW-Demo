@@ -4,9 +4,9 @@ import { Squares2X2Icon, TableCellsIcon, EllipsisVerticalIcon } from "@heroicons
 import AuthorCard from "../../../components/dashboard/AuthorCard";
 
 const authors = [
-  { name: "Olivia Rhye", description: "Front-end Developer", noOfPub: 200, category: ["Defi", "History", "Art"] },
-  { name: "Olivia Rhye", description: "Front-end Developer", noOfPub: 200, category: ["Defi", "History", "Art"] },
-  { name: "Olivia Rhye", description: "Front-end Developer", noOfPub: 200, category: ["Defi", "History", "Art"] },
+  { name: "Olivia Rhye", description: "Front-end Developer", noOfPub: 200, category: ["DeSci", "History", "Art"] },
+  { name: "Olivia Rhye", description: "Front-end Developer", noOfPub: 200, category: ["DeSci", "History", "Art"] },
+  { name: "Olivia Rhye", description: "Front-end Developer", noOfPub: 200, category: ["DeSci", "History", "Art"] },
 ];
 
 const AuthorsView = () => {
@@ -89,7 +89,22 @@ const AuthorsView = () => {
                   </td>
                   <td className="hidden px-3 py-4 text-sm text-textgrey lg:table-cell">{author.description}</td>
                   <td className="hidden px-3 py-4 text-sm text-textgrey sm:table-cell">{author.noOfPub}</td>
-                  <td className="px-3 py-4 text-sm text-textgrey">{author.category.toString()}</td>
+                  <td className="hidden px-3 py-4 text-sm text-textgrey lg:table-cell">
+                    <div class="flex flex-row space-x-1">
+                      {author.category.map(item => {
+                        if (item == "DeSci") {
+                          return <div class="px-2 rounded-xl bg-bgred text-primary">{item}</div>;
+                        }
+                        if (item == "History") {
+                          return <div class="px-2 rounded-xl bg-bgblue text-blue">{item}</div>;
+                        }
+                        if (item == "Art") {
+                          return <div class="px-2 rounded-xl bg-bgpurple text-purple">{item}</div>;
+                        }
+                        return null;
+                      })}
+                    </div>
+                  </td>
                   <td className="py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 flex justify-center">
                     <a href="#" className="text-indigo-600 hover:text-indigo-900">
                       <EllipsisVerticalIcon className="w-5 h-5" />
@@ -120,7 +135,7 @@ const AuthorsView = () => {
             <AuthorCard></AuthorCard>
             <AuthorCard></AuthorCard>
             <AuthorCard></AuthorCard>
-            <AuthorCard></AuthorCard>   
+            <AuthorCard></AuthorCard>
             <AuthorCard></AuthorCard>
             <AuthorCard></AuthorCard>
           </div>
