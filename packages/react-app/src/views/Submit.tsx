@@ -6,12 +6,18 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import { useAccount, useContractWrite, useNetwork, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
+import {
+  useAccount,
+  useContractWrite,
+  useNetwork,
+  usePrepareContractWrite,
+  useWaitForTransaction,
+} from "wagmi";
 import { SubmitArticleModal } from "../components";
 import { JODW_BACKEND } from "../constants";
 import TalentDaoContracts from "../contracts/hardhat_contracts.json";
 import { RootState } from "../app/store";
-import { CreatePostViaDispatcherDocument } from "@jodw/lens";
+import { CreatePostTypedDataDocument } from "@jodw/lens";
 import { MetadataDisplayType } from "../lib/lens/interfaces/generic";
 import { PublicationMainFocus } from "../lib/lens/interfaces/publication";
 import { sendTransacton } from "../utils/arweave";
@@ -32,9 +38,6 @@ const SubmitState = {
 
 const Submit = () => {
   const apolloClient = useApolloClient();
-  const lensAuthData = useSelector((state: RootState) =>
-    state.user.lensAuth
-  );
   const { address } = useAccount();
   const { chain } = useNetwork();
   const [selectedManuscriptFile, setSelectedManuscriptFile] = useState(undefined);
@@ -78,47 +81,47 @@ const Submit = () => {
   };
 
   // todo: we are only using on polygon, so we can remove this
-  const talentDaoManagerContract = Object.entries(TalentDaoContracts[chain?.id] || {}).find(([_key, _value]) => _value?.chainId === String(chain?.id))?.[1]?.contracts?.TalentDaoManager;
+  // const talentDaoManagerContract = Object.entries(TalentDaoContracts[chain?.id] || {}).find(([_key, _value]) => _value?.chainId === String(chain?.id))?.[1]?.contracts?.TalentDaoManager;
 
-  const { config: talentDaoManagerContractConfig } = usePrepareContractWrite({
-    addressOrName: talentDaoManagerContract?.address,
-    contractInterface: talentDaoManagerContract?.abi,
-    functionName: "mintArticleNFT",
-    args: [address, arweaveHash, ipfsMetadataUri, !Number.isNaN(talentPrice) ? ethers.utils.parseEther("0") : ethers.utils.parseEther(String(talentPrice))],
-    onError(_err) {
-      if (_err) {
-        setSubmitState(SubmitState.SUBMIT_CONTINUE_ERROR);
-        console.error("On chain tx failed", _err);
-        notification.open({
-          message: "Submit failed!",
-          description: "Something went wrong while submitting the article, please try again.",
-          icon: "⚠️",
-        });
-      }
-    },
-  });
-  const {
-    data: onChainSubmitData,
-    write: doSubmitOnChain,
-  } = useContractWrite(talentDaoManagerContractConfig);
-
-  const waitForOnChainTransaction = useWaitForTransaction({
-    hash: onChainSubmitData?.hash,
-    timeout: 10_000,
-    onSettled(_data, _error) {
-      if (_data?.status === 1) {
-        notification.open({
-          message: "Article is now onchain",
-          description: "You have submitted your article== 😍",
-          icon: "🚀",
-        });
-        setSubmitState(SubmitState.SUBMIT_CONTINUE_COMPLETED);
-        clearForm();
-      } else {
-        setSubmitState(SubmitState.SUBMIT_CONTINUE_ERROR);
-      }
-    },
-  });
+  // const { config: talentDaoManagerContractConfig } = usePrepareContractWrite({
+  //   addressOrName: talentDaoManagerContract?.address,
+  //   contractInterface: talentDaoManagerContract?.abi,
+  //   functionName: "mintArticleNFT",
+  //   args: [address, arweaveHash, ipfsMetadataUri, !Number.isNaN(talentPrice) ? ethers.utils.parseEther("0") : ethers.utils.parseEther(String(talentPrice))],
+  //   onError(_err) {
+  //     if (_err) {
+  //       setSubmitState(SubmitState.SUBMIT_CONTINUE_ERROR);
+  //       console.error("On chain tx failed", _err);
+  //       notification.open({
+  //         message: "Submit failed!",
+  //         description: "Something went wrong while submitting the article, please try again.",
+  //         icon: "⚠️",
+  //       });
+  //     }
+  //   },
+  // });
+  // const {
+  //   data: onChainSubmitData,
+  //   write: doSubmitOnChain,
+  // } = useContractWrite(talentDaoManagerContractConfig);
+  // 
+  // const waitForOnChainTransaction = useWaitForTransaction({
+  //   hash: onChainSubmitData?.hash,
+  //   timeout: 10_000,
+  //   onSettled(_data, _error) {
+  //     if (_data?.status === 1) {
+  //       notification.open({
+  //         message: "Article is now onchain",
+  //         description: "You have submitted your article== 😍",
+  //         icon: "🚀",
+  //       });
+  //       setSubmitState(SubmitState.SUBMIT_CONTINUE_COMPLETED);
+  //       clearForm();
+  //     } else {
+  //       setSubmitState(SubmitState.SUBMIT_CONTINUE_ERROR);
+  //     }
+  //   },
+  // });
 
   const createArticleMetadata = async (articleArweave: { id: any; contentType: any; }, coverImageArweave: { id: any; contentType: any; }, onSuccess: { (ipfsUri: any): Promise<void>; (arg0: string): void; }, onError: () => void) => {
     const ipfsResult = await uploadIpfs({
@@ -282,18 +285,13 @@ const Submit = () => {
     }
     try {
       const results = await apolloClient.mutate({
-        mutation: CreatePostViaDispatcherDocument,
+        mutation: CreatePostTypedDataDocument,
         variables: {
           request: {
             profileId: lensProfile.id,
             contentURI: ipfsUri,
             collectModule: {}
           }
-        },
-        context: {
-          headers: {
-            "x-access-token": lensAuthData?.accessToken ? `Bearer ${lensAuthData?.accessToken}` : "",
-          },
         }
       });
       console.log("LENS PUBLISH RESULTS ", results);
@@ -313,10 +311,10 @@ const Submit = () => {
       return;
     }
 
-    if (arweaveHash !== "" && ipfsMetadataUri !== "" && doSubmitOnChain) {
+    if (arweaveHash !== "" && ipfsMetadataUri !== ""/* && doSubmitOnChain*/) {
       //doSubmitOnChain?.();
     }
-  }, [ipfsMetadataUri, doSubmitOnChain]);
+  }, [ipfsMetadataUri/*, doSubmitOnChain*/]);
 
   const submitToArweave = async (file: { filename?: any; data: any; }) => {
     //

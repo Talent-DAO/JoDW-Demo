@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MiniLensProfile from "./MiniLensProfile";
 import { fetchLensUserStart, fetchLensUserSuccess, Status } from "../../features/user/userSlice";
-import { useLensAuth } from "../../hooks";
 import React from "react";
 
 const ConnectLensModal = ({ isOpen, onConnectSuccess, onConnectError, onConnectCancel }: any) => {
@@ -28,22 +27,11 @@ const ConnectLensModal = ({ isOpen, onConnectSuccess, onConnectError, onConnectC
   //   return result.data?.createProfile;
   // };
 
-  useLensAuth(address, () => !isOpen);
-
-  const lensAuthData = useSelector((state: any) =>
-    state.user.lensAuth
-  );
-
   const findExistingLensProfiles = async () => {
     dispatch(fetchLensUserStart());
     const results = await apolloClient.query({
       query: ProfilesDocument,
       variables: { request: { ownedBy: [address] } },
-      context: {
-        headers: {
-          "x-access-token": lensAuthData?.accessToken ? `Bearer ${lensAuthData?.accessToken}` : "",
-        },
-      }
     });
     setAvailableLensProfiles(results?.data.profiles?.items); // not paginating
     // default to the first profile
@@ -63,8 +51,10 @@ const ConnectLensModal = ({ isOpen, onConnectSuccess, onConnectError, onConnectC
   };
 
   useEffect(() => {
-    findExistingLensProfiles();
-  }, [lensAuthData]);
+    if (isOpen) {
+      findExistingLensProfiles();
+    }
+  });
 
   return (
     <Modal

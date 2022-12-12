@@ -1,20 +1,10 @@
 import { useEffect } from "react";
 import { useSignMessage } from "wagmi";
 import { Lens } from "lens-protocol";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchLensAuthTokenStart, fetchLensAuthTokenSuccess, Status } from "../features/user/userSlice";
+import { useLocalStorage } from ".";
 
 export const useLensAuth = (address, deferCondition = () => false) => {
-  const dispatch = useDispatch();
-  const props = useSelector((state) => {
-    const lensAuth = state.user.lensAuth;
-    const addr = state.user.user.walletId;
-
-    return {
-      lensAuth,
-      addr
-    };
-  });
+  const [authToken, setAuthToken] = useLocalStorage("lens-auth-token");
   
   const { data, error, isLoading, signMessage } = useSignMessage({
     onError(error) {
@@ -27,11 +17,6 @@ export const useLensAuth = (address, deferCondition = () => false) => {
   });
 
   const connectWithLens = async () => {
-    if (props.lensAuth.status === Status.Loading || props.lensAuth.status === Status.Success) {
-      return;
-    }
-
-    dispatch(fetchLensAuthTokenStart());
     // Getting the challenge from the server
     try {
       const data = await Lens.getChallenge(address);
@@ -46,23 +31,23 @@ export const useLensAuth = (address, deferCondition = () => false) => {
   const VerifyLensSignature = async (sign) => {
     // Sending the signature to the server to verify
     const response = await Lens.Authenticate(address, sign);
-    dispatch(fetchLensAuthTokenSuccess({
-      accessToken: response?.data?.authenticate?.accessToken,
-      refreshToken: response?.data?.authenticate?.refreshToken,
-      status: Status.Success,
-    }));
+    if (response?.data?.authenticate?.accessToken) {
+      setAuthToken(response?.data?.authenticate?.accessToken);
+    } else {
+      console.error(["verification failed!", response]);
+    }
   };
 
   useEffect(() => {
     // check whether there is already an auth token
-    if (deferCondition() || isLoading || !signMessage || (address === props.addr && props.lensAuth.accessToken)) {
+    if (deferCondition() || isLoading || !signMessage || authToken) {
       return;
     }
     // if not, proceed
     connectWithLens();
   }, [address, deferCondition]);
 
-  return props.lensAuth;
+  return authToken;
 };
 
 export default useLensAuth;

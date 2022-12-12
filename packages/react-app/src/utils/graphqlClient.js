@@ -4,6 +4,11 @@ import { ApolloClient, ApolloLink, InMemoryCache, useQuery } from "@apollo/clien
 import gql from "graphql-tag";
 import { useNetwork } from "wagmi";
 
+const getLensAuthToken = () => {
+  const token = window.localStorage.getItem("lens-auth-token");
+  return token ? `Bearer ${JSON.parse(token)}` : "";
+};
+
 export const healthClient = new ApolloClient({
   uri: "https://api.thegraph.com/index-node/graphql",
   cache: new InMemoryCache(),
@@ -75,7 +80,17 @@ export const compositeClient = new ApolloClient({
         goerli: "https://api.thegraph.com/subgraphs/name/codenamejason/reputation-goerli",
         arweave: "https://arweave.net/graphql",
         lens: "https://api.thegraph.com/subgraphs/name/supriyaamisshra/lens-tdao-test-1",
-        officiallens: "https://api.lens.dev",
+        officiallens: "https://api-mumbai.lens.dev",
+      },
+      getContext: (endpoint) => {
+        if (endpoint === "officiallens") {
+          return ({
+            headers: {
+              "x-access-token": getLensAuthToken()
+            }
+          });
+        }
+        return {};
       },
       createHttpLink: () => createHttpLink(),
       httpSuffix: ""

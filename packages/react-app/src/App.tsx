@@ -6,6 +6,7 @@ import { useAccount, useNetwork } from "wagmi";
 import "./App.css";
 import { Footer, Navbar } from "./components";
 import LensLogin from "./components/lens/LensLogin";
+import { useLensAuth } from "./hooks";
 import { fetchUserStart, userWalletUpdated } from "./features/user/userSlice";
 import { accountUpdated, chainUpdated } from "./features/web3/web3Slice";
 import {
@@ -22,8 +23,7 @@ import {
   ReviewerView,
   SearchView,
   SubgraphView, 
-  SubmitView, 
-  SubmitLensView, 
+  SubmitView,
   TermsOfServiceView,
   TokenView,
   UserView,
@@ -54,6 +54,7 @@ const Website = ({ ...props }) => {
   const { chain } = useNetwork();
   const dispatch = useDispatch();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const lensAuth = useLensAuth(address, () => !address);
 
   const handleUserMenuOpen = (state: any) => {
     setUserMenuOpen(state);
@@ -138,7 +139,6 @@ const Website = ({ ...props }) => {
             </Route>
             <Route path="/debug" />
             <Route path="/submit/:walletId" element={<SubmitView />} />
-            <Route path="/submit-lens" element={<SubmitLensView />} />
             <Route path="/termsofservice" element={<TermsOfServiceView />} />
             <Route path="/privacypolicy" element={<PrivacyPolicyView />} />
             <Route path="/subgraph" element={<SubgraphView subgraphUri={props.subgraphUri} />} />

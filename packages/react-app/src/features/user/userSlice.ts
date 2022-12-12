@@ -7,12 +7,6 @@ export enum Status {
   Failed = "failed",
 }
 
-export type LensAuth = {
-  accessToken: string | undefined;
-  refreshToken: string | undefined;
-  status: Status;
-}
-
 export type LensUser = {
   id: number;
   handle: string | undefined;
@@ -31,7 +25,6 @@ export interface UserRootState {
   user: User;
   status: Status;
   error: string;
-  lensAuth: LensAuth;
 }
 
 const initialState: UserRootState = {
@@ -44,11 +37,6 @@ const initialState: UserRootState = {
       walletId: "",
       status: Status.Idle,
     },
-    status: Status.Idle,
-  },
-  lensAuth: {
-    accessToken: "",
-    refreshToken: "",
     status: Status.Idle,
   },
   status: Status.Idle,
@@ -83,18 +71,6 @@ export const userSlice = createSlice({
       state.status = Status.Failed;
       state.error = action.payload;
     },
-    // Grab lens auth token
-    fetchLensAuthTokenStart: (state: UserRootState) => {
-      state.lensAuth.status = Status.Loading;
-    },
-    fetchLensAuthTokenSuccess: (state: UserRootState, action: PayloadAction<LensAuth>) => {
-      state.lensAuth.status = Status.Success;
-      state.lensAuth.accessToken = action.payload.accessToken;
-      state.lensAuth.refreshToken = action.payload.refreshToken;
-    },
-    fetchLensAuthTokenFailure: (state: UserRootState) => {
-      state.lensAuth.status = Status.Failed;
-    },
     // Update user profile reducers
     userWalletUpdated: (state: UserRootState, action: PayloadAction<string>) => {
       // this is only updating the user wallet id, not the lens profile which is fetched separately
@@ -112,9 +88,6 @@ export const {
   fetchLensUserStart,
   fetchLensUserSuccess,
   fetchLensUserFailure,
-  fetchLensAuthTokenStart,
-  fetchLensAuthTokenSuccess,
-  fetchLensAuthTokenFailure,
   userWalletUpdated,
 } = actions;
 export default reducer;

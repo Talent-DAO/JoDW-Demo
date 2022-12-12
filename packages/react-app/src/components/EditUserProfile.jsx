@@ -8,7 +8,6 @@ import { JODW_BACKEND as server } from "../constants";
 import { dataURLtoFile, toBase64 } from "../utils/utils";
 import { ProfileDocument } from "@jodw/lens";
 import ConnectLensModal from "./lens/ConnectLensModal";
-import { useLensAuth } from "../hooks";
 import { fetchLensUserStart, fetchLensUserSuccess, Status } from "../features/user/userSlice";
 
 const EditUserProfile = () => {
@@ -66,12 +65,8 @@ const EditUserProfile = () => {
     toggleConnectWithLensModal();
   };
   
-  useLensAuth(address, () => lensProfileId === "");
   const lensProfile = useSelector(state =>
     state.user.user.lensProfile
-  );
-  const lensAuthData = useSelector(state =>
-    state.user.lensAuth
   );
 
   
@@ -80,21 +75,11 @@ const EditUserProfile = () => {
     if (!id || lensProfile?.handle) {
       return;
     }
-
-    if (!lensAuthData?.accessToken) {
-      console.log("not ready yet!");
-      return;
-    }
     
     dispatch(fetchLensUserStart());
     const result = await apolloClient.query({
       query: ProfileDocument,
       variables: { request: { profileId: id } },
-      context: {
-        headers: {
-          "x-access-token": lensAuthData?.accessToken ? `Bearer ${lensAuthData?.accessToken}` : "",
-        },
-      }
     });
     const profile = result.data.profile;
     dispatch(fetchLensUserSuccess({
@@ -108,7 +93,7 @@ const EditUserProfile = () => {
 
   useEffect(() => {
     loadLensProfile(lensProfileId);
-  }, [lensProfileId, lensAuthData]);
+  }, [lensProfileId]);
 
   useEffect(() => {
     const getAuthorData = async () => {
