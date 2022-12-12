@@ -11,7 +11,7 @@ import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import Connections from "../../../components/dashboard/Connections";
 
 const publificationsTabs = [
-  { name: "Reviewed Publification", href: "/dashboard/reviewer/home/reviewedpubs" },
+  { name: "Reviewed Publification", href: "/dashboard/reviewer/home/mine" },
 ];
 
 const HomeView = () => {
