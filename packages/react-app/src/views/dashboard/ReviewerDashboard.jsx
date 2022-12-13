@@ -4,9 +4,11 @@ import { Route, Routes } from "react-router-dom";
 
 import HomeView from "./reviewer/HomeView";
 import ReviewView from "./reviewer/ReviewView";
+import ReviewedPubsView from "./reviewer/ReviewedPubsView";
 import RewardsView from "./reviewer/RewardsView";
 import PublificationView from "./reviewer/PublificationView";
 import SettingsView from "./reviewer/SettingsView";
+
 
 import AuthorsView from "./common/AuthorsView";
 import SubmitView from "./common/SubmitView";
@@ -26,7 +28,8 @@ const ReviewerDashboard = () => {
       <Routes>
         <Route index element={<HomeView />} />
         <Route path="/home/*" element={<HomeView />} />
-        <Route path="/review" element={<ReviewView />} />
+        <Route path="/review" element={<ReviewView />} />.
+        <Route path="/review/reviewed" element={<ReviewedPubsView />} />
         <Route path="/publification/*" element={<PublificationView />} />
         <Route path="/rewards" element={<RewardsView />} />
         <Route path="/settings/*" element={<SettingsView />} />

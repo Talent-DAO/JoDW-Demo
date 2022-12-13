@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { MagnifyingGlassIcon, StarIcon } from "@heroicons/react/20/solid";
 import { StarIcon as StarIconOutline, CheckBadgeIcon, ArrowUpTrayIcon } from "@heroicons/react/24/outline";
+import SubmissionCardModal from "../../../components/dashboard/SubmissionCardModal";
 
 const pubs = [
   { name: "Meta verse", category: ["DeSci", "History", "Art"], isFavourite: true, published: true, reviews: 8 },
@@ -18,6 +20,15 @@ const pubs = [
 ];
 
 const ReviewView = () => {
+  const [article, setArticle] = useState();
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handlePubClicked = pub => {
+    setArticle(pub);
+    setOpen(true);
+  };
+
   return (
     <div className="m-6 bg-white p-6 rounded-lg">
       <div className="flex flex-row justify-between items-center">
@@ -25,7 +36,10 @@ const ReviewView = () => {
           <div className="text-xl font-bold font-mont">Review a Publification</div>
           <div className="">Pick your interest to review</div>
         </div>
-        <div className="flex flex-row items-center space-x-1 text-primary cursor-pointer">
+        <div
+          className="flex flex-row items-center space-x-1 text-primary cursor-pointer"
+          onClick={() => navigate("/dashboard/reviewer/review/reviewed")}
+        >
           <ArrowUpTrayIcon className="w-4 h-4" />
           <span>Reviewed Publifications</span>
         </div>
@@ -45,7 +59,13 @@ const ReviewView = () => {
             />
           </div>
           <div className="flex flex-row space-x-2 items-center">
-            <input id="favourite" aria-describedby="favourite" name="favourite" type="checkbox" class="h-4 w-4 rounded border-textgrey text-primary focus:ring-bgred" />
+            <input
+              id="favourite"
+              aria-describedby="favourite"
+              name="favourite"
+              type="checkbox"
+              class="h-4 w-4 rounded border-textgrey text-primary focus:ring-bgred"
+            />
             <span>Favourite</span>
           </div>
         </div>
@@ -80,7 +100,9 @@ const ReviewView = () => {
               <tr key={index}>
                 <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-textgrey sm:w-auto sm:max-w-none sm:pl-6">
                   <div className="flex flex-row space-x-1 items-center">
-                    <span className="cursor-pointer text-darkblack">{pub.name}</span>
+                    <span className="cursor-pointer text-darkblack" onClick={() => handlePubClicked(pub)}>
+                      {pub.name}
+                    </span>
                     <div className="truncate text-textgrey sm:hidden">
                       {pub.isFavourite ? (
                         <StarIcon className="w-4 h-4 text-primary" />
@@ -94,13 +116,13 @@ const ReviewView = () => {
                     <dd className="mt-1 truncate text-textgrey md:hidden">
                       <div className="flex flex-row space-x-1">
                         {pub.category.map(item => {
-                          if (item == "DeSci") {
+                          if (item === "DeSci") {
                             return <div className="px-2 rounded-xl bg-bgred text-primary">{item}</div>;
                           }
-                          if (item == "History") {
+                          if (item === "History") {
                             return <div className="px-2 rounded-xl bg-bgblue text-blue">{item}</div>;
                           }
-                          if (item == "Art") {
+                          if (item === "Art") {
                             return <div className="px-2 rounded-xl bg-bgpurple text-purple">{item}</div>;
                           }
                           return null;
@@ -112,13 +134,13 @@ const ReviewView = () => {
                 <td className="hidden px-3 py-4 text-sm text-textgrey lg:table-cell">
                   <div className="flex flex-row space-x-1">
                     {pub.category.map(item => {
-                      if (item == "DeSci") {
+                      if (item === "DeSci") {
                         return <div className="px-2 rounded-xl bg-bgred text-primary">{item}</div>;
                       }
-                      if (item == "History") {
+                      if (item === "History") {
                         return <div className="px-2 rounded-xl bg-bgblue text-blue">{item}</div>;
                       }
-                      if (item == "Art") {
+                      if (item === "Art") {
                         return <div className="px-2 rounded-xl bg-bgpurple text-purple">{item}</div>;
                       }
                       return null;
@@ -126,7 +148,11 @@ const ReviewView = () => {
                   </div>
                 </td>
                 <td className="hidden px-3 py-4 text-sm text-textgrey sm:table-cell">
-                  {pub.isFavourite ? <StarIcon className="w-6 h-6 text-primary" /> : <StarIconOutline className="w-6 h-6" />}
+                  {pub.isFavourite ? (
+                    <StarIcon className="w-6 h-6 text-primary" />
+                  ) : (
+                    <StarIconOutline className="w-6 h-6" />
+                  )}
                 </td>
                 <td className="px-3 py-4 text-sm text-textgrey">
                   {pub.published ? (
@@ -161,6 +187,7 @@ const ReviewView = () => {
           </tfoot>
         </table>
       </div>
+      <SubmissionCardModal open={open} onClose={() => setOpen(false)} article={article} />
     </div>
   );
 };

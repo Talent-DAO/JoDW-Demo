@@ -92,13 +92,13 @@ const AuthorsView = () => {
                   <td className="hidden px-3 py-4 text-sm text-textgrey lg:table-cell">
                     <div class="flex flex-row space-x-1">
                       {author.category.map(item => {
-                        if (item == "DeSci") {
+                        if (item === "DeSci") {
                           return <div class="px-2 rounded-xl bg-bgred text-primary">{item}</div>;
                         }
-                        if (item == "History") {
+                        if (item === "History") {
                           return <div class="px-2 rounded-xl bg-bgblue text-blue">{item}</div>;
                         }
-                        if (item == "Art") {
+                        if (item === "Art") {
                           return <div class="px-2 rounded-xl bg-bgpurple text-purple">{item}</div>;
                         }
                         return null;
