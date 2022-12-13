@@ -1,19 +1,17 @@
 import { useApolloClient } from "@apollo/client";
-import { notification } from "antd";
 import axios from "axios";
-import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import { useAccount, useContractWrite, useNetwork, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 import { SubmitArticleModal } from "../components";
 import { JODW_BACKEND } from "../constants";
-import TalentDaoContracts from "../contracts/hardhat_contracts.json";
 import { RootState } from "../app/store";
 import { CREATE_POST } from "../graphql/queries/lens";
 import { MetadataDisplayType } from "../lib/lens/interfaces/generic";
 import { PublicationMainFocus } from "../lib/lens/interfaces/publication";
+import { NewArticleFormData } from "../lib/shared/interfaces";
 import { sendTransacton } from "../utils/arweave";
 import { uploadIpfs } from "../utils/ipfs";
 
@@ -38,7 +36,7 @@ const Submit = () => {
   const { address } = useAccount();
   const { chain } = useNetwork();
   const [selectedManuscriptFile, setSelectedManuscriptFile] = useState(undefined);
-  const [authors, setAuthors] = useState([]);
+  const [authors, setAuthors] = useState<any>([]);
   const [selectedArticleCover, setSelectedArticleCover] = useState();
   const [talentPrice, setTalentPrice] = useState(0);
   const [articleTitle, setArticleTitle] = useState("");
@@ -77,50 +75,12 @@ const Submit = () => {
     setSubmitState(SubmitState.SUBMIT_REVIEW_PENDING);
   };
 
-  // todo: we are only using on polygon, so we can remove this
-  const talentDaoManagerContract = Object.entries(TalentDaoContracts[chain?.id] || {}).find(([_key, _value]) => _value?.chainId === String(chain?.id))?.[1]?.contracts?.TalentDaoManager;
-
-  const { config: talentDaoManagerContractConfig } = usePrepareContractWrite({
-    addressOrName: talentDaoManagerContract?.address,
-    contractInterface: talentDaoManagerContract?.abi,
-    functionName: "mintArticleNFT",
-    args: [address, arweaveHash, ipfsMetadataUri, !Number.isNaN(talentPrice) ? ethers.utils.parseEther("0") : ethers.utils.parseEther(String(talentPrice))],
-    onError(_err) {
-      if (_err) {
-        setSubmitState(SubmitState.SUBMIT_CONTINUE_ERROR);
-        console.error("On chain tx failed", _err);
-        notification.open({
-          message: "Submit failed!",
-          description: "Something went wrong while submitting the article, please try again.",
-          icon: "⚠️",
-        });
-      }
-    },
-  });
-  const {
-    data: onChainSubmitData,
-    write: doSubmitOnChain,
-  } = useContractWrite(talentDaoManagerContractConfig);
-
-  const waitForOnChainTransaction = useWaitForTransaction({
-    hash: onChainSubmitData?.hash,
-    timeout: 10_000,
-    onSettled(_data, _error) {
-      if (_data?.status === 1) {
-        notification.open({
-          message: "Article is now onchain",
-          description: "You have submitted your article== 😍",
-          icon: "🚀",
-        });
-        setSubmitState(SubmitState.SUBMIT_CONTINUE_COMPLETED);
-        clearForm();
-      } else {
-        setSubmitState(SubmitState.SUBMIT_CONTINUE_ERROR);
-      }
-    },
-  });
-
-  const createArticleMetadata = async (articleArweave: { id: any; contentType: any; }, coverImageArweave: { id: any; contentType: any; }, onSuccess: { (ipfsUri: any): Promise<void>; (arg0: string): void; }, onError: () => void) => {
+  const createArticleMetadata = async (
+    articleArweave: { id: any; contentType: any; },
+    coverImageArweave: { id: any; contentType: any; },
+    onSuccess: { (ipfsUri: any): Promise<void>; (arg0: string): void; },
+    onError: () => void
+  ) => {
     const ipfsResult = await uploadIpfs({
       version: "2.0.0",
       mainContentFocus: PublicationMainFocus.IMAGE,
@@ -272,7 +232,7 @@ const Submit = () => {
       } catch (e) {
         console.error("Save article to JoDW backend failed: ", e);
       }
-    }, () => {});
+    }, () => { });
   };
 
   const publishToLensProfile = async (ipfsUri: string, lensProfile: { id: any; }) => {
@@ -301,10 +261,10 @@ const Submit = () => {
       return;
     }
 
-    if (arweaveHash !== "" && ipfsMetadataUri !== "" && doSubmitOnChain) {
-      doSubmitOnChain?.();
-    }
-  }, [ipfsMetadataUri, doSubmitOnChain]);
+    // if (arweaveHash !== "" && ipfsMetadataUri !== "" && doSubmitOnChain) {
+    //   doSubmitOnChain?.();
+    // }
+  }, [ipfsMetadataUri]);
 
   const submitToArweave = async (file: { filename?: any; data: any; }) => {
     //
@@ -325,7 +285,7 @@ const Submit = () => {
     preview.style.display = "block";
   }, [selectedArticleCover]);
 
-  const articleFormData = {
+  const articleFormData: NewArticleFormData = {
     title: articleTitle,
     abstract: abstract,
     manuscriptFile: {
@@ -359,9 +319,9 @@ const Submit = () => {
   };
 
   // For debugging:
-  // useEffect(() => {
-  //   console.log("SUBMIT STATE: ", submitState);
-  // }, [submitState]);
+  useEffect(() => {
+    console.log("SUBMIT STATE: ", submitState);
+  }, [submitState]);
 
   return (
     <div className="" style={{ backgroundImage: "linear-gradient(#fff, #EEEE" }}>

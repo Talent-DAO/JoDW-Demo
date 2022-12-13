@@ -8,7 +8,7 @@
     "linebreak-style": 0,
     "quotes": ["error", "double"],
     "semi": ["error", "always"],
-    "no-console": "warn",
+    "no-console": "off",
     "no-unused-vars": 0,
     "no-undef": "warn",
     "no-constant-condition": "warn",
