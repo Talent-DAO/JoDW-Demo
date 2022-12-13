@@ -415,6 +415,11 @@ const Submit = () => {
           traitType: "articleContentType",
           value: articleArweave?.contentType
         },
+        {
+          displayType: MetadataDisplayType.String,
+          traitType: "articleContentURI",
+          value: "https://arweave.net/" + articleArweave?.id
+        },
       ],
       tags: ["talentdao", "jodw"],
       appId: "JoDW",

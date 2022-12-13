@@ -1,45 +1,29 @@
 
-import { Modal } from "antd";
-import { useApolloClient } from "@apollo/client";
+import { Col, Modal, Row, Space, Spin } from "antd";
 import { useAccount } from "wagmi";
-import { ProfilesDocument, ProfileQueryRequest } from "@jodw/lens";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { Profile, useProfilesQuery } from "@jodw/lens";
+import { useDispatch } from "react-redux";
 import MiniLensProfile from "./MiniLensProfile";
-import { fetchLensUserStart, fetchLensUserSuccess, Status } from "../../features/user/userSlice";
+import { fetchLensUserSuccess, Status } from "../../features/user/userSlice";
 import React from "react";
 
-const ConnectLensModal = ({ isOpen, onConnectSuccess, onConnectError, onConnectCancel }: any) => {
+type ConnectLensModalParams = {
+  isOpen: boolean;
+  onConnectSuccess?: (profile: Profile) => void;
+  onConnectError?: (error: Error) => void;
+  onConnectCancel?: () => void;
+};
+
+const ConnectLensModal = ({ isOpen, onConnectSuccess = (_) => {}, onConnectError = () => {}, onConnectCancel = () => {} }: ConnectLensModalParams) => {
   const dispatch = useDispatch();
   const { address } = useAccount();
-  const [availableLensProfiles, setAvailableLensProfiles]: any = useState(null);
-  const apolloClient = useApolloClient();
+  const { data: lensProfilesData, loading: lensProfilesIsLoading, error: lensProfileLoadError } = useProfilesQuery({
+    variables: {
+      request: { ownedBy: [address || ""] }
+    },
+  });
 
-  // TODO: add support to create lens profile from here.
-  // const createLensProfileRequest = async (request) => {
-  //   const result = await apolloClient.mutate({
-  //     mutation: CreateProfileDocument,
-  //     variables: {
-  //       request,
-  //     },
-  //   });
-
-  //   return result.data?.createProfile;
-  // };
-
-  const findExistingLensProfiles = async () => {
-    dispatch(fetchLensUserStart());
-    const results = await apolloClient.query({
-      query: ProfilesDocument,
-      variables: { request: { ownedBy: [address] } },
-    });
-    setAvailableLensProfiles(results?.data.profiles?.items); // not paginating
-    // default to the first profile
-    // todo: allow user to select profile
-    dispatch(fetchLensUserSuccess(results?.data.profiles?.items[0]));
-  };
-
-  const onProfileSelected = async (profile: any) => {
+  const onProfileSelected = async (profile: Profile) => {
     onConnectSuccess(profile);
     dispatch(fetchLensUserSuccess({
       id: profile?.id,
@@ -50,11 +34,9 @@ const ConnectLensModal = ({ isOpen, onConnectSuccess, onConnectError, onConnectC
     }));
   };
 
-  useEffect(() => {
-    if (isOpen) {
-      findExistingLensProfiles();
-    }
-  });
+  const availableLensProfiles = lensProfilesData?.profiles?.items;
+
+  const miniLensProfileDisplayRow = availableLensProfiles && availableLensProfiles.map((profile) => <Col><MiniLensProfile profile={profile} onProfileSelected={onProfileSelected} /></Col>);
 
   return (
     <Modal
@@ -66,15 +48,23 @@ const ConnectLensModal = ({ isOpen, onConnectSuccess, onConnectError, onConnectC
       visible={isOpen}
       footer={null}
     >
-      <ol>
-        <li key={"1"}>List available profiles corresponding to this wallet ID</li>
-        <li key={"2"}>If any one of them is selected, return by invoking callback</li>
-        <li key={"3"}>TODO: Else, display handle name field & create button.</li>
-        <li key={"4"}>TODO: On create clicked, createProfile and return ID</li>
-      </ol>
-      <div className="flex">
-        {availableLensProfiles && availableLensProfiles.map((profile: any) => <MiniLensProfile profile={profile} onProfileSelected={onProfileSelected} />)}
-      </div>
+      <Row justify="center" gutter={16}>
+        {lensProfilesIsLoading ? (
+          <Col>
+            <Space direction="vertical">
+              <Space direction="horizontal" style={{width: "100%", justifyContent: "center"}}>
+                <Space>
+                  <Spin />
+                </Space>
+              </Space>
+              <Space>
+                Loading connected Lens profiles...
+              </Space>
+            </Space>
+          </Col>
+        ) : availableLensProfiles?.length === 0 ? <Col>You don't have any Lens profiles yet!</Col> : miniLensProfileDisplayRow
+        }
+      </Row>
     </Modal>
   );
 };

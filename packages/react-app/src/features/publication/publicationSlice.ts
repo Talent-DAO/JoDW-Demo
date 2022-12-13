@@ -1,6 +1,6 @@
+import { Post } from "@jodw/lens";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getLatestArticles, TLensPublicationContent } from "../../helpers/graphql/articles";
-import { LensUser } from "../user/userSlice";
+import { getLatestArticles } from "../../helpers/graphql/articles";
 
 export enum Status {
   Idle = "idle",
@@ -9,23 +9,8 @@ export enum Status {
   Failed = "failed",
 }
 
-export type TComment = {
-  pubId: string;
-  timestamp: number;
-}
-
-export type TPublication = {
-  id: number;
-  pubId: number | undefined;
-  profileId: LensUser | undefined;
-  content: TLensPublicationContent;
-  comments: TComment[] | undefined;
-  contentURI: string | undefined;
-  timestamp: number | undefined;
-}
-
 export interface IPublicationState {
-  publications: TPublication[];
+  publications: Post[];
   status: Status;
   error: string | undefined;
 }
@@ -50,7 +35,7 @@ const getLatestPublications = createAsyncThunk(
 
 const postPublication = createAsyncThunk(
   "publication/postPublication",
-  async (publication: TPublication) => {
+  async (publication: Post) => {
     // todo:
   });
 
@@ -62,7 +47,7 @@ export const publicationSlice = createSlice({
     getPublicationsStart: state => {
       state.status = Status.Loading;
     },
-    getPublicationsSuccess: (state: IPublicationState, action: PayloadAction<TPublication[]>) => {
+    getPublicationsSuccess: (state: IPublicationState, action: PayloadAction<Post[]>) => {
       state.publications = action.payload;
       state.status = Status.Success;
     },
@@ -73,7 +58,7 @@ export const publicationSlice = createSlice({
     getPublicationDetailsStart: (state: IPublicationState) => {
       state.status = Status.Loading;
     },
-    getPublicationDetailsSuccess: (state: IPublicationState, action: PayloadAction<TPublication>) => {
+    getPublicationDetailsSuccess: (state: IPublicationState, action: PayloadAction<Post>) => {
       console.log("getPublicationDetailsSuccess", action.payload);
       state.publications[0] = action.payload;
       state.status = Status.Success;
