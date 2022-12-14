@@ -92,7 +92,7 @@ const Submit = () => {
         icon: "🚀",
       });
       console.log(["Article published!"]);
-    }),
+    }, false), // TODO: make this true. RN it does not complete...
     onError: (error) => {
       onError({
         message: "Submit failed!",
@@ -361,7 +361,7 @@ const Submit = () => {
       external_url: "https://arweave.net/" + articleArweave?.id,
       image: null,
       imageMimeType: null,
-      name: articleTitle,
+      name: "#jodw " + articleTitle,
       media: [
         {
           item: "https://arweave.net/" + coverImageArweave?.id,

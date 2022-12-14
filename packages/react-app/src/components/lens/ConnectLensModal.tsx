@@ -6,6 +6,9 @@ import { useDispatch } from "react-redux";
 import MiniLensProfile from "./MiniLensProfile";
 import { fetchLensUserSuccess, Status } from "../../features/user/userSlice";
 import React from "react";
+import { getProfilePicture } from "../../lib/lens/publications/getPostAsArticle";
+import { convertToHttpUrl } from "../../utils/utils";
+import { ipfsGetByPath } from "../../utils/ipfs";
 
 type ConnectLensModalParams = {
   isOpen: boolean;
@@ -25,11 +28,19 @@ const ConnectLensModal = ({ isOpen, onConnectSuccess = (_) => {}, onConnectError
 
   const onProfileSelected = async (profile: Profile) => {
     onConnectSuccess(profile);
+    const metadataFile = profile?.metadata ? await ipfsGetByPath(profile?.metadata) : null;
+    const metadata = metadataFile ? JSON.parse(metadataFile) : null;
     dispatch(fetchLensUserSuccess({
       id: profile?.id,
       handle: profile?.handle,
-      image: profile?.picture?.original?.url,
+      image: convertToHttpUrl(getProfilePicture(profile?.picture)),
       walletId: profile?.ownedBy,
+      coverImage: convertToHttpUrl(getProfilePicture(profile?.coverPicture)),
+      bio: profile?.bio || undefined,
+      aboutMe: metadata?.attributes.find((a: any) => a?.key === "aboutMe")?.value || undefined,
+      twitter: metadata?.attributes.find((a: any) => a?.key === "twitter")?.value || undefined,
+      linkedin: metadata?.attributes.find((a: any) => a?.key === "linkedin")?.value || undefined,
+      tipAddress: metadata?.attributes.find((a: any) => a?.key === "tipAddress")?.value || undefined,
       status: Status.Success
     }));
   };

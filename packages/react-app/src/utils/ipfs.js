@@ -24,3 +24,15 @@ export const uploadIpfs = async (data) => {
   console.log("upload result ipfs", result);
   return result;
 };
+
+export const uploadIpfsRaw = async (data) => {
+  const result = await client.add(data);
+
+  console.log("upload result ipfs raw", result);
+  return result;
+};
+
+export const ipfsGetByPath = async (path) => {
+  const result = await client.get(path);
+  return Buffer.from(result).toString("utf8");
+};

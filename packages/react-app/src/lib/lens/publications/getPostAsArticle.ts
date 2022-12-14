@@ -13,7 +13,7 @@ export const getMediaSetOriginal = (item: any) => {
   if (item?.__typename === "MediaSet") {
     return item?.original?.url;
   } else {
-    return "http://path/to/default/image";
+    return null;
   }
 };
 

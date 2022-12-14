@@ -12,6 +12,12 @@ export type LensUser = {
   handle: string | undefined;
   image: string | undefined;
   walletId: string | undefined;
+  coverImage: string | undefined;
+  bio: string | undefined;
+  aboutMe: string | undefined;
+  twitter: string | undefined;
+  linkedin: string | undefined;
+  tipAddress: string | undefined;
   status: Status;
 }
 
@@ -36,6 +42,12 @@ const initialState: UserRootState = {
       handle: "",
       image: "",
       walletId: "",
+      coverImage: undefined,
+      bio: undefined,
+      aboutMe: undefined,
+      twitter: undefined,
+      linkedin: undefined,
+      tipAddress: undefined,
       status: Status.Idle,
     },
     sigNonce: 0,

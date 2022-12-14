@@ -43,13 +43,13 @@ export const postViaContract = async (createPostRequest: CreatePublicPostRequest
   return null;
 };
 
-export const broadcastTypedData = async (generatedData: any, onSuccess: (data: any) => void, trackTx = true) => {
+export const broadcastTypedData = async (generatedData: any, onSuccess: (data: any) => void = (d) => {}, trackTx = true) => {
   const { id, typedData } = generatedData;
   try {
     const signature = await signTypedData(getSignature(typedData));
 
     const broadcastResult = await broadcastRequest({
-      id: id,
+      id,
       signature,
     });
     console.log("broadcastResult", broadcastResult);
