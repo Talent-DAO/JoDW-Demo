@@ -1,4 +1,8 @@
-import { useCreateCommentTypedDataMutation } from "@jodw/lens";
+import {
+  Comment,
+  useCommentFeedQuery,
+  useCreateCommentTypedDataMutation
+} from "@jodw/lens";
 import {
   Avatar,
   Button,
@@ -8,7 +12,7 @@ import {
   List,
   notification
 } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { UserRootState } from "../../features/user/userSlice";
 import { PublicationMainFocus } from "../../lib";
@@ -18,23 +22,33 @@ import onError from "../../lib/shared/onError";
 import { broadcastTypedData } from "../../lib/lens/publications/post";
 import * as dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { getProfilePicture } from "../../lib/lens/publications/getPostAsArticle";
 
 dayjs.extend(relativeTime);
 
 const { TextArea } = Input;
 
-export interface Comment {
+type CommentViewData = {
   id: string;
   author: string;
   avatar: string;
   content: string;
-  datetime: string;
-  children?: Comment[];
+  createdAt: string;
 }
 
 type NewCommentProps = {
   parentId: string;
-  onSuccess?: (comment: Comment) => void;
+  onSuccess?: (comment: CommentViewData) => void;
+};
+
+const convertToCommentViewData = (c: Comment): CommentViewData => {
+  return {
+    id: c?.id,
+    author: c?.profile?.handle,
+    avatar: getProfilePicture(c?.profile?.picture),
+    content: c?.metadata?.content??"no body",
+    createdAt: c?.createdAt,
+  };
 };
 
 const NewComment = ({ parentId, onSuccess = (c) => {} }: NewCommentProps) => {
@@ -58,6 +72,7 @@ const NewComment = ({ parentId, onSuccess = (c) => {} }: NewCommentProps) => {
       external_url: null,
       image: null,
       imageMimeType: null,
+      attributes: [],
       name: "Comment by " + lensProfile?.handle,
       tags: ["talentdao", "jodw", "comment"],
       appId: "JoDW",
@@ -90,15 +105,15 @@ const NewComment = ({ parentId, onSuccess = (c) => {} }: NewCommentProps) => {
           icon: "🚀",
         });
         onSuccess({
-          id: "pendingid",
+          id: lensProfile?.id + "-0xfe9d19",
           author: lensProfile?.handle??"unknown",
           avatar: lensProfile?.image??"none",
           content: newComment,
-          datetime: new Date().toString(),
+          createdAt: new Date().toString(),
         });
         setNewComment("");
         setSubmitting(false);
-      }, false);
+      }, false); // waiting for it here takes a lot of time
     }
   };
 
@@ -130,7 +145,7 @@ const NewComment = ({ parentId, onSuccess = (c) => {} }: NewCommentProps) => {
   );
 };
 
-export const CommentList: React.FC<{ comments: Comment[] }> = ({ comments }) => (
+export const CommentList: React.FC<{ comments: CommentViewData[] }> = ({ comments }) => (
   <List
     dataSource={comments}
     itemLayout="horizontal"
@@ -138,26 +153,56 @@ export const CommentList: React.FC<{ comments: Comment[] }> = ({ comments }) => 
   />
 );
 
-export const CommentUI: React.FC<Comment> = ({
+export const CommentUI: React.FC<CommentViewData> = ({
   id,
   author,
   avatar,
   content,
-  datetime,
-  children,
+  createdAt,
 }) => {
   const [showNewComment, setShowNewComment] = useState(false);
-  const [replies, setReplies] = useState(children);
-  const handleCommentAdded = (comment: Comment) => {
-    setReplies([comment, ...replies??[]]);
+  const [replies, setReplies] = useState<JSX.Element[]>([]);
+  const lensProfile = useSelector((state: { user: UserRootState }) => {
+    return state.user.user.lensProfile;
+  });
+  const { data: commentsData, loading: commentsAreLoadin, error: commentsError } = useCommentFeedQuery({
+    variables: {
+      request: {
+        commentsOf: id,
+      },
+      reactionRequest: {
+        profileId: lensProfile?.id,
+      },
+    },
+  });
+
+  useEffect(() => {
+    if (commentsData) {
+      setReplies(commentsData?.publications?.items
+        .map(c => convertToCommentViewData(c))
+        .map(reply => <CommentUI {...reply} />));
+    }
+  }, [commentsData]);
+
+  const handleCommentAdded = (comment: CommentViewData) => {
+    setReplies([<CommentUI {...comment} />, ...replies??[]]);
   };
+
+  const handleReplyToClicked = () => {
+    if (id.endsWith("0xfe9d19")) {
+      onError({ message: "Your comment is still pending.", details: "Please try again in some time." });
+    } else {
+      setShowNewComment(!showNewComment);
+    }
+  };
+
   return (
     <AntdComment
-      actions={[<span onClick={() => setShowNewComment(!showNewComment)}>Reply to</span>]}
+      actions={[<span onClick={handleReplyToClicked}>Reply to</span>]}
       author={author}
       avatar={<Avatar src={avatar} />}
       content={content}
-      datetime={dayjs.default(datetime).from(new Date().toString())}
+      datetime={dayjs.default(createdAt).from(new Date().toString())}
     >
       {showNewComment && <NewComment parentId={id} onSuccess={handleCommentAdded} />}
       {replies}
@@ -167,13 +212,32 @@ export const CommentUI: React.FC<Comment> = ({
 
 type CommentFeatureProps = {
   id: string;
-  initialComments: Comment[];
 };
 
-export const CommentFeature = ({ id, initialComments }: CommentFeatureProps) => {
-  const [comments, setComments] = useState(initialComments);
-  const handleCommentAdded = (comment: Comment) => {
-    setComments([comment, ...comments??[]]);
+export const CommentFeature = ({ id }: CommentFeatureProps) => {
+  const lensProfile = useSelector((state: { user: UserRootState }) => {
+    return state.user.user.lensProfile;
+  });
+  const [comments, setComments] = useState<CommentViewData[]>([]);
+  const { data: commentsData, loading: commentsAreLoadin, error: commentsError } = useCommentFeedQuery({
+    variables: {
+      request: {
+        commentsOf: id,
+      },
+      reactionRequest: {
+        profileId: lensProfile?.id,
+      },
+    },
+  });
+
+  useEffect(() => {
+    if (commentsData) {
+      setComments(commentsData?.publications?.items?.map(c => convertToCommentViewData(c))??[]);
+    }
+  }, [commentsData]);
+
+  const handleCommentAdded = (c: CommentViewData) => {
+    setComments([c, ...comments]);
   };
 
   return (

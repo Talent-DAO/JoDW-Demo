@@ -43,7 +43,7 @@ export const postViaContract = async (createPostRequest: CreatePublicPostRequest
   return null;
 };
 
-export const broadcastTypedData = async (generatedData: any, onSuccess: () => void, trackTx = true) => {
+export const broadcastTypedData = async (generatedData: any, onSuccess: (data: any) => void, trackTx = true) => {
   const { id, typedData } = generatedData;
   try {
     const signature = await signTypedData(getSignature(typedData));
@@ -59,13 +59,13 @@ export const broadcastTypedData = async (generatedData: any, onSuccess: () => vo
     }
 
     if (!trackTx) {
-      onSuccess();
+      onSuccess({ txId: broadcastResult.txId });
       return;
     }
     
     try {
-      await pollUntilIndexed({ txId: broadcastResult.txId });
-      onSuccess();
+      const indexedResult = await pollUntilIndexed({ txId: broadcastResult.txId });
+      onSuccess({ txId: broadcastResult.txId, logs: indexedResult.txReceipt?.logs });
     } catch (err) {
       onError({ message: "Action failed!", details: "Please retry. Error: " + err });
     }

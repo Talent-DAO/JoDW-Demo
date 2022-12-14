@@ -9,7 +9,7 @@ const getBlockchain = (chain: string) => {
   throw new Error("Unknown blockchain!");
 };
 
-const getMediaSetOriginal = (item: any) => {
+export const getMediaSetOriginal = (item: any) => {
   if (item?.__typename === "MediaSet") {
     return item?.original?.url;
   } else {
@@ -17,7 +17,7 @@ const getMediaSetOriginal = (item: any) => {
   }
 };
 
-const getProfilePicture = (item: ProfileMedia | null) => {
+export const getProfilePicture = (item: ProfileMedia | null | undefined) => {
   return getMediaSetOriginal(item);
 };
 

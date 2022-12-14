@@ -1,27 +1,19 @@
 import { Spin } from "antd";
 import axios from "axios";
-import { useApolloClient } from "@apollo/client";
 import { useAccount } from "wagmi";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { JODW_BACKEND as server } from "../constants";
 import { dataURLtoFile, toBase64 } from "../utils/utils";
-import { ProfileDocument } from "@jodw/lens";
-import ConnectLensModal from "./lens/ConnectLensModal";
-import { fetchLensUserStart, fetchLensUserSuccess, Status } from "../features/user/userSlice";
 
 const EditUserProfile = () => {
-  const dispatch = useDispatch();
-  const apolloClient = useApolloClient();
-  const { address, isConnected } = useAccount();
+  const { address } = useAccount();
   const [name, setName] = useState("Edit Name");
   const [bio, setBio] = useState("Edit Bio");
   const [aboutMe, setAboutMe] = useState("");
   const [twitter, setTwitter] = useState("");
   const [linkedin, setLinkedin] = useState("");
   const [tipAddress, setTipAddress] = useState("");
-  const [isLensConnectModalOpen, setIsLensConnectModalOpen] = useState(false);
-  const [lensProfileId, setLensProfileId] = useState("");
   const [existAuthor, setExistAuthor] = useState(false);
   const [author, setAuthor] = useState(null);
   const [readers, setReaders] = useState("");
@@ -52,49 +44,10 @@ const EditUserProfile = () => {
   const changeSelectedCoverImage = event => {
     setSelectedCoverImage(event.target.files[0]);
   };
-
-  const toggleConnectWithLensModal = () => {
-    setIsLensConnectModalOpen(!isLensConnectModalOpen);
-    console.log("Toggling lens connect modal: %s", isLensConnectModalOpen);
-  };
-
-  const onLensConnectSuccess = (profile) => {
-    if (profile) {
-      setLensProfileId(profile?.id);
-    }
-    toggleConnectWithLensModal();
-  };
   
   const lensProfile = useSelector(state =>
     state.user.user.lensProfile
   );
-
-  
-
-  const loadLensProfile = async (id) => {
-    if (!id || lensProfile?.handle) {
-      return;
-    }
-    
-    dispatch(fetchLensUserStart());
-    const result = await apolloClient.query({
-      query: ProfileDocument,
-      variables: { request: { profileId: id } },
-    });
-    const profile = result.data.profile;
-    dispatch(fetchLensUserSuccess({
-      id: profile?.id,
-      handle: profile?.handle,
-      image: profile?.picture?.original?.url,
-      walletId: profile?.ownedBy,
-      status: Status.Success
-    }));
-  };
-
-  useEffect(() => {
-    loadLensProfile(lensProfileId);
-  }, [lensProfileId]);
-
   useEffect(() => {
     const getAuthorData = async () => {
       const params = new URLSearchParams([["walletId", address]]);
@@ -234,7 +187,7 @@ const EditUserProfile = () => {
         readers: readers,
         times_cited: timesCited,
         popularCategories: popularCategories,
-        lensProfileId: lensProfileId || author?.lensProfileId,
+        lensProfileId: lensProfile?.id,
       };
       
       if (existAuthor) {
@@ -253,11 +206,6 @@ const EditUserProfile = () => {
 
   return (
     <>
-      <ConnectLensModal
-        isOpen={isLensConnectModalOpen}
-        onConnectSuccess={onLensConnectSuccess}
-        onConnectCancel={toggleConnectWithLensModal}
-      />
       <div className="flex flex-col space-y-4">
         <div className="w-full rounded-2xl bg-white">
           <div className="rounded-2xl h-56 relative" style={{ backgroundColor: "rgba(220, 220, 220, 1)" }}>
@@ -320,25 +268,12 @@ const EditUserProfile = () => {
             </div>
             <div className="flex flex-row">
               <div className="flex flex-col w-1/2 justify-center">
-                {lensProfileId === "" && (
-                  <button
-                    className="w-1/2 p-3 rounded-md"
-                    style={{ backgroundColor: "#e5ffbe" }}
-                    onClick={toggleConnectWithLensModal}
-                  >
-                      Connect Lens Profile
-                  </button>
-                )}
-                {lensProfileId !== "" &&
-                <>
-                  <div
-                    className="w-1/2 p-3 rounded-md disabled"
-                    style={{ backgroundColor: "#e5ffbe" }}
-                  >
-                    {lensProfile?.handle}
-                  </div>
-                </>
-                }
+                <div
+                  className="w-1/2 p-3 rounded-md disabled"
+                  style={{ backgroundColor: "#e5ffbe" }}
+                >
+                  {lensProfile?.handle}
+                </div>
               </div>
               <div className="flex flex-col w-1/2">
                 <div className="flex flex-row space-x-4 pb-4 justify-end">

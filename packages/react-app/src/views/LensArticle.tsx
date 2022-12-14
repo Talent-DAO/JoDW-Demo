@@ -10,7 +10,7 @@ import matic from "../assets/matic.png";
 import { SimilarPublicationCard } from "../components";
 import { getPublicationDetailsFailure, getPublicationDetailsSuccess } from "../features/publication/publicationSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { CommentFeature, CommentList } from "../components/comment/Comments";
+import { CommentFeature } from "../components/comment/Comments";
 import Title from "antd/lib/typography/Title";
 import { usePublicationQuery } from "@jodw/lens";
 import { RootState } from "../app/store";
@@ -237,7 +237,7 @@ const LensArticle = () => {
           </div>
           <div className="pt-4">
             <Title level={4}>Comments</Title>
-            <CommentFeature id={article?.id} comments={[]}/>
+            <CommentFeature id={article?.id}/>
           </div>
           <div className="pb-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             <SimilarPublicationCard />
