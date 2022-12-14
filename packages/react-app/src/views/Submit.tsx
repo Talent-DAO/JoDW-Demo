@@ -9,7 +9,6 @@ import { v4 as uuidv4 } from "uuid";
 import {
   useAccount,
   useNetwork,
-  useSignTypedData,
 } from "wagmi";
 import { SubmitArticleModal } from "../components";
 import { JODW_BACKEND } from "../constants";
@@ -24,8 +23,7 @@ import { PublicationMainFocus } from "../lib";
 import { sendTransacton } from "../utils/arweave";
 import { uploadIpfs } from "../utils/ipfs";
 import onError from "../lib/shared/onError";
-import getSignature from "../lib/shared/getSignature";
-import useBroadcast from "../hooks/useBroadcast";
+import { broadcastTypedData } from "../lib/lens/publications/post";
 
 const server = JODW_BACKEND;
 
@@ -85,35 +83,16 @@ const Submit = () => {
     setSubmitState(SubmitState.SUBMIT_REVIEW_PENDING);
   };
 
-  const userSigNonce = useSelector((state: RootState) =>
-    state.user.user.sigNonce
-  );
-
-  const { broadcast } = useBroadcast({
-    onCompleted: (data) => {
+  const [createPostTypedData] = useCreatePostTypedDataMutation({
+    onCompleted: ({ createPostTypedData }) => broadcastTypedData(createPostTypedData, () => {
       clearForm();
       notification.open({
         message: "Article submission successful!",
         description: "You have submitted your article== 😍",
         icon: "🚀",
       });
-      console.log(["Article published: ", data]);
-    }
-  });
-
-  const { signTypedDataAsync } = useSignTypedData({ onError });
-
-  const typedDataGenerator = async (generatedData: any) => {
-    const { id, typedData } = generatedData;
-    const signature = await signTypedDataAsync(getSignature(typedData));
-
-    const {
-      data: { broadcast: result }
-    } = await broadcast({ request: { id, signature } });
-  };
-
-  const [createPostTypedData] = useCreatePostTypedDataMutation({
-    onCompleted: ({ createPostTypedData }) => typedDataGenerator(createPostTypedData),
+      console.log(["Article published!"]);
+    }),
     onError: (error) => {
       onError({
         message: "Submit failed!",

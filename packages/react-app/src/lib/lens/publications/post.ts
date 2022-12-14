@@ -1,9 +1,26 @@
 import {
+  BroadcastDocument,
+  BroadcastRequest,
   CreatePublicPostRequest,
 } from "@jodw/lens";
-import { writeContract } from "@wagmi/core";
+import { writeContract, signTypedData } from "@wagmi/core";
 import { LensHubProxy } from "../../../contracts/LensHubProxy";
 import { defaultAbiCoder } from "ethers/lib/utils";
+import getSignature from "../../shared/getSignature";
+import { compositeClient as apolloClient } from "../../../utils/graphqlClient";
+import onError from "../../shared/onError";
+import { pollUntilIndexed } from "../indexer/transactions";
+
+export const broadcastRequest = async (request: BroadcastRequest) => {
+  const result = await apolloClient.mutate({
+    mutation: BroadcastDocument,
+    variables: {
+      request,
+    },
+  });
+
+  return result.data?.broadcast;
+};
 
 export const postViaContract = async (createPostRequest: CreatePublicPostRequest) => {
   const result = await writeContract({
@@ -24,4 +41,35 @@ export const postViaContract = async (createPostRequest: CreatePublicPostRequest
   });
   console.log(["post result: ", result]);
   return null;
+};
+
+export const broadcastTypedData = async (generatedData: any, onSuccess: () => void, trackTx = true) => {
+  const { id, typedData } = generatedData;
+  try {
+    const signature = await signTypedData(getSignature(typedData));
+
+    const broadcastResult = await broadcastRequest({
+      id: id,
+      signature,
+    });
+    console.log("broadcastResult", broadcastResult);
+
+    if (broadcastResult.__typename !== "RelayerResult") {
+      onError({ message: "Action failed!", details: "Please retry. Error: broadcast failed." });
+    }
+
+    if (!trackTx) {
+      onSuccess();
+      return;
+    }
+    
+    try {
+      await pollUntilIndexed({ txId: broadcastResult.txId });
+      onSuccess();
+    } catch (err) {
+      onError({ message: "Action failed!", details: "Please retry. Error: " + err });
+    }
+  } catch (err) {
+    console.error("Broadcast error - ignoring.", err);
+  }
 };

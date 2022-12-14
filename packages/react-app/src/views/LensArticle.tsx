@@ -1,8 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-console */
-import { Tooltip } from "antd";
+import { Space, Tooltip } from "antd";
 import React, { useEffect, useState } from "react";
-import { pdfjs } from "react-pdf";
 import { useParams } from "react-router-dom";
 import article_back from "../assets/article_back.png";
 import author_pro from "../assets/author_pro.png";
@@ -11,13 +10,20 @@ import matic from "../assets/matic.png";
 import { SimilarPublicationCard } from "../components";
 import { getPublicationDetailsFailure, getPublicationDetailsSuccess } from "../features/publication/publicationSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { HandThumbDownIcon, HandThumbUpIcon } from "@heroicons/react/24/outline";
-import { CommentList } from "../components/Comments";
+import { CommentFeature, CommentList } from "../components/comment/Comments";
 import Title from "antd/lib/typography/Title";
 import { usePublicationQuery } from "@jodw/lens";
 import { RootState } from "../app/store";
 import getPostAsArticle from "../lib/lens/publications/getPostAsArticle";
-pdfjs.GlobalWorkerOptions.workerSrc = "pdf.worker.min.js";
+import PDFViewer from "../components/article/PDFViewer";
+import ArticleVoter from "../components/article/ArticleVoter";
+import ShareButton from "../components/actions/ShareButton";
+import { getBlockchainName, SupportedBlockchain } from "../lib";
+
+const blockchainImage = new Map<SupportedBlockchain, string>();
+blockchainImage.set(SupportedBlockchain.Ethereum, ethereum);
+//blockchainImage.set(SupportedBlockchain.Optimism, optimism);
+blockchainImage.set(SupportedBlockchain.Polygon, matic);
 
 type TTabType = {
   detail: string;
@@ -87,7 +93,7 @@ const LensArticle = () => {
     <div>
       {!articleIsLoading && article && (
         <div className="p-4 sm:p-8 md:p-10 xl:p-20 overflow-hidden">
-          <div className="flex flex-col 2xl:flex-row items-start justify-between text-left space-x-8">
+          <div className="flex flex-col 2xl:flex-row items-start justify-between text-left">
             <div className="pt-4 flex flex-col items-start space-y-4">
               <div className="flex flex-col-reverse lg:flex-col items-start space-y-4">
                 <div className="pt-4 text-5xl lg:text-7xl font-bold">{article.title}</div>
@@ -142,12 +148,8 @@ const LensArticle = () => {
                     <div className="text-lg text-darkgray">Blockchain</div>
                     <div className="flex flex-row items-center space-x-4">
                       <div className="rounded-full p-1 bg-gray flex flex-row items-center cursor-pointer">
-                        <img src={matic} width={26} height={26} alt="matic"></img>
-                        <div className="pl-2 text-lg">Matic (Polygon)</div>
-                      </div>
-                      <div className="rounded-full p-1 bg-gray flex flex-row items-center cursor-pointer">
-                        <img src={ethereum} width={26} height={26} alt="ethereum"></img>
-                        <div className="pl-2 text-lg">Ethereum</div>
+                        <img src={blockchainImage.get(article?.blockchain??SupportedBlockchain.Ethereum)} width={26} height={26} alt={getBlockchainName(article?.blockchain??SupportedBlockchain.Ethereum)}></img>
+                        <div className="pl-2 text-lg">{getBlockchainName(article?.blockchain??SupportedBlockchain.Ethereum)}</div>
                       </div>
                     </div>
                   </div>
@@ -200,48 +202,42 @@ const LensArticle = () => {
               )}
               <div className="flex flex-row items-center space-x-4">
                 <Tooltip title="Export Article">
-                  <div
+                  <a
                     className="px-8 py-2 bg-primary text-white text-sm rounded-full cursor-pointer"
-                    onClick={e => {
-                      console.log("Export clicked: ", e);
-                    }}
+                    href={article.manuscriptFileURI}
+                    target="_blank"
                   >
                     EXPORT
-                  </div>
+                  </a>
                 </Tooltip>
-                <Tooltip title="Like Article">
-                  <div
-                    className="px-8 py-2 bg-primary text-white text-sm rounded-full cursor-pointer"
-                    onClick={e => {
-                      console.log("Like clicked", e);
-                    }}
-                  >
-                    <HandThumbUpIcon className="h-6 w-6 text-blue-500" />
-                  </div>
-                </Tooltip>
-                <Tooltip title="Dislike Article">
-                  <div
-                    className="px-8 py-2 bg-primary text-white text-sm rounded-full cursor-pointer"
-                    onClick={e => {
-                      console.log("Dislike clicked", e);
-                    }}
-                  >
-                    <HandThumbDownIcon className="h-6 w-6 text-blue-500" />
-                  </div>
-                </Tooltip>
-              </div>
-              <div className="">
-                <Title>Comments</Title>
-                <CommentList comments={[]}/>
               </div>
             </div>
-            <div className="hidden 2xl:block mx-auto">
-              <img className="rounded-2xl w-full " src={article_back} alt="article back"></img>
+            <div className="2xl:block mx-auto">
+              <img className="rounded-2xl w-full " src={article?.coverImageURI ?? article_back} alt="article back"></img>
             </div>
           </div>
 
           <div className="hidden lg:block my-8 max-w-screen-lg mx-auto text-lg text-left">
-            <a href={article.manuscriptFileURI} target="_blank">{article.manuscriptFileURI}</a>
+            
+          </div>
+          {article?.manuscriptFileContentType === "application/pdf" && <PDFViewer fileURL={article.manuscriptFileURI??""} />}
+          <div className="pt-4">
+            <Space direction="horizontal">
+              <Space>
+                <ArticleVoter
+                  articleId={article?.id}
+                  totalUpvotes={articleData?.publication?.stats?.totalUpvotes ?? 0}
+                  reaction={articleData?.publication?.reaction}
+                />
+              </Space>
+              <Space>
+                <ShareButton id={article?.id} />
+              </Space>
+            </Space>
+          </div>
+          <div className="pt-4">
+            <Title level={4}>Comments</Title>
+            <CommentFeature id={article?.id} comments={[]}/>
           </div>
           <div className="pb-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             <SimilarPublicationCard />
