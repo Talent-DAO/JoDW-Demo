@@ -18,8 +18,7 @@ import {
   useCreatePostViaDispatcherMutation,
   useCreatePostTypedDataMutation,
 } from "@jodw/lens";
-import { MetadataDisplayType } from "../lib";
-import { PublicationMainFocus } from "../lib";
+import { MetadataDisplayType, PublicationMainFocus } from "../lib";
 import { sendTransacton } from "../utils/arweave";
 import { uploadIpfs } from "../utils/ipfs";
 import onError from "../lib/shared/onError";
