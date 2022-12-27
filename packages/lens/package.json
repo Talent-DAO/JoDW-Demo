@@ -2,6 +2,7 @@
   "name": "@jodw/lens",
   "version": "1.0.0",
   "main": "generated.ts",
+  "description": "Lens library for GraphQL",
   "dependencies": {
     "@apollo/client": "^3.3.21",
     "typescript": "4.0.5"

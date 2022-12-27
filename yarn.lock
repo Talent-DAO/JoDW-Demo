@@ -3881,6 +3881,12 @@
     "@types/yargs" "^17.0.8"
     chalk "^4.0.0"
 
+"@jodw/lens@file:packages/lens":
+  version "1.0.0"
+  dependencies:
+    "@apollo/client" "^3.3.21"
+    typescript "4.0.5"
+
 "@jridgewell/gen-mapping@^0.1.0":
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/@jridgewell/gen-mapping/-/gen-mapping-0.1.1.tgz#e5d2e450306a9491e3bd77e323e38d7aff315996"
