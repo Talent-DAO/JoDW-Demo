@@ -81,10 +81,11 @@ const Website = ({ ...props }) => {
 
   const isReady = address !== null && lensProfile?.id !== 0;
 
+  const bypass = true;
   return (
     <div className="App container-2xl mx-auto">
       <Navbar userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />
-      {true ? (
+      {bypass ? (
         <>
           <Routes>
             <Route index element={<HomeView />} />

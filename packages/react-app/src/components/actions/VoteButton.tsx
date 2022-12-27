@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { HandThumbDownIcon, HandThumbUpIcon } from "@heroicons/react/24/outline";
 import { Button, Tooltip } from "antd";
 import React from "react";

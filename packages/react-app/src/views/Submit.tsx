@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { useApolloClient } from "@apollo/client";
 import { notification } from "antd";
 import axios from "axios";
@@ -122,7 +123,6 @@ const Submit = () => {
       createPostTypedData({ variables: { request } });
     }
   };
-
 
   // todo: we are only using on polygon, so we can remove this
   // const talentDaoManagerContract = Object.entries(TalentDaoContracts[chain?.id] || {}).find(([_key, _value]) => _value?.chainId === String(chain?.id))?.[1]?.contracts?.TalentDaoManager;

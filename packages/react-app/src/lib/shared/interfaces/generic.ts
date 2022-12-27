@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 export interface RawFileData {
   /**
    * The file name.

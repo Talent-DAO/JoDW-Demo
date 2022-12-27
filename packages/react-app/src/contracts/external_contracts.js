@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const ERC20ABI = [
   {
     constant: true,

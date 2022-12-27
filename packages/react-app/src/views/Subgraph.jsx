@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import "antd/dist/antd.css";
 import GraphiQL from "graphiql";
 import "graphiql/graphiql.min.css";

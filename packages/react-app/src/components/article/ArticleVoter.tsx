@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { ReactionTypes, useAddReactionMutation } from "@jodw/lens";
 import { Input } from "antd";
 import React, { useEffect, useState } from "react";

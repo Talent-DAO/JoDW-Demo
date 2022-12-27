@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // MY INFURA_ID, SWAP IN YOURS FROM https://infura.io/dashboard/ethereum
 export const INFURA_ID = process.env.REACT_APP_INFURA_ID;
 export const INFURA_PROJECT_ID = process.env.REACT_APP_INFURA_PROJECT_ID || "";

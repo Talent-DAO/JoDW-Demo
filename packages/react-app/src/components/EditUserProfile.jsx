@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { notification, Spin } from "antd";
 import axios from "axios";
 import { useAccount } from "wagmi";

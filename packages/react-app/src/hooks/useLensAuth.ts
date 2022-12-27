@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { useAuthenticateMutation, useChallengeLazyQuery, useRefreshMutation } from "@jodw/lens";
 import { useEffect, useState } from "react";
 import { useSignMessage } from "wagmi";

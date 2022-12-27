@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { useQuery } from "@apollo/client";
 import { Dispatch } from "@reduxjs/toolkit";
 import axios from "axios";

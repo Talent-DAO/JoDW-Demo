@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { useCreateMirrorTypedDataMutation } from "@jodw/lens";
 import { Button, Input, notification } from "antd";
 import React, { useEffect, useState } from "react";

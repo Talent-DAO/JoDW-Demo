@@ -1,7 +1,8 @@
+/* eslint-disable no-undef */
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { NotificationCard } from "../components";
-import { JODW_BACKEND as server } from "../constants"; 
+import { JODW_BACKEND as server } from "../constants";
 
 const Notifications = ({ address }) => {
   const [notifications, setNotifications] = useState([
@@ -18,9 +19,11 @@ const Notifications = ({ address }) => {
           walletId: address,
         });
         if (response?.data?.success) {
+          // set the notifications
+          setNotifications(response.data.data);
         } else {
           //
-          setNotifications(response.data.data);
+          // setNotifications(response.data.data);
         }
       } catch (error) {
         console.log(error);
