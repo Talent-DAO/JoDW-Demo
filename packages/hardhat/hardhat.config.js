@@ -21,7 +21,7 @@ const etherscanKeyMumbai = process.env.ETHERSCAN_KEY_POLYGON;
 // If not set, it uses the hardhat account 0 private key.
 // const deployerPrivateKey = process.env.DEPLOYER_PRIVATE_KEY;
 
-const defaultNetwork = "mumbai";
+const defaultNetwork = "polygonMumbai";
 const mainnetGwei = 21;
 
 function mnemonic() {
