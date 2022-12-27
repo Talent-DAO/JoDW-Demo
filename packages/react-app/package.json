@@ -84,6 +84,7 @@
     "styled-components": "^5.3.3",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "tw-elements": "^1.0.0-alpha10",
+    "urql": "^2.0.5",
     "uuid": "^9.0.0",
     "wagmi": "^0.6.3",
     "walletlink": "^2.1.5",
@@ -91,7 +92,7 @@
   },
   "devDependencies": {
     "@apollo/client": "^3.3.21",
-    "@jodw/lens": "*",
+    "@jodw/lens": "^1.0.0",
     "@testing-library/dom": "^6.12.2",
     "chalk": "^4.1.0",
     "eslint-config-prettier": "^8.3.0",

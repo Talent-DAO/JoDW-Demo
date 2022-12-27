@@ -113,7 +113,7 @@ const EditUserProfile = () => {
     );
     setReaders(author?.readers ? author.readers : "");
     setTimesCited(author && author.times_cited ? author.times_cited : 0);
-    setLensProfileId(author?.lensProfileId);
+    // setLensProfileId(author?.lensProfileId);
     // setId(author?._id);
 
     const popularCategories = author.popularCategories;

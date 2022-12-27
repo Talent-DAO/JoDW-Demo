@@ -6,7 +6,8 @@ import { useNetwork } from "wagmi";
 import { LOCAL_STORAGE_LENS_AUTH_TOKENS } from "../constants";
 
 const getLensAuthToken = () => {
-  const serializedData = window.localStorage.getItem(LOCAL_STORAGE_LENS_AUTH_TOKENS) || {};
+  const serializedData = window.localStorage.getItem(LOCAL_STORAGE_LENS_AUTH_TOKENS) || { };
+  console.log("serializedData", serializedData);
   if (serializedData && serializedData !== {}) {
     const tokens = JSON.parse(serializedData)?.value;
     return tokens?.accessToken ? `Bearer ${tokens?.accessToken}` : "";

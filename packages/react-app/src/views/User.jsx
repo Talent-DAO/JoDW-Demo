@@ -125,7 +125,7 @@ export default function User({ userMenuOpen, handleUserMenuOpen }) {
           Submissions
         </div>
       </div>
-      <div
+      {/* <div
         className="rounded-md bg-transparent hover:bg-gray px-8 py-2 flex flex-row items-center cursor-pointer text-lg"
         onClick={() => handleConfigTypeChanged(configUserType.article)}
       >
@@ -136,7 +136,7 @@ export default function User({ userMenuOpen, handleUserMenuOpen }) {
           />
         </svg>
         <div className={userConfig === configUserType.article ? "text-primary" : "text-textgrey"}>Papers</div>
-      </div>
+      </div> */}
       <div
         className="rounded-md bg-transparent hover:bg-gray px-8 py-2 flex flex-row items-center cursor-pointer text-lg"
         onClick={() => handleConfigTypeChanged(configUserType.reputation)}

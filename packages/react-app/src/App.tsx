@@ -56,7 +56,7 @@ const Website = ({ ...props }) => {
   const { chain } = useNetwork();
   const dispatch = useDispatch();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const lensAuth = useLensAuth(address, () => !address);
+  // const lensAuth = useLensAuth(address, () => !address);
   const lensProfile = useSelector((state: RootState) =>
     state.user.user.lensProfile
   );
@@ -83,7 +83,7 @@ const Website = ({ ...props }) => {
   return (
     <div className="App container-2xl mx-auto">
       <Navbar userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />
-      {isReady ? (
+      {true ? (
         <>
           <Routes>
             <Route index element={<HomeView />} />

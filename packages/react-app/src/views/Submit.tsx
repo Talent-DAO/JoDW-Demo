@@ -10,7 +10,7 @@ import {
   useAccount,
   useNetwork,
 } from "wagmi";
-import { SubmitArticleModal } from "../components";
+import { AuthorForm, SubmitArticleModal } from "../components";
 import { JODW_BACKEND } from "../constants";
 import TalentDaoContracts from "../contracts/hardhat_contracts.json";
 import { RootState } from "../app/store";
@@ -43,7 +43,7 @@ const Submit = () => {
   const { address } = useAccount();
   const { chain } = useNetwork();
   const [selectedManuscriptFile, setSelectedManuscriptFile] = useState(undefined);
-  const [authors, setAuthors] = useState([]);
+  const [authors, setAuthors] = useState<string[]>([]);
   const [selectedArticleCover, setSelectedArticleCover] = useState();
   const [talentPrice, setTalentPrice] = useState(0);
   const [articleTitle, setArticleTitle] = useState("");
@@ -408,9 +408,9 @@ const Submit = () => {
   };
 
   // For debugging:
-  // useEffect(() => {
-  //   console.log("SUBMIT STATE: ", submitState);
-  // }, [submitState]);
+  useEffect(() => {
+    console.log("SUBMIT STATE: ", submitState);
+  }, [submitState]);
 
   return (
     <div className="" style={{ backgroundImage: "linear-gradient(#fff, #EEEE" }}>
@@ -418,7 +418,7 @@ const Submit = () => {
         <div>
           <h2 className="text-4xl font-bold text-left">Submit Article</h2>
           <p className="text-left">
-            Upload your article manuscript and related details to the Journal of Decentralized Work.
+            Upload your publiction and related details to the Journal of Decentralized Work.
           </p>
         </div>
 
@@ -428,8 +428,8 @@ const Submit = () => {
               <div className="py-5 sm:rounded-lg">
                 <div className="md:grid md:grid-cols-10 md:gap-6">
                   <div className="mt-5 md:mt-0 md:col-span-6 flex flex-col place-content-between">
-                    <label className="block text-left text-lg font-bold text-gray-700">Article Manuscript</label>
-                    <div className="mt-1 h-full flex flex-col justify-center items-center px-6 pt-5 pb-6 border border-gray-300 rounded-md">
+                    {/* <label className="block text-left text-lg font-bold text-gray-700">Article Manuscript</label> */}
+                    {/* <div className="mt-1 h-full flex flex-col justify-center items-center px-6 pt-5 pb-6 border border-gray-300 rounded-md">
                       {selectedManuscriptFile ? (
                         <div className="py-5 text-lg text-textgrey">{selectedManuscriptFile.name}</div>
                       ) : (
@@ -450,7 +450,7 @@ const Submit = () => {
                           onChange={changeSelectedManuscriptFile}
                         />
                       </label>
-                    </div>
+                    </div> */}
                     <div className="mt-1 h-full flex flex-col justify-center items-center px-6 pt-5 pb-6 border border-gray-300 rounded-md">
                       {selectedArticleCover ? (
                         <div className="py-5 text-lg text-textgrey">{selectedArticleCover.name}</div>
@@ -536,15 +536,17 @@ const Submit = () => {
                 </div>
                 <div className="mt-10 col-span-6">
                   <label htmlFor="article-title" className="pl-4 block text-left text-lg font-bold">
-                    Author(s) <span className="pl-1 text-primary">*</span>
+                    Author(s) <span className="pl-1 text-primary">*</span> (separated by comma)
                   </label>
                   <input
                     type="text"
                     name="article-title"
                     id="article-title"
-                    placeholder="e.g John Doe"
+                    placeholder="John Doe, Jane Doe"
                     value={authors}
-                    onChange={e => setAuthors([e.target.value])}
+                    onChange={(e) => {
+                      setAuthors([e.target.value]);
+                    }}
                     className="my-1 p-4 bg-transparent rounded-xl block w-full focus:outline-none text-lg border border-black "
                   />
                   {authorError && (
@@ -568,18 +570,18 @@ const Submit = () => {
                   )}
                 </div>
                 {/* <div className="mt-10 col-span-6">
-                <label htmlFor="authors" className="block text-left text-sm font-medium text-gray-700">
-                  Author(s)
-                </label>
-                <AuthorForm
-                  register={register}
-                  control={control}
-                  handleSubmit={handleSubmit}
-                  reset={reset}
-                  formState={formState}
-                  watch={watch}
-                />
-              </div> */}
+                  <label htmlFor="authors" className="block text-left text-sm font-medium text-gray-700">
+                    Author(s)
+                  </label>
+                  <AuthorForm
+                    register={register}
+                    control={control}
+                    handleSubmit={handleSubmit}
+                    reset={reset}
+                    formState={formState}
+                    watch={watch}
+                  />
+                </div> */}
                 <div className="mt-10 col-span-6">
                   <div className="pl-4 flex flex-col text-left">
                     <label htmlFor="abstract" className="block text-left text-lg font-bold">
@@ -635,9 +637,12 @@ const Submit = () => {
                     onChange={e => changeBlockchain(e)}
                     className="mt-1 block bg-transparent w-full pl-3 pr-10 py-2 text-lg rounded-xl border border-black"
                   >
-                    <option>Ethereum</option>
-                    <option>Polygon</option>
-                    <option>Optimism</option>
+                    <option disabled>Ethereum</option>
+                    <option defaultValue="polygon">Polygon</option>
+                    <option disabled>Optimism</option>
+                    <option disabled>Arbitrum</option>
+                    <option disabled>Gnosis</option>
+                    <option disabled>Fantom</option>
                   </select>
                 </div>
 
