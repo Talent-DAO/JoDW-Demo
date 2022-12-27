@@ -14,7 +14,7 @@
     "react-app:eject": "yarn workspace @jodw/react-app eject",
     "react-app:start": "yarn workspace @jodw/react-app start",
     "react-app:test": "yarn workspace @jodw/react-app test",
-    "build": "yarn workspace @jodw/react-app build --max-old-space-size=12288",
+    "build": "yarn workspace @jodw/lens codegen && yarn workspace @jodw/react-app build --max-old-space-size=12288",
     "prettier": "yarn workspace @jodw/react-app prettier",
     "chain": "yarn workspace @jodw/hardhat chain",
     "fork:polygon": "yarn workspace @jodw/hardhat fork:polygon",
