@@ -1,21 +1,20 @@
 /* eslint-disable no-console */
 /* eslint-disable no-undef */
-import { useQuery } from "@apollo/client";
+import { SearchRequestTypes, useSearchPublicationsQuery } from "@jaxcoder/lens";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAccount } from "wagmi";
 import { RootState } from "../app/store";
-import { JODW_BACKEND as server } from "../constants";
 import arrowRightImage from "../assets/ArrowRight.png";
 import authorImage from "../assets/author.png";
 import lineImage from "../assets/line.png";
 import partnershipImage from "../assets/partnership.png";
 import { LatestPublications, Newsletter, Splash } from "../components";
+import { JODW_BACKEND as server } from "../constants";
 import { getPublicationsFailure, getPublicationsSuccess } from "../features/publication/publicationSlice";
 import { dataURLtoFile, getBgColorForCategory, getTextColorForCategory } from "../utils/utils";
-import { SearchRequestTypes, useSearchPublicationsQuery } from "@jodw/lens";
 
 
 function Home() {

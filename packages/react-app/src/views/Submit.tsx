@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import {
   useCreatePostTypedDataMutation, useCreatePostViaDispatcherMutation
-} from "@jodw/lens";
+} from "@jaxcoder/lens";
 import { notification } from "antd";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";

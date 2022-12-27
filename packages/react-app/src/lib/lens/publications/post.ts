@@ -2,13 +2,13 @@
 import {
   BroadcastDocument,
   BroadcastRequest,
-  CreatePublicPostRequest,
-} from "@jodw/lens";
-import { writeContract, signTypedData } from "@wagmi/core";
-import { LensHubProxy } from "../../../contracts/LensHubProxy";
+  CreatePublicPostRequest
+} from "@jaxcoder/lens";
+import { signTypedData, writeContract } from "@wagmi/core";
 import { defaultAbiCoder } from "ethers/lib/utils";
-import getSignature from "../../shared/getSignature";
+import { LensHubProxy } from "../../../contracts/LensHubProxy";
 import { compositeClient as apolloClient } from "../../../utils/graphqlClient";
+import getSignature from "../../shared/getSignature";
 import onError from "../../shared/onError";
 import { pollUntilIndexed } from "../indexer/transactions";
 

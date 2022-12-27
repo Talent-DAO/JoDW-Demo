@@ -1,12 +1,12 @@
 // todo: swap out antd for chakra components
+import { Profile } from "@jaxcoder/lens";
 import { Modal } from "antd";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { ArticlePreview } from "..";
 import { fetchLensUserSuccess, LensUser, Status, UserRootState } from "../../features/user/userSlice";
-import { Profile } from "@jodw/lens";
 import { useLensProfiles } from "../../hooks";
 import { NewArticleFormData } from "../../lib/shared/interfaces";
-import { ArticlePreview } from "..";
 import MiniLensProfile from "../lens/MiniLensProfile";
 
 type SubmitArticleModalSuccessResult = {

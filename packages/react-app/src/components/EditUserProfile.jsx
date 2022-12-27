@@ -1,15 +1,15 @@
 /* eslint-disable no-undef */
+import { useCreateSetProfileMetadataTypedDataMutation } from "@jaxcoder/lens";
 import { notification, Spin } from "antd";
 import axios from "axios";
-import { useAccount } from "wagmi";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { JODW_BACKEND as server } from "../constants";
-import { dataURLtoFile, toBase64, toFileBuffer } from "../utils/utils";
-import { useCreateSetProfileMetadataTypedDataMutation } from "@jodw/lens";
-import { uploadIpfs, uploadIpfsRaw } from "../utils/ipfs";
 import { v4 as uuidv4 } from "uuid";
+import { useAccount } from "wagmi";
+import { JODW_BACKEND as server } from "../constants";
 import { broadcastTypedData } from "../lib/lens/publications/post";
+import { uploadIpfs, uploadIpfsRaw } from "../utils/ipfs";
+import { dataURLtoFile, toBase64, toFileBuffer } from "../utils/utils";
 
 const saveToJodwBackend = async (data, existAuthor) => {
   try {

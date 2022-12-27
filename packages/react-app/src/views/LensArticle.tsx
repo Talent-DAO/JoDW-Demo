@@ -1,24 +1,24 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-console */
+import { usePublicationQuery } from "@jaxcoder/lens";
 import { Space, Tooltip } from "antd";
+import Title from "antd/lib/typography/Title";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { RootState } from "../app/store";
 import article_back from "../assets/article_back.png";
 import author_pro from "../assets/author_pro.png";
 import ethereum from "../assets/ethereum.png";
 import matic from "../assets/matic.png";
 import { SimilarPublicationCard } from "../components";
-import { getPublicationDetailsFailure, getPublicationDetailsSuccess } from "../features/publication/publicationSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { CommentFeature } from "../components/comment/Comments";
-import Title from "antd/lib/typography/Title";
-import { usePublicationQuery } from "@jodw/lens";
-import { RootState } from "../app/store";
-import getPostAsArticle from "../lib/lens/publications/getPostAsArticle";
-import PDFViewer from "../components/article/PDFViewer";
-import ArticleVoter from "../components/article/ArticleVoter";
 import ShareButton from "../components/actions/ShareButton";
+import ArticleVoter from "../components/article/ArticleVoter";
+import PDFViewer from "../components/article/PDFViewer";
+import { CommentFeature } from "../components/comment/Comments";
+import { getPublicationDetailsFailure, getPublicationDetailsSuccess } from "../features/publication/publicationSlice";
 import { getBlockchainName, SupportedBlockchain } from "../lib";
+import getPostAsArticle from "../lib/lens/publications/getPostAsArticle";
 
 const blockchainImage = new Map<SupportedBlockchain, string>();
 blockchainImage.set(SupportedBlockchain.Ethereum, ethereum);

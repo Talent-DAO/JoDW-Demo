@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { useCreateMirrorTypedDataMutation } from "@jodw/lens";
+import { useCreateMirrorTypedDataMutation } from "@jaxcoder/lens";
 import { Button, Input, notification } from "antd";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";

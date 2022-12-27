@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { useApolloClient } from "@apollo/client";
-import { ProfilesDocument } from "@jodw/lens";
+import { ProfilesDocument } from "@jaxcoder/lens";
 
 export const useLensProfiles = () => {
   const { address } = useAccount();

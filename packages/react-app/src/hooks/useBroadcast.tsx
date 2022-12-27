@@ -1,5 +1,5 @@
 import type { ApolloCache } from "@apollo/client";
-import { useBroadcastMutation } from "@jodw/lens";
+import { useBroadcastMutation } from "@jaxcoder/lens";
 import onError from "../lib/shared/onError";
 
 interface Props {

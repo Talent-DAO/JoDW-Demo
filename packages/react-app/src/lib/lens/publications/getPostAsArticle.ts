@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { Post, ProfileMedia } from "@jodw/lens";
+import { Post, ProfileMedia } from "@jaxcoder/lens";
 import { SupportedBlockchain } from "../../shared";
 import { Article } from "../../shared/interfaces/Article";
 

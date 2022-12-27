@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { useAuthenticateMutation, useChallengeLazyQuery, useRefreshMutation } from "@jodw/lens";
+import { useAuthenticateMutation, useChallengeLazyQuery, useRefreshMutation } from "@jaxcoder/lens";
 import { useEffect, useState } from "react";
 import { useSignMessage } from "wagmi";
 import { useLocalStorage } from ".";

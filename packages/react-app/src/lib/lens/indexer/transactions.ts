@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { HasTxHashBeenIndexedDocument, HasTxHashBeenIndexedRequest } from "@jodw/lens";
+import { HasTxHashBeenIndexedDocument, HasTxHashBeenIndexedRequest } from "@jaxcoder/lens";
 import { compositeClient as apolloClient } from "../../../utils/graphqlClient";
 
 const hasTxBeenIndexed = async (request: HasTxHashBeenIndexedRequest) => {

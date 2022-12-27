@@ -3,7 +3,7 @@ import {
   Comment,
   useCommentFeedQuery,
   useCreateCommentTypedDataMutation
-} from "@jodw/lens";
+} from "@jaxcoder/lens";
 import {
   Avatar,
   Button,

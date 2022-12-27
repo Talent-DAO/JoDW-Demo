@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { Post } from "@jodw/lens";
+import { Post } from "@jaxcoder/lens";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getLatestArticles } from "../../helpers/graphql/articles";
 

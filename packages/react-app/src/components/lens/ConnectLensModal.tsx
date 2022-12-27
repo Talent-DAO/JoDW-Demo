@@ -1,14 +1,14 @@
 
+import { Profile, useProfilesQuery } from "@jaxcoder/lens";
 import { Col, Modal, Row, Space, Spin } from "antd";
-import { useAccount } from "wagmi";
-import { Profile, useProfilesQuery } from "@jodw/lens";
-import { useDispatch } from "react-redux";
-import MiniLensProfile from "./MiniLensProfile";
-import { fetchLensUserSuccess, Status } from "../../features/user/userSlice";
 import React from "react";
+import { useDispatch } from "react-redux";
+import { useAccount } from "wagmi";
+import { fetchLensUserSuccess, Status } from "../../features/user/userSlice";
 import { getProfilePicture } from "../../lib/lens/publications/getPostAsArticle";
-import { convertToHttpUrl } from "../../utils/utils";
 import { ipfsGetByPath } from "../../utils/ipfs";
+import { convertToHttpUrl } from "../../utils/utils";
+import MiniLensProfile from "./MiniLensProfile";
 
 type ConnectLensModalParams = {
   isOpen: boolean;

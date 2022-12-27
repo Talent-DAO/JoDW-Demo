@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { ReactionTypes, useAddReactionMutation } from "@jodw/lens";
+import { ReactionTypes, useAddReactionMutation } from "@jaxcoder/lens";
 import { Input } from "antd";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";

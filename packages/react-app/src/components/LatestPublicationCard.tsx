@@ -1,7 +1,6 @@
-import { Post } from "@jodw/lens";
+import { Post } from "@jaxcoder/lens";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useAccount } from "wagmi";
 import authorimg from "../assets/author.png";
 import etherImage from "../assets/ethereum.png";
 import heartImage from "../assets/heart.png";
