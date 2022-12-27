@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import "antd/dist/antd.css";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -56,7 +57,7 @@ const Website = ({ ...props }) => {
   const { chain } = useNetwork();
   const dispatch = useDispatch();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-  // const lensAuth = useLensAuth(address, () => !address);
+  const lensAuth = useLensAuth(address, () => !address);
   const lensProfile = useSelector((state: RootState) =>
     state.user.user.lensProfile
   );

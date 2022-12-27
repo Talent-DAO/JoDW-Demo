@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { HasTxHashBeenIndexedDocument, HasTxHashBeenIndexedRequest } from "@jodw/lens";
 import { compositeClient as apolloClient } from "../../../utils/graphqlClient";
 
@@ -14,7 +15,8 @@ const hasTxBeenIndexed = async (request: HasTxHashBeenIndexedRequest) => {
 };
 
 export const pollUntilIndexed = async (input: { txHash: string } | { txId: string }) => {
-  while (true) {
+  const newLocal = true;
+  while (newLocal) {
     const response = await hasTxBeenIndexed(input);
     console.log("pool until indexed: result", response);
 

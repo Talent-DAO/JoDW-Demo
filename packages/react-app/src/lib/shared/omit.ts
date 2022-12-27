@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /**
  *
  * @param object - Object to remove properties from
