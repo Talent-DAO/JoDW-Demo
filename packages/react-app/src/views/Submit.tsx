@@ -1,29 +1,18 @@
 /* eslint-disable no-undef */
-import { useApolloClient } from "@apollo/client";
+import {
+  useCreatePostTypedDataMutation, useCreatePostViaDispatcherMutation
+} from "@jodw/lens";
 import { notification } from "antd";
-import axios from "axios";
-import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import {
-  useAccount,
-  useNetwork,
-} from "wagmi";
-import { AuthorForm, SubmitArticleModal } from "../components";
+import { SubmitArticleModal } from "../components";
 import { JODW_BACKEND } from "../constants";
-import TalentDaoContracts from "../contracts/hardhat_contracts.json";
-import { RootState } from "../app/store";
-import {
-  useCreatePostViaDispatcherMutation,
-  useCreatePostTypedDataMutation,
-} from "@jodw/lens";
 import { MetadataDisplayType, PublicationMainFocus } from "../lib";
+import { broadcastTypedData } from "../lib/lens/publications/post";
+import onError from "../lib/shared/onError";
 import { sendTransacton } from "../utils/arweave";
 import { uploadIpfs } from "../utils/ipfs";
-import onError from "../lib/shared/onError";
-import { broadcastTypedData } from "../lib/lens/publications/post";
 
 const server = JODW_BACKEND;
 
@@ -39,34 +28,30 @@ const SubmitState = {
 };
 
 const Submit = () => {
-  const dispatch = useDispatch();
-  const apolloClient = useApolloClient();
-  const { address } = useAccount();
-  const { chain } = useNetwork();
-  const [selectedManuscriptFile, setSelectedManuscriptFile] = useState(undefined);
+  // const [selectedManuscriptFile, setSelectedManuscriptFile] = useState(undefined);
   const [authors, setAuthors] = useState<string[]>([]);
   const [selectedArticleCover, setSelectedArticleCover] = useState();
   const [talentPrice, setTalentPrice] = useState(0);
-  const [articleTitle, setArticleTitle] = useState("");
-  const [abstract, setAbstract] = useState("");
-  const [blockchain, setBlockchain] = useState("Ethereum");
-  const [categories, setCategories] = useState([]);
-  const [optionTech, setOptionTech] = useState(false);
-  const [optionHistory, setOptionHistory] = useState(false);
-  const [optionRomance, setOptionRomance] = useState(false);
-  const [optionComedy, setOptionComedy] = useState(false);
-  const [optionPolitics, setOptionPolitics] = useState(false);
-  const [arweaveHash, setArweaveHash] = useState("");
-  const [ipfsMetadataUri, setIpfsMetadataUri] = useState("");
+  const [articleTitle, setArticleTitle] = useState<string>("");
+  const [abstract, setAbstract] = useState<string>("");
+  const [blockchain, setBlockchain] = useState<string>("polygon");
+  const [categories, setCategories] = useState<string[]>([]);
+  const [optionTech, setOptionTech] = useState<boolean>(false);
+  const [optionHistory, setOptionHistory] = useState<boolean>(false);
+  const [optionRomance, setOptionRomance] = useState<boolean>(false);
+  const [optionComedy, setOptionComedy] = useState<boolean>(false);
+  const [optionPolitics, setOptionPolitics] = useState<boolean>(false);
+  const [arweaveHash, setArweaveHash] = useState<string>("");
+  const [ipfsMetadataUri, setIpfsMetadataUri] = useState<string>("");
   const { walletId } = useParams();
 
-  const [titleError, setTitleError] = useState(false);
-  const [authorError, setAuthorError] = useState(false);
-  const [abstractError, setAbstractError] = useState(false);
-  const [submitState, setSubmitState] = useState(SubmitState.SUBMIT_REVIEW_PENDING);
+  const [titleError, setTitleError] = useState<boolean>(false);
+  const [authorError, setAuthorError] = useState<boolean>(false);
+  const [abstractError, setAbstractError] = useState<boolean>(false);
+  const [submitState, setSubmitState] = useState<string>(SubmitState.SUBMIT_REVIEW_PENDING);
 
   const clearForm = () => {
-    setSelectedManuscriptFile(undefined);
+    // setSelectedManuscriptFile(undefined);
     setAuthors([]);
     setSelectedArticleCover(undefined);
     setTalentPrice(0);
@@ -148,7 +133,7 @@ const Submit = () => {
   //   data: onChainSubmitData,
   //   write: doSubmitOnChain,
   // } = useContractWrite(talentDaoManagerContractConfig);
-  // 
+
   // const waitForOnChainTransaction = useWaitForTransaction({
   //   hash: onChainSubmitData?.hash,
   //   timeout: 10_000,
@@ -167,9 +152,9 @@ const Submit = () => {
   //   },
   // });
 
-  const changeSelectedManuscriptFile = (event: any) => {
-    setSelectedManuscriptFile(event.target.files[0]);
-  };
+  // const changeSelectedManuscriptFile = (event: any) => {
+  //   setSelectedManuscriptFile(event.target.files[0]);
+  // };
 
   const changeTalentPrice = (event: any) => {
     setTalentPrice(event.target.value);
@@ -320,10 +305,10 @@ const Submit = () => {
   const articleFormData = {
     title: articleTitle,
     abstract: abstract,
-    manuscriptFile: {
-      name: selectedManuscriptFile?.name,
-      data: selectedManuscriptFile
-    },
+    // manuscriptFile: {
+    //   name: "",
+    //   data: {},
+    // },
     coverImage: {
       name: selectedArticleCover?.name,
       data: selectedArticleCover
@@ -637,12 +622,12 @@ const Submit = () => {
                     onChange={e => changeBlockchain(e)}
                     className="mt-1 block bg-transparent w-full pl-3 pr-10 py-2 text-lg rounded-xl border border-black"
                   >
-                    <option disabled>Ethereum</option>
-                    <option defaultValue="polygon">Polygon</option>
-                    <option disabled>Optimism</option>
-                    <option disabled>Arbitrum</option>
-                    <option disabled>Gnosis</option>
-                    <option disabled>Fantom</option>
+                    <option disabled value="ethereum">Ethereum</option>
+                    <option value="polygon">Polygon</option>
+                    <option disabled value="optimism">Optimism</option>
+                    <option disabled value="arbitrum">Arbitrum</option>
+                    <option disabled value="gnosis">Gnosis</option>
+                    <option disabled value="fantom">Fantom</option>
                   </select>
                 </div>
 

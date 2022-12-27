@@ -33,7 +33,7 @@ function Footer() {
                 onChange={handleCategoryChange}
               >
                 <option value="English" className="font-bold">English</option>
-                <option value="French" className="font-bold">French</option>
+                <option disabled value="French" className="font-bold">French</option>
               </select>
             </div>
           </div>
