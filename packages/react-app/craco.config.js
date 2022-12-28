@@ -15,7 +15,6 @@ module.exports = {
       webpackConfig.module.rules.push({
         test: /\.(tsx|ts)?$/,
         loader: 'ts-loader',
-        exclude: /node_modules/,
         options: {
           transpileOnly: true,
           configFile: 'tsconfig.json',

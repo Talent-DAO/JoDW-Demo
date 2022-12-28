@@ -57,7 +57,7 @@ const Website = ({ ...props }) => {
   const { chain } = useNetwork();
   const dispatch = useDispatch();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const lensAuth = useLensAuth(address, () => !address);
+  const lensAuth = useLensAuth(address, () => false);
   const lensProfile = useSelector((state: RootState) =>
     state.user.user.lensProfile
   );

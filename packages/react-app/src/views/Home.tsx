@@ -33,6 +33,10 @@ function Home() {
     };
   });
 
+  const reactionRequest = props?.lensProfile?.id ? {
+    profileId: props?.lensProfile?.id
+  } : null;
+
   const { data: publicationsData, loading: publicationsDataIsLoading, error: publicationsDataError } = useSearchPublicationsQuery({
     variables: {
       request: {
@@ -40,9 +44,7 @@ function Home() {
         type: SearchRequestTypes.Publication,
         limit: 10,
       },
-      reactionRequest: {
-        profileId: props?.lensProfile?.id
-      },
+      reactionRequest: reactionRequest,
     },
   });
 
