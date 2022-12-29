@@ -206,15 +206,15 @@ const Submit = () => {
 
     setSubmitState(SubmitState.SUBMIT_CONTINUE_PENDING);
 
-    const articleFile = articleData?.manuscriptFile
-      ? {
-        filename: articleData?.manuscriptFile?.name,
-        data: articleData?.manuscriptFile ? await toBase64(articleData?.manuscriptFile?.data) : "",
-      }
-      : {
-        filename: "",
-        data: "",
-      };
+    // const articleFile = articleData?.manuscriptFile
+    //   ? {
+    //     filename: articleData?.manuscriptFile?.name,
+    //     data: articleData?.manuscriptFile ? await toBase64(articleData?.manuscriptFile?.data) : "",
+    //   }
+    //   : {
+    //     filename: "",
+    //     data: "",
+    //   };
 
     const articleCover = articleData?.coverImage
       ? {
@@ -227,8 +227,8 @@ const Submit = () => {
       };
 
     // set up Arweave tx
-    const { result: arweaveTx, contentType: articleContentType } = await submitToArweave(articleFile);
-    const { result: coverImageArweaveTx, contentType: coverImageContentType } = await submitToArweave(articleCover);
+    const { result: arweaveTx, contentType: articleContentType } = await submitTextToArweave(abstract);
+    const { result: coverImageArweaveTx, contentType: coverImageContentType } = await submitFileToArweave(articleCover);
 
     // set up onchain tx
     const articleArweave = { id: arweaveTx?.id, contentType: articleContentType };
@@ -283,11 +283,26 @@ const Submit = () => {
     }
   }, [ipfsMetadataUri/*, doSubmitOnChain*/]);
 
-  const submitToArweave = async (file: { filename?: any; data: any; }) => {
+  const submitFileToArweave = async (file: { filename?: any; data: any; }) => {
+    console.log("Submitting to Arweave: ", abstract);
     //
-    const fileData = file.data;
-    const contentType = fileData.substring(5, fileData.indexOf(";", 5));
-    const result = await sendTransacton(fileData.substring(fileData.indexOf(",") + 1), contentType, categories);
+    const fileData = abstract;
+    const contentType = "text";
+    // fileData.substring(5, fileData.indexOf(";", 5));
+    const result = await sendTransacton(fileData, contentType, categories);
+    console.log("Result: ", result);
+    console.log("Tx Id: ", result.id);
+
+    return { result, contentType };
+  };
+
+  const submitTextToArweave = async (content: string) => {
+    console.log("Submitting to Arweave: ", abstract);
+    //
+    const fileData = abstract;
+    const contentType = "text";
+    // fileData.substring(5, fileData.indexOf(";", 5));
+    const result = await sendTransacton(fileData, contentType, categories);
     console.log("Result: ", result);
     console.log("Tx Id: ", result.id);
 

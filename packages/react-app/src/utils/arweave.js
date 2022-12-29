@@ -35,9 +35,9 @@ export async function sendTransacton(data, contentType, categories) {
     arJWK,
   );
   // tags
-  if(contentType) transaction.addTag("Content-Type", `${contentType}`);
+  if (contentType) transaction.addTag("Content-Type", `${contentType}`);
   if (categories) {
-    categories.forEach((category) => {
+    categories.forEach(category => {
       transaction.addTag("Category", `${category}`);
     });
   }

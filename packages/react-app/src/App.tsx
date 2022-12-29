@@ -5,33 +5,33 @@ import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import { useAccount, useNetwork } from "wagmi";
 import "./App.css";
+import { RootState } from "./app/store";
 import { Footer, Navbar } from "./components";
+import ConnectLensModal from "./components/lens/ConnectLensModal";
 import LensLogin from "./components/lens/LensLogin";
-import { useLensAuth } from "./hooks";
 import { fetchUserStart, userWalletUpdated } from "./features/user/userSlice";
 import { accountUpdated, chainUpdated } from "./features/web3/web3Slice";
+import { useLensAuth } from "./hooks";
 import {
   AboutView,
   AdvancedSearchView,
-  AuthorView,
   AuthorDashboard,
+  AuthorView,
   ContactView,
   GovernanceView,
-  HomeView, 
+  HomeView,
   LensArticleView,
   PrivacyPolicyView,
-  PublisherView, 
+  PublisherView,
   ReviewerView,
   SearchView,
-  SubgraphView, 
+  SubgraphView,
   SubmitView,
   TermsOfServiceView,
   TokenView,
   UserView,
   WalletConnectModalView,
 } from "./views";
-import { RootState } from "./app/store";
-import ConnectLensModal from "./components/lens/ConnectLensModal";
 
 const App = ({ ...props }) => {
   return (
@@ -85,7 +85,7 @@ const Website = ({ ...props }) => {
   return (
     <div className="App container-2xl mx-auto">
       <Navbar userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />
-      {bypass ? (
+      {isReady ? (
         <>
           <Routes>
             <Route index element={<HomeView />} />
