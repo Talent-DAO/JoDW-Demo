@@ -4,10 +4,11 @@ import { SupportedBlockchain } from "../../shared";
 import { Article } from "../../shared/interfaces/Article";
 
 const getBlockchain = (chain: string) => {
-  if (chain === "Ethereum") return SupportedBlockchain.Ethereum;
-  if (chain === "Polygon") return SupportedBlockchain.Polygon;
-  if (chain === "Optimism") return SupportedBlockchain.Optimism;
-  throw new Error("Unknown blockchain!");
+  const c = chain.toLowerCase();
+  if (c === "ethereum") return SupportedBlockchain.Ethereum;
+  if (c === "polygon") return SupportedBlockchain.Polygon;
+  if (c === "optimism") return SupportedBlockchain.Optimism;
+  throw new Error("Unknown blockchain: " + chain);
 };
 
 export const getMediaSetOriginal = (item: any) => {

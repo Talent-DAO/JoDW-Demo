@@ -225,9 +225,12 @@ const Submit = () => {
         filename: "",
         data: "",
       };
+    
+    console.log(["articleFile", articleFile]);
+    console.log(["articleCover", articleCover]);
 
     // set up Arweave tx
-    const { result: arweaveTx, contentType: articleContentType } = await submitTextToArweave(abstract);
+    const { result: arweaveTx, contentType: articleContentType } = await submitFileToArweave(articleFile);
     const { result: coverImageArweaveTx, contentType: coverImageContentType } = await submitFileToArweave(articleCover);
 
     // set up onchain tx
@@ -284,24 +287,10 @@ const Submit = () => {
   }, [ipfsMetadataUri/*, doSubmitOnChain*/]);
 
   const submitFileToArweave = async (file: { filename?: any; data: any; }) => {
-    console.log("Submitting to Arweave: ", abstract);
+    console.log("Submitting to Arweave: ", file);
     //
-    const fileData = abstract;
-    const contentType = "text";
-    // fileData.substring(5, fileData.indexOf(";", 5));
-    const result = await sendTransacton(fileData, contentType, categories);
-    console.log("Result: ", result);
-    console.log("Tx Id: ", result.id);
-
-    return { result, contentType };
-  };
-
-  const submitTextToArweave = async (content: string) => {
-    console.log("Submitting to Arweave: ", abstract);
-    //
-    const fileData = abstract;
-    const contentType = "text";
-    // fileData.substring(5, fileData.indexOf(";", 5));
+    const fileData = Buffer.from(file?.data.substring(file?.data.indexOf(",", 5)), "base64");
+    const contentType = file?.data.substring(5, file?.data.indexOf(";", 5));
     const result = await sendTransacton(fileData, contentType, categories);
     console.log("Result: ", result);
     console.log("Tx Id: ", result.id);
