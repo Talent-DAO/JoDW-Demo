@@ -43,7 +43,7 @@ export const LatestPublicationCard = ({ key, id, publication }: LatestPublicatio
             </div>
           </div>
           <div className="pt-8 flex flex-row justify-between items-center">
-            <div className="flex flex-row items-center cursor-pointer" onClick={() => navigate("/author/" + publication)}>
+            <div className="flex flex-row items-center cursor-pointer" onClick={() => navigate("/author/" + publication?.profile?.id)}>
               {article?.profile?.picture ? (
                 <img alt="author" src={article?.profile?.picture} width={30} height={30}></img>
               ) : (
