@@ -94,7 +94,7 @@ function Home() {
     if (publicationsData) {
       const searchResult = publicationsData?.search;
       if (searchResult?.__typename === "PublicationSearchResult") {
-        dispatch(getPublicationsSuccess(searchResult.items));
+        dispatch(getPublicationsSuccess(searchResult.items?.filter(v => v.__typename !== "Comment")));
       }
     }
     if (publicationsDataError) {
