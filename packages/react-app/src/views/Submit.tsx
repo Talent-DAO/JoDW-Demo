@@ -28,7 +28,7 @@ const SubmitState = {
 };
 
 const Submit = () => {
-  const [selectedManuscriptFile, setSelectedManuscriptFile] = useState(undefined);
+  // const [selectedManuscriptFile, setSelectedManuscriptFile] = useState(undefined);
   const [authors, setAuthors] = useState<string[]>([]);
   const [selectedArticleCover, setSelectedArticleCover] = useState();
   const [talentPrice, setTalentPrice] = useState(0);
@@ -51,7 +51,7 @@ const Submit = () => {
   const [submitState, setSubmitState] = useState<string>(SubmitState.SUBMIT_REVIEW_PENDING);
 
   const clearForm = () => {
-    setSelectedManuscriptFile(undefined);
+    // setSelectedManuscriptFile(undefined);
     setAuthors([]);
     setSelectedArticleCover(undefined);
     setTalentPrice(0);
@@ -152,9 +152,9 @@ const Submit = () => {
   //   },
   // });
 
-  const changeSelectedManuscriptFile = (event: any) => {
-    setSelectedManuscriptFile(event.target.files[0]);
-  };
+  // const changeSelectedManuscriptFile = (event: any) => {
+  //   setSelectedManuscriptFile(event.target.files[0]);
+  // };
 
   const changeTalentPrice = (event: any) => {
     setTalentPrice(event.target.value);
@@ -206,15 +206,15 @@ const Submit = () => {
 
     setSubmitState(SubmitState.SUBMIT_CONTINUE_PENDING);
 
-    const articleFile = articleData?.manuscriptFile
-      ? {
-        filename: articleData?.manuscriptFile?.name,
-        data: articleData?.manuscriptFile ? await toBase64(articleData?.manuscriptFile?.data) : "",
-      }
-      : {
-        filename: "",
-        data: "",
-      };
+    // const articleFile = articleData?.manuscriptFile
+    //   ? {
+    //     filename: articleData?.manuscriptFile?.name,
+    //     data: articleData?.manuscriptFile ? await toBase64(articleData?.manuscriptFile?.data) : "",
+    //   }
+    //   : {
+    //     filename: "",
+    //     data: "",
+    //   };
 
     const articleCover = articleData?.coverImage
       ? {
@@ -226,11 +226,11 @@ const Submit = () => {
         data: "",
       };
     
-    console.log(["articleFile", articleFile]);
+    // console.log(["articleFile", articleFile]);
     console.log(["articleCover", articleCover]);
 
     // set up Arweave tx
-    const { result: arweaveTx, contentType: articleContentType } = await submitFileToArweave(articleFile);
+    const { result: arweaveTx, contentType: articleContentType } = await submitTextToArweave(abstract);
     const { result: coverImageArweaveTx, contentType: coverImageContentType } = await submitFileToArweave(articleCover);
 
     // set up onchain tx
@@ -286,6 +286,17 @@ const Submit = () => {
     }
   }, [ipfsMetadataUri/*, doSubmitOnChain*/]);
 
+  const submitTextToArweave = async (content: string) => {
+    console.log("Submitting to Arweave: ", abstract);
+    //
+    const fileData = abstract;
+    const contentType = "text";
+    const result = await sendTransacton(fileData, contentType, categories);
+    console.log("Result: ", result);
+    console.log("Tx Id: ", result.id);
+    return { result, contentType };
+  };
+
   const submitFileToArweave = async (file: { filename?: any; data: any; }) => {
     console.log("Submitting to Arweave: ", file);
     //
@@ -309,10 +320,10 @@ const Submit = () => {
   const articleFormData = {
     title: articleTitle,
     abstract: abstract,
-    manuscriptFile: {
-      name: selectedManuscriptFile?.name,
-      data: selectedManuscriptFile,
-    },
+    // manuscriptFile: {
+    //   name: selectedManuscriptFile?.name,
+    //   data: selectedManuscriptFile,
+    // },
     coverImage: {
       name: selectedArticleCover?.name,
       data: selectedArticleCover,
@@ -417,7 +428,7 @@ const Submit = () => {
               <div className="py-5 sm:rounded-lg">
                 <div className="md:grid md:grid-cols-10 md:gap-6">
                   <div className="mt-5 md:mt-0 md:col-span-6 flex flex-col place-content-between">
-                    <label className="block text-left text-lg font-bold text-gray-700">Article Manuscript</label>
+                    {/* <label className="block text-left text-lg font-bold text-gray-700">Article Manuscript</label>
                     <div className="mt-1 h-full flex flex-col justify-center items-center px-6 pt-5 pb-6 border border-gray-300 rounded-md">
                       {selectedManuscriptFile ? (
                         <div className="py-5 text-lg text-textgrey">{selectedManuscriptFile.name}</div>
@@ -439,7 +450,7 @@ const Submit = () => {
                           onChange={changeSelectedManuscriptFile}
                         />
                       </label>
-                    </div>
+                    </div> */}
                     <div className="mt-1 h-full flex flex-col justify-center items-center px-6 pt-5 pb-6 border border-gray-300 rounded-md">
                       {selectedArticleCover ? (
                         <div className="py-5 text-lg text-textgrey">{selectedArticleCover.name}</div>
