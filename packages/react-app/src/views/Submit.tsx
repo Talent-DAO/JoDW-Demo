@@ -297,6 +297,17 @@ const Submit = () => {
     return { result, contentType };
   };
 
+  const submitJSONToArweave = async (content: Object) => {
+    console.log("Submitting to Arweave: ", content);
+    //
+    const fileData = JSON.stringify(content);
+    const contentType = "application/json";
+    const result = await sendTransacton(fileData, contentType, categories);
+    console.log("Result: ", result);
+    console.log("Tx Id: ", result.id);
+    return { result, contentType };
+  };
+
   const submitFileToArweave = async (file: { filename?: any; data: any; }) => {
     console.log("Submitting to Arweave: ", file);
     //
@@ -351,7 +362,8 @@ const Submit = () => {
   };
 
   const createArticleMetadata = async (articleArweave: { id: any; contentType: any; }, coverImageArweave: { id: any; contentType: any; }, onSuccess: { (ipfsUri: any): Promise<void>; (arg0: string): void; }, onError: () => void) => {
-    const ipfsResult = await uploadIpfs({
+    // const ipfsResult = await uploadIpfs({
+    const { result, contentType } = await submitJSONToArweave({
       version: "2.0.0",
       mainContentFocus: PublicationMainFocus.IMAGE,
       metadata_id: uuidv4(),
@@ -402,8 +414,10 @@ const Submit = () => {
       tags: ["talentdao", "jodw"],
       appId: "JoDW",
     });
-    console.log("IPFS metadata upload result: ", ipfsResult);
-    onSuccess("ipfs://" + ipfsResult?.path);
+    // console.log("IPFS metadata upload result: ", ipfsResult);
+    // onSuccess("ipfs://" + ipfsResult?.path);
+    console.log("ARweave metadata upload result: ", result);
+    onSuccess("https://arweave.net/" + result?.id);
     // onError();
   };
 
