@@ -11,7 +11,7 @@ import { JODW_BACKEND } from "../constants";
 import { MetadataDisplayType, PublicationMainFocus } from "../lib";
 import { broadcastTypedData } from "../lib/lens/publications/post";
 import onError from "../lib/shared/onError";
-import { sendTransacton } from "../utils/arweave";
+import { sendTransacton, submitFileToArweave, submitJSONToArweave } from "../utils/arweave";
 import { uploadIpfs } from "../utils/ipfs";
 
 const server = JODW_BACKEND;
@@ -294,29 +294,6 @@ const Submit = () => {
     const result = await sendTransacton(fileData, contentType, categories);
     console.log("Result: ", result);
     console.log("Tx Id: ", result.id);
-    return { result, contentType };
-  };
-
-  const submitJSONToArweave = async (content: Object) => {
-    console.log("Submitting to Arweave: ", content);
-    //
-    const fileData = JSON.stringify(content);
-    const contentType = "application/json";
-    const result = await sendTransacton(fileData, contentType, categories);
-    console.log("Result: ", result);
-    console.log("Tx Id: ", result.id);
-    return { result, contentType };
-  };
-
-  const submitFileToArweave = async (file: { filename?: any; data: any; }) => {
-    console.log("Submitting to Arweave: ", file);
-    //
-    const fileData = Buffer.from(file?.data.substring(file?.data.indexOf(",", 5)), "base64");
-    const contentType = file?.data.substring(5, file?.data.indexOf(";", 5));
-    const result = await sendTransacton(fileData, contentType, categories);
-    console.log("Result: ", result);
-    console.log("Tx Id: ", result.id);
-
     return { result, contentType };
   };
 

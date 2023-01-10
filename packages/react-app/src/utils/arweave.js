@@ -81,3 +81,26 @@ export async function DecodeTags(txId) {
     // User-Agent : ArweaveDeploy/1.1.0
   });
 }
+
+export const submitFileToArweave = async (file) => {
+  console.log("Submitting to Arweave: ", file);
+  //
+  const fileData = Buffer.from(file?.data.substring(file?.data.indexOf(",", 5)), "base64");
+  const contentType = file?.data.substring(5, file?.data.indexOf(";", 5));
+  const result = await sendTransacton(fileData, contentType, []);
+  console.log("Result: ", result);
+  console.log("Tx Id: ", result.id);
+
+  return { result, contentType };
+};
+
+export const submitJSONToArweave = async (content) => {
+  console.log("Submitting to Arweave: ", content);
+  //
+  const fileData = JSON.stringify(content);
+  const contentType = "application/json";
+  const result = await sendTransacton(fileData, contentType, []);
+  console.log("Result: ", result);
+  console.log("Tx Id: ", result.id);
+  return { result, contentType };
+};

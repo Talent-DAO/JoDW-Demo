@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import { useCreateSetProfileMetadataTypedDataMutation } from "@jaxcoder/lens";
+import { useCreateSetProfileMetadataTypedDataMutation, useCreateSetProfileImageUriTypedDataMutation } from "@jaxcoder/lens";
 import { notification, Spin } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -10,6 +10,7 @@ import { JODW_BACKEND as server } from "../constants";
 import { broadcastTypedData } from "../lib/lens/publications/post";
 import { uploadIpfs, uploadIpfsRaw } from "../utils/ipfs";
 import { dataURLtoFile, toBase64, toFileBuffer } from "../utils/utils";
+import { submitJSONToArweave, submitFileToArweave } from "../utils/arweave";
 
 const saveToJodwBackend = async (data, existAuthor) => {
   try {
@@ -43,11 +44,11 @@ const EditUserProfile = () => {
   const [timesCited, setTimesCited] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  const [optionTech, setOptionTech] = useState(false);
-  const [optionHistory, setOptionHistory] = useState(false);
-  const [optionRomance, setOptionRomance] = useState(false);
-  const [optionComedy, setOptionComedy] = useState(false);
-  const [optionPolitics, setOptionPolitics] = useState(false);
+  const [optionTech, setOptionTech] = useState(lensProfile?.categories?.includes("Technology")??false);
+  const [optionHistory, setOptionHistory] = useState(lensProfile?.categories?.includes("History")??false);
+  const [optionRomance, setOptionRomance] = useState(lensProfile?.categories?.includes("Romance")??false);
+  const [optionComedy, setOptionComedy] = useState(lensProfile?.categories?.includes("Comedy")??false);
+  const [optionPolitics, setOptionPolitics] = useState(lensProfile?.categories?.includes("Politics")??false);
 
   const [selectedAuthorImage, setselectedAuthorImage] = useState(
     author && author?.authorImage && author?.authorImage?.data !== ""
@@ -69,6 +70,7 @@ const EditUserProfile = () => {
   };
 
   const [createSetProfileMetadataTypedDataMutation] = useCreateSetProfileMetadataTypedDataMutation();
+  const [createSetProfileImageUriTypedDataMutation] = useCreateSetProfileImageUriTypedDataMutation();
 
   useEffect(() => {
     const getAuthorData = async () => {
@@ -151,7 +153,7 @@ const EditUserProfile = () => {
 
   useEffect(() => {
     if (!selectedAuthorImage) return;
-    var src = URL.createObjectURL(selectedAuthorImage);
+    var src = typeof selectedAuthorImage === "string" ? selectedAuthorImage : URL.createObjectURL(selectedAuthorImage);
     var userImage = document.getElementById("user-image");
     userImage.src = src;
     userImage.style.display = "block";
@@ -159,21 +161,22 @@ const EditUserProfile = () => {
 
   useEffect(() => {
     if (!selectedCoverImage) return;
-    var src = URL.createObjectURL(selectedCoverImage);
+    var src = typeof selectedCoverImage === "string" ? selectedCoverImage : URL.createObjectURL(selectedCoverImage);
     var coverImage = document.getElementById("cover-image");
     coverImage.src = src;
     coverImage.style.display = "block";
   }, [selectedCoverImage]);
 
   const saveToLens = async (data) => {
-    const coverImageIpfsResult = selectedCoverImage ? await uploadIpfsRaw(await toFileBuffer(selectedCoverImage)) : null;
-    const profileImageIpfsResult = selectedAuthorImage ? await uploadIpfsRaw(await toFileBuffer(selectedAuthorImage)) : null;
-    const ipfsResult = await uploadIpfs({
+    const coverImageIpfsResult = typeof selectedCoverImage !== "string" ? await submitFileToArweave({ filename: "coverImage", data: await toBase64(selectedCoverImage) }) : {result: {id: selectedCoverImage??"".replace("https://arweave.net/", "")}};
+    const profileImageIpfsResult = typeof selectedAuthorImage !== "string" ? await submitFileToArweave({ filename: "profileImage", data: await await toBase64(selectedAuthorImage) }) : {result: {id: selectedAuthorImage??"".replace("https://arweave.net/", "")}};
+    const ipfsResult = await submitJSONToArweave({
       version: "1.0.0",
       metadata_id: uuidv4(),
       name: data?.username,
       bio: data?.bio,
-      cover_picture: "ipfs://" + coverImageIpfsResult?.path,
+      // cover_picture: "ipfs://" + coverImageIpfsResult?.path,
+      cover_picture: "https://arweave.net/" + coverImageIpfsResult?.result?.id,
       attributes: [
         {
           traitType: "string",
@@ -198,7 +201,14 @@ const EditUserProfile = () => {
         {
           traitType: "string",
           key: "authorImage",
-          value: "ipfs://" + profileImageIpfsResult?.path,
+          // value: "ipfs://" + profileImageIpfsResult?.path,
+          value: "https://arweave.net/" + profileImageIpfsResult?.result?.id,
+        },
+        {
+          traitType: "string",
+          key: "coverImage",
+          // value: "ipfs://" + coverImageIpfsResult?.path,
+          value: "https://arweave.net/" + coverImageIpfsResult?.result?.id,
         },
         {
           traitType: "string",
@@ -216,17 +226,31 @@ const EditUserProfile = () => {
       variables: {
         request: {
           profileId: lensProfile?.id,
-          metadata: "ipfs://" + ipfsResult?.path,
+          // metadata: "ipfs://" + ipfsResult?.path,
+          metadata: "https://arweave.net/" + ipfsResult?.result?.id,
         },
       },
     });
+    if (typeof selectedAuthorImage !== "string") {
+      const profilePicUpdate = await createSetProfileImageUriTypedDataMutation({
+        variables: {
+          request: {
+            profileId: lensProfile?.id,
+            url: "https://arweave.net/" + profileImageIpfsResult?.result?.id
+          }
+        }
+      });
+      broadcastTypedData(profilePicUpdate?.data?.createSetProfileImageURITypedData, () => {
+        console.log("Profile picture updated successfully!");
+      }, false);
+    }
     broadcastTypedData(result?.data?.createSetProfileMetadataTypedData, () => {
       notification.open({
         message: "Updated profile!",
         description: "Your profile was updated successfully!",
         icon: "🚀",
       });
-    }, false); // TODO: make this true.
+    }); // TODO: make this true.
   };
 
   const handleSave = async () => {
@@ -242,7 +266,7 @@ const EditUserProfile = () => {
     const authorImage = selectedAuthorImage
       ? {
         filename: selectedAuthorImage.name,
-        data: selectedAuthorImage ? await toBase64(selectedAuthorImage) : "",
+        data: selectedAuthorImage && typeof selectedAuthorImage !== "string" ? await toBase64(selectedAuthorImage) : "",
       }
       : {
         filename: "",
@@ -252,7 +276,7 @@ const EditUserProfile = () => {
     const authorCoverImage = selectedCoverImage
       ? {
         filename: selectedCoverImage.name,
-        data: selectedCoverImage ? await toBase64(selectedCoverImage) : "",
+        data: selectedCoverImage && typeof selectedCoverImage !== "string" ? await toBase64(selectedCoverImage) : "",
       }
       : {
         filename: "",

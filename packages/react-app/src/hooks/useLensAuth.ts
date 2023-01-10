@@ -98,7 +98,18 @@ export const useLensAuth = (address: string | undefined, deferCondition = () => 
       token: authToken?.accessToken,
       onExpired: () => {
         console.log("Lens auth access token has expired, refreshing...");
-        refreshMutation();
+        handleJwtTokenExpiry({
+          token: authToken?.refreshToken,
+          onExpired: () => {
+            setAuthToken(null);
+            setSignature("");
+            // grab new token
+            getChallenge();
+          },
+          onValid: () => {
+            refreshMutation();
+          }
+        });
       },
     });
   };

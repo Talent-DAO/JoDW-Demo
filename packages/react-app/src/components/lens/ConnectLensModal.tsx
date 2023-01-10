@@ -28,19 +28,20 @@ const ConnectLensModal = ({ isOpen, onConnectSuccess = (_) => {}, onConnectError
 
   const onProfileSelected = async (profile: Profile) => {
     onConnectSuccess(profile);
-    const metadataFile = profile?.metadata ? await ipfsGetByPath(profile?.metadata) : null;
-    const metadata = metadataFile ? JSON.parse(metadataFile) : null;
+    const attrs = profile?.attributes || [];
     dispatch(fetchLensUserSuccess({
       id: profile?.id,
       handle: profile?.handle,
-      image: convertToHttpUrl(getProfilePicture(profile?.picture)),
+      name: profile?.name,
+      image: convertToHttpUrl(getProfilePicture(profile?.picture)) || attrs.find((a: any) => a?.key === "authorImage")?.value,
       walletId: profile?.ownedBy,
-      coverImage: convertToHttpUrl(getProfilePicture(profile?.coverPicture)),
+      coverImage: attrs.find((a: any) => a?.key === "coverImage")?.value || undefined,
       bio: profile?.bio || undefined,
-      aboutMe: metadata?.attributes.find((a: any) => a?.key === "aboutMe")?.value || undefined,
-      twitter: metadata?.attributes.find((a: any) => a?.key === "twitter")?.value || undefined,
-      linkedin: metadata?.attributes.find((a: any) => a?.key === "linkedin")?.value || undefined,
-      tipAddress: metadata?.attributes.find((a: any) => a?.key === "tipAddress")?.value || undefined,
+      aboutMe: attrs.find((a: any) => a?.key === "aboutMe")?.value || undefined,
+      twitter: attrs.find((a: any) => a?.key === "twitter")?.value || undefined,
+      linkedin: attrs.find((a: any) => a?.key === "linkedin")?.value || undefined,
+      tipAddress: attrs.find((a: any) => a?.key === "tipAddress")?.value || undefined,
+      categories: attrs.find((a: any) => a?.key === "popularCategories")?.value?.split(",") || undefined,
       status: Status.Success
     }));
   };

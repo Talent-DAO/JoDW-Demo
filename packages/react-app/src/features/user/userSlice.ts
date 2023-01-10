@@ -10,6 +10,7 @@ export enum Status {
 export type LensUser = {
   id: number;
   handle: string | undefined;
+  name: string | undefined;
   image: string | undefined;
   walletId: string | undefined;
   coverImage: string | undefined;
@@ -18,6 +19,7 @@ export type LensUser = {
   twitter: string | undefined;
   linkedin: string | undefined;
   tipAddress: string | undefined;
+  categories: string[] | undefined;
   status: Status;
 }
 
@@ -42,6 +44,8 @@ const initialState: UserRootState = {
       handle: "",
       image: "",
       walletId: "",
+      name: "",
+      categories: undefined,
       coverImage: undefined,
       bio: undefined,
       aboutMe: undefined,

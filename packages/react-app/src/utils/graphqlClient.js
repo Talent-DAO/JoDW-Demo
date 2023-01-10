@@ -8,7 +8,7 @@ import { LOCAL_STORAGE_LENS_AUTH_TOKENS } from "../constants";
 
 const getLensAuthToken = () => {
   const serializedData = window.localStorage.getItem(LOCAL_STORAGE_LENS_AUTH_TOKENS) || { };
-  console.log("serializedData", serializedData);
+  
   if (serializedData && Object.keys(serializedData).length !== 0) {
     const tokens = JSON.parse(serializedData)?.value;
     return tokens?.accessToken ? `Bearer ${tokens?.accessToken}` : "";
