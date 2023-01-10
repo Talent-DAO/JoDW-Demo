@@ -5,6 +5,7 @@ import searchImage from "../assets/search.svg";
 import vector from "../assets/Vector.png";
 
 /* This example requires Tailwind CSS v2.0+ */
+/* Magic Palm */
 export default function Splash({ address }) {
   const navigate = useNavigate();
   return (
