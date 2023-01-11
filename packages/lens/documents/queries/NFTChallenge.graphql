@@ -1,0 +1,6 @@
+query NFTChallenge($request: NftOwnershipChallengeRequest!) @api(name: officiallens) {
+  nftOwnershipChallenge(request: $request) {
+    id
+    text
+  }
+}

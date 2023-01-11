@@ -1,0 +1,7 @@
+{
+  "extends": "../react-app/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "noEmit": true
+  }
+}

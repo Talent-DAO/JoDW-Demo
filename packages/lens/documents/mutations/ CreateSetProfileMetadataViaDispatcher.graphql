@@ -1,0 +1,5 @@
+mutation CreateSetProfileMetadataViaDispatcher($request: CreatePublicSetProfileMetadataURIRequest!) @api(name: officiallens) {
+  createSetProfileMetadataViaDispatcher(request: $request) {
+    ...RelayerResultFields
+  }
+}

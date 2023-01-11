@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { ethers } from "ethers";
 import { useCallback, useEffect, useState } from "react";
 

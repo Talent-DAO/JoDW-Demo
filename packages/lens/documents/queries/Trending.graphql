@@ -1,0 +1,8 @@
+query Trending($request: AllPublicationsTagsRequest!) @api(name: officiallens) {
+  allPublicationsTags(request: $request) {
+    items {
+      tag
+      total
+    }
+  }
+}

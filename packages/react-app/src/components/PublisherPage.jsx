@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { Switch } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";

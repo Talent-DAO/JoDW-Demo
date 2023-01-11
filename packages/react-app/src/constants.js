@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // MY INFURA_ID, SWAP IN YOURS FROM https://infura.io/dashboard/ethereum
 export const INFURA_ID = process.env.REACT_APP_INFURA_ID;
 export const INFURA_PROJECT_ID = process.env.REACT_APP_INFURA_PROJECT_ID || "";
@@ -17,6 +18,9 @@ export const BLOCKNATIVE_DAPPID = process.env.REACT_APP_BLOCKNATIVE_DAPPID || ""
 export const ALCHEMY_KEY = process.env.REACT_APP_ALCHEMY_KEY || "";
 
 export const JODW_BACKEND = process.env.REACT_APP_JODW_BACKEND_URL || "https://tdao-api.herokuapp.com";
+
+// App Constants
+export const LOCAL_STORAGE_LENS_AUTH_TOKENS = "lens-auth-tokens";
 
 export const NETWORKS = {
   localhost: {

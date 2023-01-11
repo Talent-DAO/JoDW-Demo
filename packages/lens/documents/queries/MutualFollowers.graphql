@@ -1,0 +1,21 @@
+query MutualFollowers($request: MutualFollowersProfilesQueryRequest!) @api(name: officiallens) {
+  mutualFollowersProfiles(request: $request) {
+    items {
+      handle
+      name
+      picture {
+        ... on MediaSet {
+          original {
+            url
+          }
+        }
+        ... on NftImage {
+          uri
+        }
+      }
+    }
+    pageInfo {
+      totalCount
+    }
+  }
+}

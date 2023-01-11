@@ -1,0 +1,6 @@
+query ProfileAddress($request: SingleProfileQueryRequest!) @api(name: officiallens) {
+  profile(request: $request) {
+    id
+    ownedBy
+  }
+}

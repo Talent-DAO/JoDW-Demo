@@ -1,4 +1,3 @@
-import react, { useState, useEffect } from "react";
 import clsx from "clsx";
 
 const NavNotificationItem = ({ notification }) => {
@@ -7,9 +6,9 @@ const NavNotificationItem = ({ notification }) => {
       <div className="flex flex-row items-center space-x-4">
         <span
           className={clsx(
-            notification.state == "Comment"
+            notification.state === "Comment"
               ? "bg-bgblue text-blue"
-              : ( notification.state == "Published" ? "bg-bggreen text-green" : "bg-bgred text-primary" ),
+              : ( notification.state === "Published" ? "bg-bggreen text-green" : "bg-bgred text-primary" ),
             "rounded-lg py-1 px-2 font-medium",
           )}
         >

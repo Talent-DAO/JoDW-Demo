@@ -1,0 +1,8 @@
+query RelevantPeople($request: ProfileQueryRequest!) @api(name: officiallens) {
+  profiles(request: $request) {
+    items {
+      ...ProfileFields
+      isFollowedByMe
+    }
+  }
+}

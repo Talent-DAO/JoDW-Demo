@@ -1,0 +1,6 @@
+mutation Refresh($request: RefreshRequest!) @api(name: officiallens) {
+  refresh(request: $request) {
+    accessToken
+    refreshToken
+  }
+}

@@ -1,0 +1,12 @@
+query Mirrors($request: ProfileQueryRequest!) @api(name: officiallens) {
+  profiles(request: $request) {
+    items {
+      ...ProfileFields
+      isFollowedByMe
+    }
+    pageInfo {
+      next
+      totalCount
+    }
+  }
+}

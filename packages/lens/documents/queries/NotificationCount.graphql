@@ -1,0 +1,7 @@
+query NotificationCount($request: NotificationRequest!) @api(name: officiallens) {
+  notifications(request: $request) {
+    pageInfo {
+      totalCount
+    }
+  }
+}

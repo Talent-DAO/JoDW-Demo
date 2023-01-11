@@ -69,3 +69,5 @@ yarn-error.log*
 
 # doc directory
 /doc
+
+packages/lens/generated.ts

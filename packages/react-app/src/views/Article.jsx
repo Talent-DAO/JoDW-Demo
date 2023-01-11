@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { notification, Tooltip } from "antd";
 import axios from "axios";
 import { ethers } from "ethers";

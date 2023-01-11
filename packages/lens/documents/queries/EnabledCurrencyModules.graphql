@@ -1,0 +1,8 @@
+query EnabledCurrencyModules @api(name: officiallens) {
+  enabledModuleCurrencies {
+    name
+    symbol
+    decimals
+    address
+  }
+}

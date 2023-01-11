@@ -1,0 +1,5 @@
+mutation CreateSetProfileImageURIViaDispatcher($request: UpdateProfileImageRequest!) @api(name: officiallens) {
+  createSetProfileImageURIViaDispatcher(request: $request) {
+    ...RelayerResultFields
+  }
+}

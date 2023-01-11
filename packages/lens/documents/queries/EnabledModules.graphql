@@ -1,0 +1,14 @@
+query EnabledModules @api(name: officiallens) {
+  enabledModules {
+    collectModules {
+      moduleName
+      contractAddress
+    }
+  }
+  enabledModuleCurrencies {
+    name
+    symbol
+    decimals
+    address
+  }
+}

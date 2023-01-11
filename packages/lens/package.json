@@ -1,0 +1,26 @@
+{
+  "name": "@jaxcoder/lens",
+  "version": "1.0.0",
+  "main": "generated.ts",
+  "description": "Lens library for GraphQL",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Talent-DAO/JoDW-Demo.git"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.3.21",
+    "typescript": "4.0.5"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^2.13.11",
+    "@graphql-codegen/fragment-matcher": "^3.3.1",
+    "@graphql-codegen/typescript": "^2.8.2",
+    "@graphql-codegen/typescript-operations": "^2.5.7",
+    "@graphql-codegen/typescript-react-apollo": "^3.3.6",
+    "tsconfig": "*"
+  },
+  "scripts": {
+    "codegen": "graphql-codegen",
+    "typecheck": "tsc --noEmit"
+  }
+}

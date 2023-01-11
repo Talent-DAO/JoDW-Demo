@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 export interface RawFileData {
   /**
    * The file name.
@@ -20,3 +21,12 @@ export enum SupportedBlockchain {
   Polygon,
   Optimism
 }
+
+export const getBlockchainName = (chain: SupportedBlockchain) => {
+  switch (chain) {
+  case SupportedBlockchain.Ethereum: return "Ethereum";
+  case SupportedBlockchain.Polygon: return "Polygon";
+  case SupportedBlockchain.Optimism: return "Optimism";
+  default: return "Unknown";
+  }
+};

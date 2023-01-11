@@ -1,0 +1,9 @@
+query PublicationRevenue($request: PublicationRevenueQueryRequest!) @api(name: officiallens) {
+  publicationRevenue(request: $request) {
+    revenue {
+      total {
+        value
+      }
+    }
+  }
+}

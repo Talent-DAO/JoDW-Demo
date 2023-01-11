@@ -1,0 +1,18 @@
+query UserProfiles($ownedBy: [EthereumAddress!]) @api(name: officiallens) {
+  profiles(request: { ownedBy: $ownedBy }) {
+    items {
+      ...ProfileFields
+      interests
+      stats {
+        totalFollowing
+      }
+      isDefault
+      dispatcher {
+        canUseRelay
+      }
+    }
+  }
+  userSigNonces {
+    lensHubOnChainSigNonce
+  }
+}

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { ApolloProvider } from "@apollo/client";
 import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/dist/index.css";

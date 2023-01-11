@@ -1,14 +1,13 @@
 // todo: swap out antd for chakra components
+import { Profile } from "@jaxcoder/lens";
 import { Modal } from "antd";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useAccount } from "wagmi";
-import { fetchLensUserSuccess, LensUser, Status, UserRootState } from "../features/user/userSlice";
-import { Profile } from "../graphql/queries/lens";
-import { useLensAuth, useLensProfiles } from "../hooks";
-import { NewArticleFormData } from "../lib/shared/interfaces";
-import { ArticlePreview } from "./";
-import MiniLensProfile from "./lens/MiniLensProfile";
+import { ArticlePreview } from "..";
+import { fetchLensUserSuccess, LensUser, Status, UserRootState } from "../../features/user/userSlice";
+import { useLensProfiles } from "../../hooks";
+import { NewArticleFormData } from "../../lib/shared/interfaces";
+import MiniLensProfile from "../lens/MiniLensProfile";
 
 type SubmitArticleModalSuccessResult = {
   article: NewArticleFormData;
@@ -25,8 +24,6 @@ type SubmitArticleParams = {
 const SubmitArticleModal = ({ article, isOpen, onError, onSuccess }: SubmitArticleParams) => {
 
   const dispatch = useDispatch();
-  const { address } = useAccount();
-  const lensAuth = useLensAuth(address, () => !isOpen);
   const lensProfiles: { profiles: Array<Profile> | null } = useLensProfiles();
   const props = useSelector((state: { user: UserRootState }) => {
     return {
@@ -38,7 +35,7 @@ const SubmitArticleModal = ({ article, isOpen, onError, onSuccess }: SubmitArtic
     dispatch(fetchLensUserSuccess({
       id: profile?.id,
       handle: profile?.handle,
-      image: profile?.picture?.original?.url,
+      image: profile?.picture?.original,
       walletId: profile?.ownedBy,
       status: Status.Success
     }));
@@ -57,7 +54,7 @@ const SubmitArticleModal = ({ article, isOpen, onError, onSuccess }: SubmitArtic
           <ArticlePreview article={article} />
         </div>
         <div>
-          {props.currentLensProfile?.status === Status.Success &&
+          {props.currentLensProfile?.id !== 0 &&
             <>
               <div className="p-3">
                 <h2 className="text-l font-bold">Submitting as</h2>
@@ -67,7 +64,7 @@ const SubmitArticleModal = ({ article, isOpen, onError, onSuccess }: SubmitArtic
               </div>
             </>}
           {/** TODO: Provide an option to change the current lens profile */}
-          {props.currentLensProfile?.handle === "" &&
+          {props.currentLensProfile?.id === 0 &&
             <>
               <div className="p-3">
                 <h2 className="text-l font-bold">Select Lens Profile</h2>

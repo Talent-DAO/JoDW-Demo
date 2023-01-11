@@ -1,0 +1,3 @@
+mutation RemoveProfileInterest($request: RemoveProfileInterestsRequest!) @api(name: officiallens) {
+  removeProfileInterests(request: $request)
+}

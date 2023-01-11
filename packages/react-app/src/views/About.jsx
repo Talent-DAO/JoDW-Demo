@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React, { useEffect } from "react";
 import aboutImage from "../assets/about.png";
 import abstract from "../assets/abstract.png";

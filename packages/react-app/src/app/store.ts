@@ -4,11 +4,13 @@ import loggerMiddleware from "redux-logger";
 import publicationReducer from "../features/publication/publicationSlice";
 import userReducer from "../features/user/userSlice";
 import web3Reducer from "../features/web3/web3Slice";
+import transactionReducer from "../features/transactions/transactionSlice";
 
 export const store = configureStore({
   reducer: {
     web3: web3Reducer,
     user: userReducer,
+    transactions: transactionReducer,
     publication: publicationReducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(loggerMiddleware),
