@@ -24,6 +24,7 @@ import { broadcastTypedData } from "../../lib/lens/publications/post";
 import * as dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { getProfilePicture } from "../../lib/lens/publications/getPostAsArticle";
+import { submitJSONToArweave } from "../../utils/arweave";
 
 dayjs.extend(relativeTime);
 
@@ -63,7 +64,7 @@ const NewComment = ({ parentId, onSuccess = (c) => {} }: NewCommentProps) => {
 
   const onSubmitNewComment = async () => {
     setSubmitting(true);
-    const ipfsResult = await uploadIpfs({
+    const ipfsResult = await submitJSONToArweave({
       version: "2.0.0",
       mainContentFocus: PublicationMainFocus.TEXT_ONLY,
       metadata_id: uuidv4(),
@@ -84,7 +85,8 @@ const NewComment = ({ parentId, onSuccess = (c) => {} }: NewCommentProps) => {
         request: {
           profileId: lensProfile?.id,
           publicationId: parentId,
-          contentURI: "ipfs://" + ipfsResult?.path,
+          // contentURI: "ipfs://" + ipfsResult?.path,
+          contentURI: "https://arweave.net/" + ipfsResult?.result?.id,
           collectModule: {
             revertCollectModule: true
           },
