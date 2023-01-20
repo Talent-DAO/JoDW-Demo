@@ -2,18 +2,11 @@
   "name": "@jodw/react-app",
   "version": "1.0.0",
   "homepage": ".",
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
   "dependencies": {
     "@apollo/client": "^3.3.21",
     "@apollo/react-hooks": "^4.0.0",
@@ -24,7 +17,7 @@
     "@heroicons/react": "^2.0.11",
     "@jaxcoder/lens": "^1.0.0",
     "@portis/web3": "^4.0.5",
-    "@rainbow-me/rainbowkit": "^0.5.0",
+    "@rainbow-me/rainbowkit": "^0.7.4",
     "@ramp-network/ramp-instant-sdk": "^2.2.0",
     "@reduxjs/toolkit": "^1.8.5",
     "@tailwindcss/forms": "^0.4.0",
@@ -90,7 +83,7 @@
     "typescript": "4.0.5",
     "urql": "^2.0.5",
     "uuid": "^9.0.0",
-    "wagmi": "^0.6.3",
+    "wagmi": "^0.7.5",
     "walletlink": "^2.1.5",
     "web3modal": "^1.9.1"
   },
