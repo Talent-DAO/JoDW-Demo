@@ -1,0 +1,6 @@
+mutation Authenticate($request: SignedAuthChallenge!) @api(name: officiallens) {
+  authenticate(request: $request) {
+    accessToken
+    refreshToken
+  }
+}

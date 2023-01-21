@@ -1,29 +1,32 @@
+/* eslint-disable no-undef */
 import "antd/dist/antd.css";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import { useAccount, useNetwork } from "wagmi";
 import "./App.css";
+import { RootState } from "./app/store";
 import { Footer, Navbar } from "./components";
+import ConnectLensModal from "./components/lens/ConnectLensModal";
 import LensLogin from "./components/lens/LensLogin";
 import { fetchUserStart, userWalletUpdated } from "./features/user/userSlice";
 import { accountUpdated, chainUpdated } from "./features/web3/web3Slice";
+import { useLensAuth } from "./hooks";
 import {
   AboutView,
   AdvancedSearchView,
-  AuthorView,
   AuthorDashboard,
+  AuthorView,
   ContactView,
   GovernanceView,
-  HomeView, 
+  HomeView,
   LensArticleView,
   PrivacyPolicyView,
-  PublisherView, 
+  PublisherView,
   ReviewerView,
   SearchView,
-  SubgraphView, 
-  SubmitView, 
-  SubmitLensView, 
+  SubgraphView,
+  SubmitView,
   TermsOfServiceView,
   TokenView,
   UserView,
@@ -54,6 +57,10 @@ const Website = ({ ...props }) => {
   const { chain } = useNetwork();
   const dispatch = useDispatch();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const lensAuth = useLensAuth(address, () => !address);
+  const lensProfile = useSelector((state: RootState) =>
+    state.user.user.lensProfile
+  );
 
   const handleUserMenuOpen = (state: any) => {
     setUserMenuOpen(state);
@@ -72,10 +79,13 @@ const Website = ({ ...props }) => {
     }
   }, [address, dispatch]);
 
+  const isReady = address !== null && lensProfile?.id !== 0;
+
+  const bypass = true;
   return (
     <div className="App container-2xl mx-auto">
       <Navbar userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />
-      {address ? (
+      {isReady ? (
         <>
           <Routes>
             <Route index element={<HomeView />} />
@@ -138,7 +148,6 @@ const Website = ({ ...props }) => {
             </Route>
             <Route path="/debug" />
             <Route path="/submit/:walletId" element={<SubmitView />} />
-            <Route path="/submit-lens/:walletId" element={<SubmitLensView />} />
             <Route path="/termsofservice" element={<TermsOfServiceView />} />
             <Route path="/privacypolicy" element={<PrivacyPolicyView />} />
             <Route path="/subgraph" element={<SubgraphView subgraphUri={props.subgraphUri} />} />
@@ -148,9 +157,7 @@ const Website = ({ ...props }) => {
           </Routes>
           <Footer />
         </>
-      ) : (
-        <WalletConnectModalView />
-      )}
+      ) : !address ? <WalletConnectModalView /> : <ConnectLensModal isOpen={!isReady} />}
     </div>
   );
 };

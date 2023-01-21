@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const s3FolderUpload = require("s3-folder-upload");
 const fs = require("fs");
 

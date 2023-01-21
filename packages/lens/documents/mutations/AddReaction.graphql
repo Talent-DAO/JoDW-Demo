@@ -1,0 +1,3 @@
+mutation AddReaction($request: ReactionRequest!) @api(name: officiallens) {
+  addReaction(request: $request)
+}

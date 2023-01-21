@@ -1,0 +1,3 @@
+mutation AddProfileInterest($request: AddProfileInterestsRequest!) @api(name: officiallens) {
+  addProfileInterests(request: $request)
+}

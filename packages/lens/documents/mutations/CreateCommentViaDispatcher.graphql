@@ -1,0 +1,5 @@
+mutation CreateCommentViaDispatcher($request: CreatePublicCommentRequest!) @api(name: officiallens) {
+  createCommentViaDispatcher(request: $request) {
+    ...RelayerResultFields
+  }
+}

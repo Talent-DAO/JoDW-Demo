@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const { existsSync, writeFileSync } = require("fs");
 
 if (!existsSync("./src/contracts/hardhat_contracts.json")) {

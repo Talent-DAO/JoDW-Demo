@@ -1,21 +1,19 @@
 /* eslint-disable no-console */
 /* eslint-disable no-undef */
-import { useQuery } from "@apollo/client";
+import { SearchRequestTypes, useSearchPublicationsQuery } from "@jaxcoder/lens";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAccount } from "wagmi";
 import { RootState } from "../app/store";
-import { JODW_BACKEND as server } from "../constants";
 import arrowRightImage from "../assets/ArrowRight.png";
 import authorImage from "../assets/author.png";
 import lineImage from "../assets/line.png";
 import partnershipImage from "../assets/partnership.png";
 import { LatestPublications, Newsletter, Splash } from "../components";
+import { JODW_BACKEND as server } from "../constants";
 import { getPublicationsFailure, getPublicationsSuccess } from "../features/publication/publicationSlice";
-import { GET_LATEST_ARTICLES } from "../graphql/queries/lens";
-import { getLensArticleData } from "../helpers/graphql/articles";
 import { dataURLtoFile, getBgColorForCategory, getTextColorForCategory } from "../utils/utils";
 
 
@@ -26,28 +24,27 @@ function Home() {
   const props = useSelector((state: RootState) => {
     const publications = state.publication.publications;
     const addr = state.user.user.walletId;
+    const lensProfile = state.user.user.lensProfile;
 
     return {
       publications,
-      addr
+      addr,
+      lensProfile,
     };
   });
 
-  console.log("Publications => ", props.publications);
+  const reactionRequest = props?.lensProfile?.id ? {
+    profileId: props?.lensProfile?.id
+  } : null;
 
-  const { loading: loadingPublications } = useQuery<any>(GET_LATEST_ARTICLES, {
-    onError: error => {
-      dispatch(getPublicationsFailure(error));
-    },
-    onCompleted: data => {
-      let unresolvedPublicationData = data.posts.map(async (post: any) => {
-        const artdata = await getLensArticleData(post);
-        return artdata;
-      });
-      Promise.all(unresolvedPublicationData).then(publicationData => {
-        // setPublications(publicationData);
-        dispatch(getPublicationsSuccess(publicationData));
-      });
+  const { data: publicationsData, loading: publicationsDataIsLoading, error: publicationsDataError } = useSearchPublicationsQuery({
+    variables: {
+      request: {
+        query: "JoDW",
+        type: SearchRequestTypes.Publication,
+        limit: 10,
+      },
+      reactionRequest: reactionRequest,
     },
   });
 
@@ -93,6 +90,18 @@ function Home() {
     init();
   }, [address]);
 
+  useEffect(() => {
+    if (publicationsData) {
+      const searchResult = publicationsData?.search;
+      if (searchResult?.__typename === "PublicationSearchResult") {
+        dispatch(getPublicationsSuccess(searchResult.items?.filter(v => v.__typename !== "Comment")));
+      }
+    }
+    if (publicationsDataError) {
+      dispatch(getPublicationsFailure(publicationsDataError));
+    }
+  }, [publicationsData, publicationsDataError]);
+
   return (
     <div>
       <div className="mx-auto pt-4 max-w-xl md:max-w-4xl xl:max-w-7xl overflow-hidden">
@@ -113,7 +122,7 @@ function Home() {
         </div>
 
         {/* Latest Publications Component Section */}
-        {!loadingPublications && props.publications ? <LatestPublications publications={props.publications} /> : <div>Loading...</div>}
+        {!publicationsDataIsLoading && props.publications ? <LatestPublications publications={props.publications} /> : <div>Loading...</div>}
         {/* Featured Author & Updates Section  */}
         <div className="pt-16 grid grid-cols-1 xl:grid-cols-2">
           <div className="mx-4 flex flex-col">

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React from "react";
 import { RewardsCard, RewardsChart } from "../components";
 

@@ -1,54 +1,63 @@
-import { createHttpLink } from "apollo-link-http";
-import { MultiAPILink } from "@habx/apollo-multi-endpoint-link";
+/* eslint-disable no-undef */
 import { ApolloClient, ApolloLink, InMemoryCache, useQuery } from "@apollo/client";
+import { MultiAPILink } from "@habx/apollo-multi-endpoint-link";
+import { createHttpLink } from "apollo-link-http";
 import gql from "graphql-tag";
 import { useNetwork } from "wagmi";
+import { LOCAL_STORAGE_LENS_AUTH_TOKENS } from "../constants";
+
+const getLensAuthToken = () => {
+  const serializedData = window.localStorage.getItem(LOCAL_STORAGE_LENS_AUTH_TOKENS) || { };
+  
+  if (serializedData && Object.keys(serializedData).length !== 0) {
+    const tokens = JSON.parse(serializedData)?.value;
+    return tokens?.accessToken ? `Bearer ${tokens?.accessToken}` : "";
+  } else {
+    return "";
+  }
+};
 
 export const healthClient = new ApolloClient({
   uri: "https://api.thegraph.com/index-node/graphql",
   cache: new InMemoryCache(),
 });
 
-export const goerliClient = new ApolloClient({
-  uri: "https://api.thegraph.com/subgraphs/name/codenamejason/reputation-goerli",
-  cache: new InMemoryCache({
-    typePolicies: {
-      Token: {
-        // Singleton types that have no identifying field can use an empty
-        // array for their keyFields.
-        keyFields: false,
-      },
-      Pool: {
-        // Singleton types that have no identifying field can use an empty
-        // array for their keyFields.
-        keyFields: false,
-      },
-    },
-  }),
-  queryDeduplication: true,
-  defaultOptions: {
-    watchQuery: {
-      fetchPolicy: "no-cache",
-    },
-    query: {
-      fetchPolicy: "no-cache",
-      errorPolicy: "all",
-    },
-  },
-});
+// export const goerliClient = new ApolloClient({
+//   uri: "https://api.thegraph.com/subgraphs/name/codenamejason/reputation-goerli",
+//   cache: new InMemoryCache({
+//     typePolicies: {
+//       Token: {
+//         // Singleton types that have no identifying field can use an empty
+//         // array for their keyFields.
+//         keyFields: false,
+//       },
+//       Pool: {
+//         // Singleton types that have no identifying field can use an empty
+//         // array for their keyFields.
+//         keyFields: false,
+//       },
+//     },
+//   }),
+//   queryDeduplication: true,
+//   defaultOptions: {
+//     watchQuery: {
+//       fetchPolicy: "no-cache",
+//     },
+//     query: {
+//       fetchPolicy: "no-cache",
+//       errorPolicy: "all",
+//     },
+//   },
+// });
 
 export const arweaveClient = new ApolloClient({
   uri: "https://arweave.net/graphql",
   cache: new InMemoryCache({
     typePolicies: {
       Token: {
-        // Singleton types that have no identifying field can use an empty
-        // array for their keyFields.
         keyFields: false,
       },
       Pool: {
-        // Singleton types that have no identifying field can use an empty
-        // array for their keyFields.
         keyFields: false,
       },
     },
@@ -75,7 +84,17 @@ export const compositeClient = new ApolloClient({
         goerli: "https://api.thegraph.com/subgraphs/name/codenamejason/reputation-goerli",
         arweave: "https://arweave.net/graphql",
         lens: "https://api.thegraph.com/subgraphs/name/supriyaamisshra/lens-tdao-test-1",
-        officiallens: "https://api.lens.dev",
+        officiallens: "https://api-mumbai.lens.dev",
+      },
+      getContext: (endpoint) => {
+        if (endpoint === "officiallens") {
+          return ({
+            headers: {
+              "x-access-token": getLensAuthToken(),
+            }
+          });
+        }
+        return {};
       },
       createHttpLink: () => createHttpLink(),
       httpSuffix: ""
@@ -84,13 +103,9 @@ export const compositeClient = new ApolloClient({
   cache: new InMemoryCache({
     typePolicies: {
       Token: {
-        // Singleton types that have no identifying field can use an empty
-        // array for their keyFields.
         keyFields: false,
       },
       Pool: {
-        // Singleton types that have no identifying field can use an empty
-        // array for their keyFields.
         keyFields: false,
       },
     },
@@ -129,9 +144,7 @@ export function useFetchedSubgraphStatus() {
   const { chain } = useNetwork();
 
   const { loading, error, data } =
-    useQuery <
-    HealthResponse >
-    (SUBGRAPH_HEALTH,
+    useQuery(SUBGRAPH_HEALTH,
       {
         client: healthClient,
         fetchPolicy: "no-cache",

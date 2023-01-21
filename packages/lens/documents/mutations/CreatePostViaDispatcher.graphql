@@ -1,0 +1,5 @@
+mutation CreatePostViaDispatcher($request: CreatePublicPostRequest!) @api(name: officiallens) {
+  createPostViaDispatcher(request: $request) {
+    ...RelayerResultFields
+  }
+}

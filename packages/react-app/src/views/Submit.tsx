@@ -1,18 +1,17 @@
-import { useApolloClient } from "@apollo/client";
-import axios from "axios";
+/* eslint-disable no-undef */
+import {
+  useCreatePostTypedDataMutation, useCreatePostViaDispatcherMutation
+} from "@jaxcoder/lens";
+import { notification } from "antd";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import { useAccount, useNetwork } from "wagmi";
 import { SubmitArticleModal } from "../components";
 import { JODW_BACKEND } from "../constants";
-import { RootState } from "../app/store";
-import { CREATE_POST } from "../graphql/queries/lens";
-import { MetadataDisplayType } from "../lib/lens/interfaces/generic";
-import { PublicationMainFocus } from "../lib/lens/interfaces/publication";
-import { NewArticleFormData } from "../lib/shared/interfaces";
-import { sendTransacton } from "../utils/arweave";
+import { MetadataDisplayType, PublicationMainFocus } from "../lib";
+import { broadcastTypedData } from "../lib/lens/publications/post";
+import onError from "../lib/shared/onError";
+import { sendTransacton, submitFileToArweave, submitJSONToArweave } from "../utils/arweave";
 import { uploadIpfs } from "../utils/ipfs";
 
 const server = JODW_BACKEND;
@@ -29,36 +28,30 @@ const SubmitState = {
 };
 
 const Submit = () => {
-  const apolloClient = useApolloClient();
-  const lensAuthData = useSelector((state: RootState) =>
-    state.user.lensAuth
-  );
-  const { address } = useAccount();
-  const { chain } = useNetwork();
-  const [selectedManuscriptFile, setSelectedManuscriptFile] = useState(undefined);
-  const [authors, setAuthors] = useState<any>([]);
+  // const [selectedManuscriptFile, setSelectedManuscriptFile] = useState(undefined);
+  const [authors, setAuthors] = useState<string[]>([]);
   const [selectedArticleCover, setSelectedArticleCover] = useState();
   const [talentPrice, setTalentPrice] = useState(0);
-  const [articleTitle, setArticleTitle] = useState("");
-  const [abstract, setAbstract] = useState("");
-  const [blockchain, setBlockchain] = useState("Ethereum");
-  const [categories, setCategories] = useState([]);
-  const [optionTech, setOptionTech] = useState(false);
-  const [optionHistory, setOptionHistory] = useState(false);
-  const [optionRomance, setOptionRomance] = useState(false);
-  const [optionComedy, setOptionComedy] = useState(false);
-  const [optionPolitics, setOptionPolitics] = useState(false);
-  const [arweaveHash, setArweaveHash] = useState("");
-  const [ipfsMetadataUri, setIpfsMetadataUri] = useState("");
+  const [articleTitle, setArticleTitle] = useState<string>("");
+  const [abstract, setAbstract] = useState<string>("");
+  const [blockchain, setBlockchain] = useState<string>("polygon");
+  const [categories, setCategories] = useState<string[]>([]);
+  const [optionTech, setOptionTech] = useState<boolean>(false);
+  const [optionHistory, setOptionHistory] = useState<boolean>(false);
+  const [optionRomance, setOptionRomance] = useState<boolean>(false);
+  const [optionComedy, setOptionComedy] = useState<boolean>(false);
+  const [optionPolitics, setOptionPolitics] = useState<boolean>(false);
+  const [arweaveHash, setArweaveHash] = useState<string>("");
+  const [ipfsMetadataUri, setIpfsMetadataUri] = useState<string>("");
   const { walletId } = useParams();
 
-  const [titleError, setTitleError] = useState(false);
-  const [authorError, setAuthorError] = useState(false);
-  const [abstractError, setAbstractError] = useState(false);
-  const [submitState, setSubmitState] = useState(SubmitState.SUBMIT_REVIEW_PENDING);
+  const [titleError, setTitleError] = useState<boolean>(false);
+  const [authorError, setAuthorError] = useState<boolean>(false);
+  const [abstractError, setAbstractError] = useState<boolean>(false);
+  const [submitState, setSubmitState] = useState<string>(SubmitState.SUBMIT_REVIEW_PENDING);
 
   const clearForm = () => {
-    setSelectedManuscriptFile(undefined);
+    // setSelectedManuscriptFile(undefined);
     setAuthors([]);
     setSelectedArticleCover(undefined);
     setTalentPrice(0);
@@ -75,66 +68,93 @@ const Submit = () => {
     setSubmitState(SubmitState.SUBMIT_REVIEW_PENDING);
   };
 
-  const createArticleMetadata = async (
-    articleArweave: { id: any; contentType: any; },
-    coverImageArweave: { id: any; contentType: any; },
-    onSuccess: { (ipfsUri: any): Promise<void>; (arg0: string): void; },
-    onError: () => void
-  ) => {
-    const ipfsResult = await uploadIpfs({
-      version: "2.0.0",
-      mainContentFocus: PublicationMainFocus.IMAGE,
-      metadata_id: uuidv4(),
-      description: abstract,
-      locale: "en-US",
-      external_url: "https://arweave.net/" + articleArweave?.id,
-      image: null,
-      imageMimeType: null,
-      name: articleTitle,
-      media: [
-        {
-          item: "https://arweave.net/" + coverImageArweave?.id,
-          type: coverImageArweave?.contentType
-        }
-      ],
-      attributes: [
-        {
-          displayType: MetadataDisplayType.Number,
-          traitType: "price",
-          value: talentPrice
-        },
-        {
-          displayType: MetadataDisplayType.String,
-          traitType: "authors",
-          value: Array.isArray(authors) ? authors.join(",") : authors
-        },
-        {
-          displayType: MetadataDisplayType.String,
-          traitType: "chain",
-          value: blockchain
-        },
-        {
-          displayType: MetadataDisplayType.String,
-          traitType: "categories",
-          value: categories.join(",")
-        },
-        {
-          displayType: MetadataDisplayType.String,
-          traitType: "articleContentType",
-          value: articleArweave?.contentType
-        },
-      ],
-      tags: ["talentdao", "jodw"],
-      appId: "talentdao",
-    });
-    console.log("IPFS metadata upload result: ", ipfsResult);
-    onSuccess("ipfs://" + ipfsResult?.path);
-    // onError();
+  const [createPostTypedData] = useCreatePostTypedDataMutation({
+    onCompleted: ({ createPostTypedData }) => broadcastTypedData(createPostTypedData, () => {
+      clearForm();
+      notification.open({
+        message: "Article submission successful!",
+        description: "You have submitted your article== 😍",
+        icon: "🚀",
+      });
+      console.log(["Article published!"]);
+    }, false), // TODO: make this true. RN it does not complete...
+    onError: (error) => {
+      onError({
+        message: "Submit failed!",
+        details: "Something went wrong while submitting the article, please try again. Details: " + error?.message
+      });
+      setSubmitState(SubmitState.SUBMIT_CONTINUE_ERROR);
+    }
+  });
+
+  const [createArticleViaDispatcher] = useCreatePostViaDispatcherMutation({
+    onCompleted: (data) => {
+      clearForm();
+      if (data.createPostViaDispatcher.__typename === "RelayerResult") {
+        notification.open({
+          message: "Article submission successful!",
+          description: "You have submitted your article== 😍",
+          icon: "🚀",
+        });
+        setSubmitState(SubmitState.SUBMIT_CONTINUE_COMPLETED); // temporary, remove once onchain submit is reenabled
+      }
+    },
+    onError
+  });
+
+  const createViaDispatcher = async (request: any) => {
+    const { data } = await createArticleViaDispatcher({ variables: { request } });
+    if (data?.createPostViaDispatcher?.__typename === "RelayError") {
+      createPostTypedData({ variables: { request } });
+    }
   };
 
-  const changeSelectedManuscriptFile = (event: any) => {
-    setSelectedManuscriptFile(event.target.files[0]);
-  };
+  // todo: we are only using on polygon, so we can remove this
+  // const talentDaoManagerContract = Object.entries(TalentDaoContracts[chain?.id] || {}).find(([_key, _value]) => _value?.chainId === String(chain?.id))?.[1]?.contracts?.TalentDaoManager;
+
+  // const { config: talentDaoManagerContractConfig } = usePrepareContractWrite({
+  //   addressOrName: talentDaoManagerContract?.address,
+  //   contractInterface: talentDaoManagerContract?.abi,
+  //   functionName: "mintArticleNFT",
+  //   args: [address, arweaveHash, ipfsMetadataUri, !Number.isNaN(talentPrice) ? ethers.utils.parseEther("0") : ethers.utils.parseEther(String(talentPrice))],
+  //   onError(_err) {
+  //     if (_err) {
+  //       setSubmitState(SubmitState.SUBMIT_CONTINUE_ERROR);
+  //       console.error("On chain tx failed", _err);
+  //       notification.open({
+  //         message: "Submit failed!",
+  //         description: "Something went wrong while submitting the article, please try again.",
+  //         icon: "⚠️",
+  //       });
+  //     }
+  //   },
+  // });
+  // const {
+  //   data: onChainSubmitData,
+  //   write: doSubmitOnChain,
+  // } = useContractWrite(talentDaoManagerContractConfig);
+
+  // const waitForOnChainTransaction = useWaitForTransaction({
+  //   hash: onChainSubmitData?.hash,
+  //   timeout: 10_000,
+  //   onSettled(_data, _error) {
+  //     if (_data?.status === 1) {
+  //       notification.open({
+  //         message: "Article is now onchain",
+  //         description: "You have submitted your article== 😍",
+  //         icon: "🚀",
+  //       });
+  //       setSubmitState(SubmitState.SUBMIT_CONTINUE_COMPLETED);
+  //       clearForm();
+  //     } else {
+  //       setSubmitState(SubmitState.SUBMIT_CONTINUE_ERROR);
+  //     }
+  //   },
+  // });
+
+  // const changeSelectedManuscriptFile = (event: any) => {
+  //   setSelectedManuscriptFile(event.target.files[0]);
+  // };
 
   const changeTalentPrice = (event: any) => {
     setTalentPrice(event.target.value);
@@ -186,15 +206,15 @@ const Submit = () => {
 
     setSubmitState(SubmitState.SUBMIT_CONTINUE_PENDING);
 
-    const articleFile = articleData?.manuscriptFile
-      ? {
-        filename: articleData?.manuscriptFile?.name,
-        data: articleData?.manuscriptFile ? await toBase64(articleData?.manuscriptFile?.data) : "",
-      }
-      : {
-        filename: "",
-        data: "",
-      };
+    // const articleFile = articleData?.manuscriptFile
+    //   ? {
+    //     filename: articleData?.manuscriptFile?.name,
+    //     data: articleData?.manuscriptFile ? await toBase64(articleData?.manuscriptFile?.data) : "",
+    //   }
+    //   : {
+    //     filename: "",
+    //     data: "",
+    //   };
 
     const articleCover = articleData?.coverImage
       ? {
@@ -205,34 +225,37 @@ const Submit = () => {
         filename: "",
         data: "",
       };
+    
+    // console.log(["articleFile", articleFile]);
+    console.log(["articleCover", articleCover]);
 
     // set up Arweave tx
-    const { result: arweaveTx, contentType: articleContentType } = await submitToArweave(articleFile);
-    const { result: coverImageArweaveTx, contentType: coverImageContentType } = await submitToArweave(articleCover);
+    const { result: arweaveTx, contentType: articleContentType } = await submitTextToArweave(abstract);
+    const { result: coverImageArweaveTx, contentType: coverImageContentType } = await submitFileToArweave(articleCover);
 
     // set up onchain tx
     const articleArweave = { id: arweaveTx?.id, contentType: articleContentType };
     const coverImageArweave = { id: coverImageArweaveTx?.id, contentType: coverImageContentType };
     createArticleMetadata(articleArweave, coverImageArweave, async (ipfsUri: string) => {
       try {
-        const res = await axios.post(server + "/api/article", {
-          ...articleData,
-          walletId: walletId,
-          body: articleFile,
-          cover: articleCover,
-          arweaveHash: arweaveTx.id.toString(),
-          lensCompatibleIpfsMetadata: ipfsUri,
-        });
-        console.log(res);
-        if (res.status === 200) {
-          setArweaveHash(articleArweave?.id);
-          setIpfsMetadataUri(ipfsUri);
-          publishToLensProfile(ipfsUri, lensProfile);
-        }
+        // const res = await axios.post(server + "/api/article", {
+        //   ...articleData,
+        //   walletId: walletId,
+        //   body: articleFile,
+        //   cover: articleCover,
+        //   arweaveHash: arweaveTx.id.toString(),
+        //   lensCompatibleIpfsMetadata: ipfsUri,
+        // });
+        // console.log(res);
+        // if (res.status === 200) {
+        setArweaveHash(articleArweave?.id);
+        setIpfsMetadataUri(ipfsUri);
+        publishToLensProfile(ipfsUri, lensProfile);
+        //}
       } catch (e) {
         console.error("Save article to JoDW backend failed: ", e);
       }
-    }, () => { });
+    }, () => {});
   };
 
   const publishToLensProfile = async (ipfsUri: string, lensProfile: { id: any; }) => {
@@ -241,16 +264,13 @@ const Submit = () => {
       return;
     }
     try {
-      const results = await apolloClient.mutate({
-        mutation: CREATE_POST,
-        variables: { profileId: lensProfile.id, ipfsUri: ipfsUri },
-        context: {
-          headers: {
-            "x-access-token": lensAuthData?.accessToken ? `Bearer ${lensAuthData?.accessToken}` : "",
-          },
-        }
-      });
-      console.log("LENS PUBLISH RESULTS ", results);
+      const request = {
+        profileId: lensProfile?.id,
+        contentURI: ipfsUri,
+        collectModule: { freeCollectModule: { followerOnly: false } },
+        referenceModule: { followerOnlyReferenceModule: false },
+      };
+      await createViaDispatcher(request);
     } catch (error) {
       console.error("Unable to publish to lens: ", error);
     }
@@ -261,19 +281,19 @@ const Submit = () => {
       return;
     }
 
-    // if (arweaveHash !== "" && ipfsMetadataUri !== "" && doSubmitOnChain) {
-    //   doSubmitOnChain?.();
-    // }
-  }, [ipfsMetadataUri]);
+    if (arweaveHash !== "" && ipfsMetadataUri !== ""/* && doSubmitOnChain*/) {
+      //doSubmitOnChain?.();
+    }
+  }, [ipfsMetadataUri/*, doSubmitOnChain*/]);
 
-  const submitToArweave = async (file: { filename?: any; data: any; }) => {
+  const submitTextToArweave = async (content: string) => {
+    console.log("Submitting to Arweave: ", abstract);
     //
-    const fileData = file.data;
-    const contentType = fileData.substring(5, fileData.indexOf(";", 5));
-    const result = await sendTransacton(fileData.substring(fileData.indexOf(",") + 1), contentType, categories);
+    const fileData = abstract;
+    const contentType = "text";
+    const result = await sendTransacton(fileData, contentType, categories);
     console.log("Result: ", result);
     console.log("Tx Id: ", result.id);
-
     return { result, contentType };
   };
 
@@ -285,16 +305,16 @@ const Submit = () => {
     preview.style.display = "block";
   }, [selectedArticleCover]);
 
-  const articleFormData: NewArticleFormData = {
+  const articleFormData = {
     title: articleTitle,
     abstract: abstract,
-    manuscriptFile: {
-      name: selectedManuscriptFile?.name,
-      data: selectedManuscriptFile
-    },
+    // manuscriptFile: {
+    //   name: selectedManuscriptFile?.name,
+    //   data: selectedManuscriptFile,
+    // },
     coverImage: {
       name: selectedArticleCover?.name,
-      data: selectedArticleCover
+      data: selectedArticleCover,
     },
     price: talentPrice,
     authors: authors,
@@ -318,6 +338,66 @@ const Submit = () => {
     setSubmitState(SubmitState.SUBMIT_REVIEW_ERROR);
   };
 
+  const createArticleMetadata = async (articleArweave: { id: any; contentType: any; }, coverImageArweave: { id: any; contentType: any; }, onSuccess: { (ipfsUri: any): Promise<void>; (arg0: string): void; }, onError: () => void) => {
+    // const ipfsResult = await uploadIpfs({
+    const { result, contentType } = await submitJSONToArweave({
+      version: "2.0.0",
+      mainContentFocus: PublicationMainFocus.IMAGE,
+      metadata_id: uuidv4(),
+      description: abstract,
+      locale: "en-US",
+      external_url: "https://arweave.net/" + articleArweave?.id,
+      image: null,
+      imageMimeType: null,
+      name: "#jodw " + articleTitle,
+      media: [
+        {
+          item: "https://arweave.net/" + coverImageArweave?.id,
+          type: coverImageArweave?.contentType
+        }
+      ],
+      attributes: [
+        {
+          displayType: MetadataDisplayType.Number,
+          traitType: "price",
+          value: talentPrice.toString()
+        },
+        {
+          displayType: MetadataDisplayType.String,
+          traitType: "authors",
+          value: Array.isArray(authors) ? authors.join(",") : authors
+        },
+        {
+          displayType: MetadataDisplayType.String,
+          traitType: "chain",
+          value: blockchain
+        },
+        {
+          displayType: MetadataDisplayType.String,
+          traitType: "categories",
+          value: articleFormData?.categories.join(",")
+        },
+        {
+          displayType: MetadataDisplayType.String,
+          traitType: "articleContentType",
+          value: articleArweave?.contentType
+        },
+        {
+          displayType: MetadataDisplayType.String,
+          traitType: "articleContentURI",
+          value: "https://arweave.net/" + articleArweave?.id
+        },
+      ],
+      tags: ["talentdao", "jodw"],
+      appId: "JoDW",
+    });
+    // console.log("IPFS metadata upload result: ", ipfsResult);
+    // onSuccess("ipfs://" + ipfsResult?.path);
+    console.log("ARweave metadata upload result: ", result);
+    onSuccess("https://arweave.net/" + result?.id);
+    // onError();
+  };
+
   // For debugging:
   useEffect(() => {
     console.log("SUBMIT STATE: ", submitState);
@@ -329,7 +409,7 @@ const Submit = () => {
         <div>
           <h2 className="text-4xl font-bold text-left">Submit Article</h2>
           <p className="text-left">
-            Upload your article manuscript and related details to the Journal of Decentralized Work.
+            Upload your publiction and related details to the Journal of Decentralized Work.
           </p>
         </div>
 
@@ -339,7 +419,7 @@ const Submit = () => {
               <div className="py-5 sm:rounded-lg">
                 <div className="md:grid md:grid-cols-10 md:gap-6">
                   <div className="mt-5 md:mt-0 md:col-span-6 flex flex-col place-content-between">
-                    <label className="block text-left text-lg font-bold text-gray-700">Article Manuscript</label>
+                    {/* <label className="block text-left text-lg font-bold text-gray-700">Article Manuscript</label>
                     <div className="mt-1 h-full flex flex-col justify-center items-center px-6 pt-5 pb-6 border border-gray-300 rounded-md">
                       {selectedManuscriptFile ? (
                         <div className="py-5 text-lg text-textgrey">{selectedManuscriptFile.name}</div>
@@ -361,7 +441,7 @@ const Submit = () => {
                           onChange={changeSelectedManuscriptFile}
                         />
                       </label>
-                    </div>
+                    </div> */}
                     <div className="mt-1 h-full flex flex-col justify-center items-center px-6 pt-5 pb-6 border border-gray-300 rounded-md">
                       {selectedArticleCover ? (
                         <div className="py-5 text-lg text-textgrey">{selectedArticleCover.name}</div>
@@ -447,15 +527,17 @@ const Submit = () => {
                 </div>
                 <div className="mt-10 col-span-6">
                   <label htmlFor="article-title" className="pl-4 block text-left text-lg font-bold">
-                    Author(s) <span className="pl-1 text-primary">*</span>
+                    Author(s) <span className="pl-1 text-primary">*</span> (separated by comma)
                   </label>
                   <input
                     type="text"
                     name="article-title"
                     id="article-title"
-                    placeholder="e.g John Doe"
+                    placeholder="John Doe, Jane Doe"
                     value={authors}
-                    onChange={e => setAuthors([e.target.value])}
+                    onChange={(e) => {
+                      setAuthors([e.target.value]);
+                    }}
                     className="my-1 p-4 bg-transparent rounded-xl block w-full focus:outline-none text-lg border border-black "
                   />
                   {authorError && (
@@ -479,18 +561,18 @@ const Submit = () => {
                   )}
                 </div>
                 {/* <div className="mt-10 col-span-6">
-                <label htmlFor="authors" className="block text-left text-sm font-medium text-gray-700">
-                  Author(s)
-                </label>
-                <AuthorForm
-                  register={register}
-                  control={control}
-                  handleSubmit={handleSubmit}
-                  reset={reset}
-                  formState={formState}
-                  watch={watch}
-                />
-              </div> */}
+                  <label htmlFor="authors" className="block text-left text-sm font-medium text-gray-700">
+                    Author(s)
+                  </label>
+                  <AuthorForm
+                    register={register}
+                    control={control}
+                    handleSubmit={handleSubmit}
+                    reset={reset}
+                    formState={formState}
+                    watch={watch}
+                  />
+                </div> */}
                 <div className="mt-10 col-span-6">
                   <div className="pl-4 flex flex-col text-left">
                     <label htmlFor="abstract" className="block text-left text-lg font-bold">
@@ -546,9 +628,12 @@ const Submit = () => {
                     onChange={e => changeBlockchain(e)}
                     className="mt-1 block bg-transparent w-full pl-3 pr-10 py-2 text-lg rounded-xl border border-black"
                   >
-                    <option>Ethereum</option>
-                    <option>Polygon</option>
-                    <option>Optimism</option>
+                    <option disabled value="ethereum">Ethereum</option>
+                    <option value="polygon">Polygon</option>
+                    <option disabled value="optimism">Optimism</option>
+                    <option disabled value="arbitrum">Arbitrum</option>
+                    <option disabled value="gnosis">Gnosis</option>
+                    <option disabled value="fantom">Fantom</option>
                   </select>
                 </div>
 

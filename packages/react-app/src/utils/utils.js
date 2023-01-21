@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import axios from "axios";
 import { JODW_BACKEND as server } from "../constants"; 
 
@@ -13,6 +14,14 @@ export function dataURLtoFile(dataurl, filename) {
 
   return new File([u8arr], filename, { type: mime });
 }
+
+export const toFileBuffer = file =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsArrayBuffer(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
 
 export const toBase64 = file =>
   new Promise((resolve, reject) => {
@@ -112,6 +121,7 @@ export const getBgColorForCategory = category => {
 };
 
 export const convertToHttpUrl = url => {
+  if (!url) {return url;}
   if (url.startsWith("ipfs://")) {
     return "https://superfun.infura-ipfs.io/ipfs/" + url.substring(7);
   } else if (url.startsWith("https://arweave.net/")) {

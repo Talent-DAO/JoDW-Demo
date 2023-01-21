@@ -1,0 +1,7 @@
+query GenerateModuleCurrencyApprovalData($request: GenerateModuleCurrencyApprovalDataRequest!) @api(name: officiallens) {
+  generateModuleCurrencyApprovalData(request: $request) {
+    to
+    from
+    data
+  }
+}

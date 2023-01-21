@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { useState } from "react";
 // Hook from useHooks! (https://usehooks.com/useLocalStorage/)
 const useLocalStorage = (key, initialValue, ttl) => {

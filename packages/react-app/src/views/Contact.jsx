@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import contact_join_us from "../assets/contact_join_us.png";
