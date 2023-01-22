@@ -7,7 +7,7 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router } from "react-router-dom";
 import { WagmiConfig } from "wagmi";
-import { store } from "../src/app/store";
+import { store } from "./app/store";
 import App from "./App";
 import { ErrorBoundary } from "./components";
 import "./index.css";

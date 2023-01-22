@@ -33,16 +33,16 @@ import {
   WalletConnectModalView,
 } from "./views";
 
-const App = ({ ...props }) => {
+const App = () => {
   return (
     <Routes>
-      <Route path="/dashboard/*" element={<DashboardApp {...props} />} />
-      <Route path="/*" element={<Website {...props} />} />
+      <Route path="/dashboard/*" element={<DashboardApp />} />
+      <Route path="/*" element={<Website />} />
     </Routes>
   );
 };
 
-const DashboardApp = ({ ...props }) => {
+const DashboardApp = () => {
   return (
     <Routes>
       <Route path="/author/*" element={<AuthorDashboard />} />
@@ -52,15 +52,17 @@ const DashboardApp = ({ ...props }) => {
   );
 };
 
-const Website = ({ ...props }) => {
+const Website = () => {
   const { address } = useAccount();
   const { chain } = useNetwork();
   const dispatch = useDispatch();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const lensAuth = useLensAuth(address, () => !address);
-  const lensProfile = useSelector((state: RootState) =>
-    state.user.user.lensProfile
-  );
+  const state = useSelector((state: RootState) => {
+    return {
+      lensProfile: state.user.user.lensProfile,
+    };
+  });
 
   const handleUserMenuOpen = (state: any) => {
     setUserMenuOpen(state);
@@ -79,12 +81,11 @@ const Website = ({ ...props }) => {
     }
   }, [address, dispatch]);
 
-  const isReady = address !== null && lensProfile?.id !== 0;
+  const isReady = address !== null && state.lensProfile?.id !== 0;
 
-  const bypass = true;
   return (
     <div className="App container-2xl mx-auto">
-      <Navbar userMenuOpen={userMenuOpen} handleUserMenuOpen={handleUserMenuOpen} />
+      <Navbar />
       {isReady ? (
         <>
           <Routes>
@@ -150,7 +151,7 @@ const Website = ({ ...props }) => {
             <Route path="/submit/:walletId" element={<SubmitView />} />
             <Route path="/termsofservice" element={<TermsOfServiceView />} />
             <Route path="/privacypolicy" element={<PrivacyPolicyView />} />
-            <Route path="/subgraph" element={<SubgraphView subgraphUri={props.subgraphUri} />} />
+            <Route path="/subgraph" element={<SubgraphView />} />
             <Route path="/token" element={<TokenView />} />
             <Route path="/governance" element={<GovernanceView />} />
             <Route path="/request-feature" />
