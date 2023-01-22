@@ -10,34 +10,19 @@ import twitterImg from "../assets/twitter.png";
 import { getAuthorData } from "../utils/utils";
 import CustomConnectButton from "./CustomConnectButton";
 
-function Navbar({ userMenuOpen, handleUserMenuOpen }) {
+function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
   const { address } = useAccount();
 
-  const [show, setShow] = useState(false);
   const [navPanelOpen, setNavPanelOpen] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(userMenuOpen);
   const [twitter, setTwitter] = useState("");
 
   const goToPage = locationPath => {
     setShow(false);
     setNavPanelOpen(false);
     navigate(locationPath);
-  };
-
-  const handleMenuOpen = () => {
-    setMenuOpen(true);
-    handleUserMenuOpen(true);
-  };
-
-  const handleBrowseByAuthor = () => {
-    goToPage("/browse");
-  };
-
-  const handleBrowseBySubject = () => {
-    goToPage("/browse");
   };
 
   useEffect(() => {
@@ -103,34 +88,10 @@ function Navbar({ userMenuOpen, handleUserMenuOpen }) {
                     ? "text-lg text-primary font-semibold cursor-pointer"
                     : "text-lg cursor-pointer font-medium"
                 }
-                onClick={() => setShow(!show)}
+                onClick={() =>  goToPage("/browse")}
               >
                 Browse
               </div>
-              {show && (
-                <div
-                  className="origin-top-right absolute left-0 mt-2 w-36 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="menu-button"
-                  tabIndex="-1"
-                >
-                  <div className="py-1" role="none">
-                    <div
-                      className="text-darkgray block px-4 py-2 text-sm hover:bg-bggrey"
-                      onClick={handleBrowseByAuthor}
-                    >
-                      Browse by Author
-                    </div>
-                    <div
-                      className="text-darkgray block px-4 py-2 text-sm hover:bg-bggrey whitespace-nowrap"
-                      onClick={handleBrowseBySubject}
-                    >
-                      Browse by Subject
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>

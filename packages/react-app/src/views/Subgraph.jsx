@@ -13,9 +13,9 @@ const highlight = {
   fontWeight: "bolder",
 };
 
-function Subgraph({ subgraphUri }) {
+function Subgraph() {
   function graphQLFetcher(graphQLParams) {
-    return fetch(subgraphUri, {
+    return fetch("https://arweave.net/", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(graphQLParams),
@@ -58,7 +58,7 @@ function Subgraph({ subgraphUri }) {
     if (error) {
       console.error(error);
     }
-    console.log("Arweave network height is: ", body);
+    console.log("Arweave network height is: ", { body });
     setNetworkInfo(body);
   });
 

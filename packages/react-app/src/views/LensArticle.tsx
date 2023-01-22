@@ -49,9 +49,12 @@ const LensArticle = () => {
 
   const { id } = useParams();
 
-  const lensProfile = useSelector((state: RootState) =>
-    state.user.user.lensProfile
-  );
+  // Get the Lens user from state, they should already be logged in.
+  const state = useSelector((state: RootState) => {
+    return {
+      lensProfile: state.user.user.lensProfile,
+    };
+  });
 
   const { data: articleData, loading: articleIsLoading, error: articleError } = usePublicationQuery({
     variables: {
@@ -59,9 +62,9 @@ const LensArticle = () => {
         publicationId: id,
       },
       reactionRequest: {
-        profileId: lensProfile?.id,
+        profileId: state.lensProfile?.id,
       },
-      profileId: lensProfile?.id,
+      profileId: state.lensProfile?.id,
     },
   });
 
@@ -193,6 +196,8 @@ const LensArticle = () => {
                   </div>
                 </div>
               ) : (
+                // todo: we will have to loop through the authors if there is more than one
+                // todo: add link to the author profile when clicked
                 <div className="flex flex-col text-left">
                   <div className="py-4 flex flex-row items-center text-gray space-x-4 cursor-pointer">
                     <img className="rounded-full" src={article.profile?.picture ? article.profile?.picture : author_pro} alt="author pro" width={48} height={48}></img>
