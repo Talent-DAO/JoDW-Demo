@@ -167,33 +167,7 @@ const LensArticle = () => {
                 </div>
               ) : tab === tabType.history ? (
                 <div className="flex flex-col text-left">
-                  <div className="py-4 flex flex-row items-center text-gray space-x-4">
-                    <img className="rounded-full" src={article.profile?.picture ? article.profile?.picture : author_pro} alt="author pro" width={48} height={48}></img>
-                    <div className="flex flex-col text-textgrey">
-                      <div className="text-lg">Listed First edition</div>
-                      <div className="text-lg">
-                        by <span className="text-black">SaintLucas James Andrew</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="py-4 flex flex-row items-center text-gray space-x-4">
-                    <img className="rounded-full" src={article.profile?.picture ? article.profile?.picture : author_pro} alt="author pro" width={48} height={48}></img>
-                    <div className="flex flex-col text-textgrey">
-                      <div className="text-lg">Listed First edition</div>
-                      <div className="text-lg">
-                        by <span className="text-black">SaintLucas James Andrew</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="py-4 flex flex-row items-center text-gray space-x-4">
-                    <img className="rounded-full" src={article.profile?.picture ? article.profile?.picture : author_pro} alt="author pro" width={48} height={48}></img>
-                    <div className="flex flex-col text-textgrey">
-                      <div className="text-lg">Listed First edition</div>
-                      <div className="text-lg">
-                        by <span className="text-black">SaintLucas James Andrew</span>
-                      </div>
-                    </div>
-                  </div>
+                  {/* loop over history */}
                 </div>
               ) : (
                 // todo: we will have to loop through the authors if there is more than one
