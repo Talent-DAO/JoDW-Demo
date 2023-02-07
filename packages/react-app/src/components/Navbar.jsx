@@ -20,7 +20,6 @@ function Navbar() {
   const [twitter, setTwitter] = useState("");
 
   const goToPage = locationPath => {
-    setShow(false);
     setNavPanelOpen(false);
     navigate(locationPath);
   };

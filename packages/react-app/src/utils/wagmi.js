@@ -3,7 +3,7 @@ import { getDefaultWallets } from "@rainbow-me/rainbowkit";
 import { chain, configureChains, createClient } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { infuraProvider } from "wagmi/providers/infura";
-import { publicProvider } from "wagmi/providers/public";
+// import { publicProvider } from "wagmi/providers/public";
 
 const alchemyId = process.env.REACT_APP_ALCHEMY_KEY;
 const infuraId = process.env.INFURA_ID;
@@ -12,7 +12,7 @@ const activeChains = [];
 if (process.env.REACT_APP_ENV === "production") {
   activeChains.push(chain.polygon);
 } else {
-  activeChains.push(chain.polygonMumbai);
+  activeChains.push(chain.polygon, chain.polygonMumbai);
 }
 
 export const { chains, provider, webSocketProvider } = configureChains(activeChains, [
