@@ -3,7 +3,6 @@ import { ApolloClient, ApolloLink, InMemoryCache, useQuery } from "@apollo/clien
 import { MultiAPILink } from "@habx/apollo-multi-endpoint-link";
 import { createHttpLink } from "apollo-link-http";
 import gql from "graphql-tag";
-import { useNetwork } from "wagmi";
 import { LOCAL_STORAGE_LENS_AUTH_TOKENS } from "../constants";
 
 const getLensAuthToken = () => {
@@ -21,34 +20,6 @@ export const healthClient = new ApolloClient({
   uri: "https://api.thegraph.com/index-node/graphql",
   cache: new InMemoryCache(),
 });
-
-// export const goerliClient = new ApolloClient({
-//   uri: "https://api.thegraph.com/subgraphs/name/codenamejason/reputation-goerli",
-//   cache: new InMemoryCache({
-//     typePolicies: {
-//       Token: {
-//         // Singleton types that have no identifying field can use an empty
-//         // array for their keyFields.
-//         keyFields: false,
-//       },
-//       Pool: {
-//         // Singleton types that have no identifying field can use an empty
-//         // array for their keyFields.
-//         keyFields: false,
-//       },
-//     },
-//   }),
-//   queryDeduplication: true,
-//   defaultOptions: {
-//     watchQuery: {
-//       fetchPolicy: "no-cache",
-//     },
-//     query: {
-//       fetchPolicy: "no-cache",
-//       errorPolicy: "all",
-//     },
-//   },
-// });
 
 export const arweaveClient = new ApolloClient({
   uri: "https://arweave.net/graphql",
@@ -141,8 +112,6 @@ export const SUBGRAPH_HEALTH = gql`
 `;
 
 export function useFetchedSubgraphStatus() {
-  const { chain } = useNetwork();
-
   const { loading, error, data } =
     useQuery(SUBGRAPH_HEALTH,
       {
@@ -150,9 +119,7 @@ export function useFetchedSubgraphStatus() {
         fetchPolicy: "no-cache",
         variables: {
           name:
-          chain?.id === 69
-            ? "danielesalatti/project-registry-optimism-kovan"
-            : "danielesalatti/project-registry-goerli",
+          "https://api-mumbai.lens.dev",
         },
       });
 

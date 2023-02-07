@@ -26,6 +26,8 @@ const ConnectLensModal = ({ isOpen, onConnectSuccess = (_) => { }, onConnectErro
     },
   });
 
+  console.log("JER lensProfileLoadError", lensProfilesData);
+
   const onProfileSelected = async (profile: Profile) => {
     onConnectSuccess(profile);
     const attrs = profile?.attributes || [];

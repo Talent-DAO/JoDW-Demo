@@ -23,7 +23,7 @@ const HomeView = () => {
       {showAlert ? (
         <div className="flex flex-row bg-bgred p-3 text-primary items-center space-x-2">
           <ExclamationCircleIcon className="w-5 h-5" />
-          <span>{"Epoch is live. (a 20 days period when papers are been reviewed)"}</span>
+          <span>{"Epoch is live. (a 20 day period when publications are being reviewed)"}</span>
         </div>
       ) : null}
       <div className="flex-row space-x-4 hidden md:flex">
