@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
-import { useAuthenticateMutation, useChallengeLazyQuery, useRefreshMutation } from "@jaxcoder/lens";
+import { AuthenticationResult, useAuthenticateMutation, useChallengeLazyQuery, useRefreshMutation } from "@jaxcoder/lens";
 import { useEffect, useState } from "react";
-import { useSignMessage } from "wagmi";
+import { useSignMessage, useNetwork } from "wagmi";
 import { useLocalStorage } from ".";
 import { LOCAL_STORAGE_LENS_AUTH_TOKENS } from "../constants";
 import onError from "../lib/shared/onError";
@@ -32,6 +32,7 @@ const handleJwtTokenExpiry = async ({ token, onExpired, onValid = () => {} }: Ha
 export const useLensAuth = (address: string | undefined, deferCondition = () => false) => {
   const [authToken, setAuthToken] = useLocalStorage(LOCAL_STORAGE_LENS_AUTH_TOKENS, null, Date.now() + ONE_DAY_MS);
   const [signature, setSignature] = useState("");
+  const { chain } = useNetwork();
 
   const [getChallenge, { data: challengeData, loading: challengeIsLoading, error: challengeError }] = useChallengeLazyQuery({
     variables: {
@@ -50,6 +51,15 @@ export const useLensAuth = (address: string | undefined, deferCondition = () => 
     },
   });
 
+  const getCurrentAuthToken = () => {
+    if (chain?.id && authToken) {
+      return authToken[chain?.id || 0];
+    }
+    else {
+      return null;
+    }
+  };
+
   const { data: signData, error: signError, isLoading: signIsLoading, signMessage } = useSignMessage({
     onError(error) {
       onError({ message: "Sign failed when connecting to Lens!", details: "Please report this: " + error.message });
@@ -63,7 +73,7 @@ export const useLensAuth = (address: string | undefined, deferCondition = () => 
   const [refreshMutation, { data: refreshedTokenData, loading: refreshIsLoading, error: refreshError }] = useRefreshMutation({
     variables: {
       request: {
-        refreshToken: authToken?.refreshToken || ""
+        refreshToken: getCurrentAuthToken()?.refreshToken || ""
       }
     },
   });
@@ -79,11 +89,25 @@ export const useLensAuth = (address: string | undefined, deferCondition = () => 
     });
   };
 
+  const resetAuthToken = () => {
+    const data = authToken || null;
+    if (data) {
+      delete data[chain?.id || 0];
+    }
+    setAuthToken(data);
+  };
+
+  const doSetAuth = (token: AuthenticationResult | undefined) => {
+    const data = authToken || {};
+    data[chain?.id || 0] = token;
+    setAuthToken(data);
+  };
+
   const doAuthenticate = async () => {
     // Sending the signature to the server to verify
     const result = await authenticateMutation();
     if (result?.data?.authenticate?.accessToken) {
-      setAuthToken(result?.data?.authenticate);
+      doSetAuth(result?.data?.authenticate);
     } else {
       onError({ message: "Unable to authenticate with Lens!" });
     }
@@ -93,15 +117,16 @@ export const useLensAuth = (address: string | undefined, deferCondition = () => 
     if (!authToken) {
       return;
     }
+    const currentToken = getCurrentAuthToken();
     
     handleJwtTokenExpiry({
-      token: authToken?.accessToken,
+      token: currentToken?.accessToken,
       onExpired: () => {
         console.log("Lens auth access token has expired, refreshing...");
         handleJwtTokenExpiry({
-          token: authToken?.refreshToken,
+          token: currentToken?.refreshToken,
           onExpired: () => {
-            setAuthToken(null);
+            resetAuthToken();
             setSignature("");
             // grab new token
             getChallenge();
@@ -128,7 +153,7 @@ export const useLensAuth = (address: string | undefined, deferCondition = () => 
 
   useEffect(() => {
     if (refreshedTokenData) {
-      setAuthToken(refreshedTokenData?.refresh);
+      doSetAuth(refreshedTokenData?.refresh);
     }
   }, [refreshedTokenData]);
 
@@ -139,7 +164,7 @@ export const useLensAuth = (address: string | undefined, deferCondition = () => 
       challengeIsLoading ||
       authenticationIsLoading ||
       !signMessage ||
-      authToken ||
+      getCurrentAuthToken() ||
       challengeData
     ) {
       perhapsRefreshToken();
@@ -147,7 +172,7 @@ export const useLensAuth = (address: string | undefined, deferCondition = () => 
     }
     // if not, proceed
     connectWithLens();
-  }, [address, deferCondition]);
+  }, [address, chain, deferCondition]);
 
   return authToken;
 };
