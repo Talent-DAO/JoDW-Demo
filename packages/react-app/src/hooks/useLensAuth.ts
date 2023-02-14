@@ -32,7 +32,7 @@ const handleJwtTokenExpiry = async ({ token, onExpired, onValid = () => {} }: Ha
 export const useLensAuth = (address: string | undefined, deferCondition = () => false) => {
   const [authToken, setAuthToken] = useLocalStorage(LOCAL_STORAGE_LENS_AUTH_TOKENS, null, Date.now() + ONE_DAY_MS);
   const [signature, setSignature] = useState("");
-  const { chain } = useNetwork();
+  const { chain, chains } = useNetwork();
 
   const [getChallenge, { data: challengeData, loading: challengeIsLoading, error: challengeError }] = useChallengeLazyQuery({
     variables: {
@@ -51,13 +51,18 @@ export const useLensAuth = (address: string | undefined, deferCondition = () => 
     },
   });
 
+  const isSupportedChain = () => {
+    return chains.find(c => c.id === chain?.id) !== undefined;
+  };
+
   const getCurrentAuthToken = () => {
-    if (chain?.id && authToken) {
-      const token = authToken[chain?.id || 0]?.[address || ""];
+    const _chain = chains.find(c => c.id === chain?.id);
+    if (_chain?.id && authToken) {
+      const token = authToken[_chain?.id || 0]?.[address || ""];
       if (token) {
         return token;
       }
-      console.log(["No token associated with this chain / wallet", authToken, chain, address]);
+      console.log(["No token associated with this chain / wallet", authToken, chain, _chain, address]);
     }
     
     return null;
@@ -177,7 +182,9 @@ export const useLensAuth = (address: string | undefined, deferCondition = () => 
       return;
     }
     // if not, proceed
-    connectWithLens();
+    if (isSupportedChain()) {
+      connectWithLens();
+    }
   }, [address, chain, deferCondition]);
 
   return authToken;
