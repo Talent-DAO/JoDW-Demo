@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import { AuthenticationResult, useAuthenticateMutation, useChallengeLazyQuery, useRefreshMutation } from "@jaxcoder/lens";
 import { useEffect, useState } from "react";
-import { useSignMessage, useNetwork } from "wagmi";
+import { useSignMessage, useNetwork, useAccount } from "wagmi";
 import { useLocalStorage } from ".";
 import { LOCAL_STORAGE_LENS_AUTH_TOKENS } from "../constants";
 import onError from "../lib/shared/onError";
@@ -53,11 +53,14 @@ export const useLensAuth = (address: string | undefined, deferCondition = () => 
 
   const getCurrentAuthToken = () => {
     if (chain?.id && authToken) {
-      return authToken[chain?.id || 0];
+      const token = authToken[chain?.id || 0]?.[address || ""];
+      if (token) {
+        return token;
+      }
+      console.log(["No token associated with this chain / wallet", authToken, chain, address]);
     }
-    else {
-      return null;
-    }
+    
+    return null;
   };
 
   const { data: signData, error: signError, isLoading: signIsLoading, signMessage } = useSignMessage({
@@ -92,14 +95,14 @@ export const useLensAuth = (address: string | undefined, deferCondition = () => 
   const resetAuthToken = () => {
     const data = authToken || null;
     if (data) {
-      delete data[chain?.id || 0];
+      delete data[chain?.id || 0][address || ""];
     }
     setAuthToken(data);
   };
 
   const doSetAuth = (token: AuthenticationResult | undefined) => {
     const data = authToken || {};
-    data[chain?.id || 0] = token;
+    data[chain?.id || 0][address || ""] = token;
     setAuthToken(data);
   };
 
