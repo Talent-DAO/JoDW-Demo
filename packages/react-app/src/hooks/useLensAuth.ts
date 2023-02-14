@@ -94,7 +94,7 @@ export const useLensAuth = (address: string | undefined, deferCondition = () => 
 
   const resetAuthToken = () => {
     const data = authToken || null;
-    if (data) {
+    if (data && data[chain?.id || 0] && data[chain?.id || 0][address || ""]) {
       delete data[chain?.id || 0][address || ""];
     }
     setAuthToken(data);
@@ -102,6 +102,9 @@ export const useLensAuth = (address: string | undefined, deferCondition = () => 
 
   const doSetAuth = (token: AuthenticationResult | undefined) => {
     const data = authToken || {};
+    if (!data[chain?.id || 0]) {
+      data[chain?.id || 0] = {};
+    }
     data[chain?.id || 0][address || ""] = token;
     setAuthToken(data);
   };
