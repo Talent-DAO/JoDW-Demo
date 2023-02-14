@@ -12,7 +12,7 @@ const getLensAuthToken = () => {
   const serializedData = window.localStorage.getItem(LOCAL_STORAGE_LENS_AUTH_TOKENS) || "{}";
   
   if (serializedData && Object.keys(serializedData).lenth !== 0) {
-    const tokens = JSON.parse(serializedData)?.value?.[chain?.id][address];
+    const tokens = JSON.parse(serializedData)?.value?.[chain?.id]?.[address];
     return tokens?.accessToken ? `Bearer ${tokens?.accessToken}` : "";
   } else {
     return "";
