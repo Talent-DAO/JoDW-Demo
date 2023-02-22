@@ -54,14 +54,17 @@ const DashboardApp = () => {
 
 const Website = () => {
   const { address } = useAccount();
-  const { chain } = useNetwork();
+  const lensAuth = useLensAuth(address, () => !address);
+  const { chain, chains } = useNetwork();
   const dispatch = useDispatch();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const lensAuth = useLensAuth(address, () => !address);
   const state = useSelector((state: RootState) => {
-    return {
-      lensProfile: state.user.user.lensProfile,
+    const userWalletMatchesLens = state.user.user.lensProfile.walletId === state.user.user.walletId;
+    const data = {
+      lensProfile: (userWalletMatchesLens) ?
+        state.user.user.lensProfile : null,
     };
+    return data;
   });
 
   const handleUserMenuOpen = (state: any) => {
@@ -81,7 +84,8 @@ const Website = () => {
     }
   }, [address, dispatch]);
 
-  const isReady = address !== null && state.lensProfile?.id !== 0;
+  const requiresWalletConnect = chains.find(c => c.id === chain?.id) === undefined;
+  const isReady = !requiresWalletConnect && address !== null && state.lensProfile?.id || false;
 
   return (
     <div className="App container-2xl mx-auto">
@@ -158,7 +162,7 @@ const Website = () => {
           </Routes>
           <Footer />
         </>
-      ) : !address ? <WalletConnectModalView /> : <ConnectLensModal isOpen={!isReady} />}
+      ) : !address || requiresWalletConnect ? <WalletConnectModalView /> : <ConnectLensModal isOpen={!isReady} />}
     </div>
   );
 };

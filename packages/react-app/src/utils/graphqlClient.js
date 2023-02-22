@@ -2,14 +2,17 @@
 import { ApolloClient, ApolloLink, InMemoryCache, useQuery } from "@apollo/client";
 import { MultiAPILink } from "@habx/apollo-multi-endpoint-link";
 import { createHttpLink } from "apollo-link-http";
+import { getNetwork, getAccount } from "@wagmi/core";
 import gql from "graphql-tag";
 import { LOCAL_STORAGE_LENS_AUTH_TOKENS } from "../constants";
 
 const getLensAuthToken = () => {
-  const serializedData = window.localStorage.getItem(LOCAL_STORAGE_LENS_AUTH_TOKENS) || { };
+  const { chain } = getNetwork();
+  const { address } = getAccount();
+  const serializedData = window.localStorage.getItem(LOCAL_STORAGE_LENS_AUTH_TOKENS) || "{}";
   
   if (serializedData && Object.keys(serializedData).length !== 0) {
-    const tokens = JSON.parse(serializedData)?.value;
+    const tokens = JSON.parse(serializedData)?.value?.[chain?.id]?.[address];
     return tokens?.accessToken ? `Bearer ${tokens?.accessToken}` : "";
   } else {
     return "";
