@@ -12,7 +12,7 @@ const activeChains = [];
 if (process.env.REACT_APP_ENV === "production") {
   activeChains.push(chain.polygon);
 } else {
-  activeChains.push(chain.polygon);
+  activeChains.push(chain.polygonMumbai);
 }
 
 export const { chains, provider, webSocketProvider } = configureChains(activeChains, [
