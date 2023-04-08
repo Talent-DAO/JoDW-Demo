@@ -28,7 +28,7 @@ const getPostAsArticle = (post: Post): Article => {
 
   return {
     id: post?.id,
-    title: post?.metadata?.name?.replace("#jodw", "") ?? "Untitled",
+    title: post?.metadata?.name ?? "Untitled",
     abstract: post?.metadata?.description,
     manuscriptFileURI: attributes.get("articleContentURI"),
     manuscriptFileContentType: attributes.get("articleContentType"),
