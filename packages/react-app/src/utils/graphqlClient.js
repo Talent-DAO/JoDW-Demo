@@ -58,8 +58,8 @@ export const compositeClient = new ApolloClient({
         goerli: "https://api.thegraph.com/subgraphs/name/codenamejason/reputation-goerli",
         arweave: "https://arweave.net/graphql",
         lens: "https://api.thegraph.com/subgraphs/name/supriyaamisshra/lens-tdao-test-1",
-        // officiallens: "https://api.lens.dev",
-        officiallens: "https://api-mumbai.lens.dev",
+        officiallens: "https://api.lens.dev",
+        //officiallens: "https://api-mumbai.lens.dev",
       },
       getContext: (endpoint) => {
         if (endpoint === "officiallens") {
