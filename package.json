@@ -25,6 +25,7 @@
     "fork:mumbai": "yarn workspace @jodw/hardhat fork:mumbai",
     "node": "yarn workspace @jodw/hardhat chain",
     "test": "yarn workspace @jodw/react-app test",
+    "test:contracts": "yarn workspace @jodw/hardhat test",
     "server": "yarn workspace @jodw/backend server",
     "prestart": "yarn workspace @jodw/react-app prestart",
     "start": "yarn workspace @jaxcoder/lens codegen && yarn workspace @jodw/react-app start",
